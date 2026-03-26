@@ -18,13 +18,17 @@ jobs:
           channel: 'stable'
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          cd fiscalia
+          flutter pub get
 
       - name: Build debug APK
-        run: flutter build apk --debug
+        run: |
+          cd fiscalia
+          flutter build apk --debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: fiscalia/build/app/outputs/flutter-apk/app-debug.apk
