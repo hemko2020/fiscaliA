@@ -112,10 +112,7 @@ class RevenuModelAdapter extends TypeAdapter<RevenuModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return RevenuModel(
-      type: fields[0] as String,
-      montant: fields[1] as double,
-    );
+    return RevenuModel(type: fields[0] as String, montant: fields[1] as double);
   }
 
   @override
