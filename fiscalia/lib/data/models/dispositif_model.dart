@@ -2,17 +2,9 @@ import 'package:hive/hive.dart';
 
 part 'dispositif_model.g.dart';
 
-enum CategorieDispositif {
-  basique,
-  avance,
-  expert,
-}
+enum CategorieDispositif { basique, avance, expert }
 
-enum TypeDispositif {
-  reduction,
-  credit,
-  deduction,
-}
+enum TypeDispositif { reduction, credit, deduction }
 
 @HiveType(typeId: 5)
 class DispositifModel {

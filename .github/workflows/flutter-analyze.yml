@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, sprint-1.2 ]
 
 jobs:
   analyze:
@@ -15,11 +15,15 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.0'
+          flutter-version: '3.41.6'
           channel: 'stable'
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          cd fiscalia
+          flutter pub get
 
       - name: Analyze
-        run: flutter analyze
+        run: |
+          cd fiscalia
+          flutter analyze

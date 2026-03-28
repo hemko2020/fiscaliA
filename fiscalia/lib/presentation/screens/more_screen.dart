@@ -8,9 +8,7 @@ class MoreScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Plus'),
-      ),
+      appBar: AppBar(title: const Text('Plus')),
       body: ListView(
         children: [
           _buildSection(
@@ -129,13 +127,17 @@ class MoreScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.security, color: AppColors.accentGreen, size: 16),
+                    const Icon(
+                      Icons.security,
+                      color: AppColors.accentGreen,
+                      size: 16,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       '100% local - Vos données ne quittent jamais votre appareil',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.accentGreen,
-                          ),
+                        color: AppColors.accentGreen,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -144,8 +146,8 @@ class MoreScreen extends ConsumerWidget {
                 Text(
                   'FiscalIA - Barème 2026',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -169,16 +171,14 @@ class MoreScreen extends ConsumerWidget {
           child: Text(
             title,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Card(
           margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: children,
-          ),
+          child: Column(children: children),
         ),
       ],
     );
@@ -196,9 +196,9 @@ class MoreScreen extends ConsumerWidget {
       title: Text(title),
       subtitle: Text(
         subtitle,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppColors.textSecondary,
-            ),
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
       ),
       trailing: const Icon(Icons.chevron_right),
       onTap: onTap,

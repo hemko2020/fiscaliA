@@ -14,17 +14,21 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.0'
+          flutter-version: '3.41.6'
           channel: 'stable'
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          cd fiscalia
+          flutter pub get
 
       - name: Build iOS
-        run: flutter build ios --simulator --no-codesign
+        run: |
+          cd fiscalia
+          flutter build ios --simulator --no-codesign
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/iphonesimulator/
+          path: fiscalia/build/ios/iphonesimulator/
