@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'niche_ceiling_tracker_model.g.dart';
-
 @HiveType(typeId: 9)
 class NicheCeilingTrackerModel {
   @HiveField(0)

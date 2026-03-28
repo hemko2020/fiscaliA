@@ -4,6 +4,8 @@ import '../../core/theme/app_colors.dart';
 import 'home_employment_credit_screen.dart';
 import 'child_care_credit_screen.dart';
 import 'donation_credit_screen.dart';
+import 'school_fees_credit_screen.dart';
+import 'union_dues_credit_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
   const OptimizerScreen({super.key});
@@ -153,6 +155,38 @@ class OptimizerScreen extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => const DonationCreditScreen(),
+              ),
+            );
+          },
+        ),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.school,
+          title: 'Frais de scolarité',
+          subtitle: 'Enseignement secondaire ou supérieur',
+          economy: '+500 €',
+          risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SchoolFeesCreditScreen(),
+              ),
+            );
+          },
+        ),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.groups,
+          title: 'Cotisations syndicales',
+          subtitle: 'Crédit d\'impôt de 66%',
+          economy: '+198 €',
+          risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const UnionDuesCreditScreen(),
               ),
             );
           },

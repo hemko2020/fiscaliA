@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'foyer_fiscal_model.g.dart';
-
 enum SituationFamiliale { celibataire, marie, pacse, divorce, veuf }
 
 @HiveType(typeId: 0)

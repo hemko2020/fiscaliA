@@ -1,8 +1,6 @@
 import 'package:hive/hive.dart';
 import 'foyer_fiscal_model.dart';
 
-part 'simulation_model.g.dart';
-
 @HiveType(typeId: 2)
 class SimulationModel {
   @HiveField(0)
