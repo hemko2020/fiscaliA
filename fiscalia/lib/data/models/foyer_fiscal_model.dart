@@ -2,13 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'foyer_fiscal_model.g.dart';
 
-enum SituationFamiliale {
-  celibataire,
-  marie,
-  pacse,
-  divorce,
-  veuf,
-}
+enum SituationFamiliale { celibataire, marie, pacse, divorce, veuf }
 
 @HiveType(typeId: 0)
 class FoyerFiscalModel {
@@ -62,7 +56,8 @@ class FoyerFiscalModel {
     return FoyerFiscalModel(
       situationFamiliale: situationFamiliale ?? this.situationFamiliale,
       nbEnfants: nbEnfants ?? this.nbEnfants,
-      nbPartsSupplementaires: nbPartsSupplementaires ?? this.nbPartsSupplementaires,
+      nbPartsSupplementaires:
+          nbPartsSupplementaires ?? this.nbPartsSupplementaires,
       revenuNetImposable: revenuNetImposable ?? this.revenuNetImposable,
       autresRevenus: autresRevenus ?? this.autresRevenus,
     );
@@ -77,8 +72,5 @@ class RevenuModel {
   @HiveField(1)
   final double montant;
 
-  RevenuModel({
-    required this.type,
-    required this.montant,
-  });
+  RevenuModel({required this.type, required this.montant});
 }

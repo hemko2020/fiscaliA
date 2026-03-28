@@ -48,17 +48,20 @@ void main() {
       expect(result['tauxMarginal'], 0.41);
     });
 
-    test('should calculate tax for 200,000€ with correct marginal rate 45%', () {
-      final foyer = FoyerFiscalModel(
-        situationFamiliale: SituationFamiliale.celibataire,
-        nbEnfants: 0,
-        revenuNetImposable: 200000,
-      );
+    test(
+      'should calculate tax for 200,000€ with correct marginal rate 45%',
+      () {
+        final foyer = FoyerFiscalModel(
+          situationFamiliale: SituationFamiliale.celibataire,
+          nbEnfants: 0,
+          revenuNetImposable: 200000,
+        );
 
-      final result = calculator.calculerImpot(foyer);
+        final result = calculator.calculerImpot(foyer);
 
-      expect(result['tauxMarginal'], 0.45);
-    });
+        expect(result['tauxMarginal'], 0.45);
+      },
+    );
 
     test('should handle 0€ income correctly', () {
       final foyer = FoyerFiscalModel(
@@ -89,21 +92,24 @@ void main() {
   });
 
   group('TaxCalculator - Story 2.2: Family Quotient System', () {
-    test('should calculate parts correctly for married couple with 2 children', () {
-      final foyer = FoyerFiscalModel(
-        situationFamiliale: SituationFamiliale.marie,
-        nbEnfants: 2,
-        revenuNetImposable: 95000,
-      );
+    test(
+      'should calculate parts correctly for married couple with 2 children',
+      () {
+        final foyer = FoyerFiscalModel(
+          situationFamiliale: SituationFamiliale.marie,
+          nbEnfants: 2,
+          revenuNetImposable: 95000,
+        );
 
-      // Base: 2 parts (married) + 0.5 per child = 1 part (2 children) = 3 parts total
-      expect(foyer.partsFiscales, 3.0);
+        // Base: 2 parts (married) + 0.5 per child = 1 part (2 children) = 3 parts total
+        expect(foyer.partsFiscales, 3.0);
 
-      final result = calculator.calculerImpot(foyer);
+        final result = calculator.calculerImpot(foyer);
 
-      // Tax calculated on 95000/3 = 31667€ then multiplied by 3
-      expect(result['parts'], 3.0);
-    });
+        // Tax calculated on 95000/3 = 31667€ then multiplied by 3
+        expect(result['parts'], 3.0);
+      },
+    );
 
     test('should calculate parts correctly for single with 1 child', () {
       final foyer = FoyerFiscalModel(
