@@ -9,6 +9,7 @@ import 'data/models/home_employment_credit_model.dart';
 import 'data/models/child_care_credit_model.dart';
 import 'data/models/donation_credit_model.dart';
 import 'data/models/niche_ceiling_tracker_model.dart';
+import 'data/models/school_fees_credit_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ void main() async {
   Hive.registerAdapter(DonationCreditModelAdapter());
   Hive.registerAdapter(NicheCeilingTrackerModelAdapter());
   Hive.registerAdapter(NicheCreditEntryAdapter());
+  Hive.registerAdapter(SchoolFeesCreditModelAdapter());
 
   await Hive.openBox<FoyerFiscalModel>('foyerFiscal');
   await Hive.openBox<SimulationModel>('simulations');
@@ -36,6 +38,7 @@ void main() async {
   await Hive.openBox<ChildCareCreditModel>('childCareCredits');
   await Hive.openBox<DonationCreditModel>('donationCredits');
   await Hive.openBox<NicheCeilingTrackerModel>('nicheCeilingTracker');
+  await Hive.openBox<SchoolFeesCreditModel>('schoolFeesCredits');
   await Hive.openBox('settings');
 
   runApp(const ProviderScope(child: FiscalIAApp()));
