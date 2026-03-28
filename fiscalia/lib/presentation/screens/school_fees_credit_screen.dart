@@ -8,10 +8,12 @@ class SchoolFeesCreditScreen extends ConsumerStatefulWidget {
   const SchoolFeesCreditScreen({super.key});
 
   @override
-  ConsumerState<SchoolFeesCreditScreen> createState() => _SchoolFeesCreditScreenState();
+  ConsumerState<SchoolFeesCreditScreen> createState() =>
+      _SchoolFeesCreditScreenState();
 }
 
-class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen> {
+class _SchoolFeesCreditScreenState
+    extends ConsumerState<SchoolFeesCreditScreen> {
   final _formKey = GlobalKey<FormState>();
   final _expensesController = TextEditingController();
   int _numberOfChildren = 1;
@@ -25,14 +27,18 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
 
   void _calculateCredit() {
     if (_formKey.currentState!.validate()) {
-      final expenses = double.tryParse(_expensesController.text.replaceAll(' ', '').replaceAll('€', '')) ?? 0;
-      
+      final expenses =
+          double.tryParse(
+            _expensesController.text.replaceAll(' ', '').replaceAll('€', ''),
+          ) ??
+          0;
+
       final model = SchoolFeesCreditModel(
         expenses: expenses,
         numberOfChildren: _numberOfChildren,
         isSecondaryEducation: _isSecondaryEducation,
       );
-      
+
       ref.read(schoolFeesCreditProvider.notifier).state = model;
     }
   }
@@ -81,9 +87,9 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
                 Text(
                   'Crédit d\'impôt frais de scolarité',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryBlue,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryBlue,
+                  ),
                 ),
               ],
             ),
@@ -93,15 +99,30 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 8),
-            _buildRateInfo(context, 'Enseignement secondaire', '153€', 'par enfant'),
-            _buildRateInfo(context, 'Enseignement supérieur', '100€', 'par enfant'),
+            _buildRateInfo(
+              context,
+              'Enseignement secondaire',
+              '153€',
+              'par enfant',
+            ),
+            _buildRateInfo(
+              context,
+              'Enseignement supérieur',
+              '100€',
+              'par enfant',
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildRateInfo(BuildContext context, String title, String rate, String limit) {
+  Widget _buildRateInfo(
+    BuildContext context,
+    String title,
+    String rate,
+    String limit,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -115,9 +136,9 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
             child: Text(
               rate,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.accentGreen,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: AppColors.accentGreen,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -143,9 +164,9 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
             children: [
               Text(
                 'Vos frais de scolarité',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -163,7 +184,9 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer un montant';
                   }
-                  final amount = double.tryParse(value.replaceAll(' ', '').replaceAll('€', ''));
+                  final amount = double.tryParse(
+                    value.replaceAll(' ', '').replaceAll('€', ''),
+                  );
                   if (amount == null) {
                     return 'Montant invalide';
                   }
@@ -176,9 +199,9 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
               const SizedBox(height: 20),
               Text(
                 'Nombre d\'enfants',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               _buildCounter(
@@ -192,7 +215,8 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
                 title: const Text('Enseignement secondaire'),
                 subtitle: const Text('Plafond majoré à 153€ par enfant'),
                 value: _isSecondaryEducation,
-                onChanged: (value) => setState(() => _isSecondaryEducation = value),
+                onChanged: (value) =>
+                    setState(() => _isSecondaryEducation = value),
                 activeTrackColor: AppColors.accentGreen.withValues(alpha: 0.5),
                 activeThumbColor: AppColors.accentGreen,
               ),
@@ -243,9 +267,9 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
                 ),
                 Text(
                   '$value',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add_circle_outline),
@@ -276,14 +300,18 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
           children: [
             Row(
               children: [
-                Icon(Icons.check_circle, color: AppColors.accentGreen, size: 28),
+                Icon(
+                  Icons.check_circle,
+                  color: AppColors.accentGreen,
+                  size: 28,
+                ),
                 const SizedBox(width: 12),
                 Text(
                   'Votre crédit d\'impôt',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.accentGreen,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.accentGreen,
+                  ),
                 ),
               ],
             ),
@@ -309,9 +337,9 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
               const SizedBox(height: 8),
               Text(
                 '⚠️ Frais non pris en compte : ${(details['excessExpenses'] as double).toStringAsFixed(0)} €',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.accentOrange,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppColors.accentOrange),
               ),
             ],
             const SizedBox(height: 16),
@@ -323,14 +351,18 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, size: 16, color: AppColors.primaryBlue),
+                  Icon(
+                    Icons.info_outline,
+                    size: 16,
+                    color: AppColors.primaryBlue,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Ce crédit compte dans le plafond des niches fiscales (10 000€)',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.primaryBlue,
-                          ),
+                        color: AppColors.primaryBlue,
+                      ),
                     ),
                   ),
                 ],
@@ -356,16 +388,16 @@ class _SchoolFeesCreditScreenState extends ConsumerState<SchoolFeesCreditScreen>
           Text(
             label,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isHighlighted ? AppColors.accentGreen : null,
-                  fontWeight: isHighlighted ? FontWeight.bold : null,
-                ),
+              color: isHighlighted ? AppColors.accentGreen : null,
+              fontWeight: isHighlighted ? FontWeight.bold : null,
+            ),
           ),
           Text(
             value,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: isHighlighted ? AppColors.accentGreen : null,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: isHighlighted ? AppColors.accentGreen : null,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

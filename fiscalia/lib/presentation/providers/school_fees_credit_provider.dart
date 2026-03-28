@@ -1,9 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/school_fees_credit_model.dart';
 
-final schoolFeesCreditServiceProvider = Provider((ref) => SchoolFeesCreditService());
+final schoolFeesCreditServiceProvider = Provider(
+  (ref) => SchoolFeesCreditService(),
+);
 
-final schoolFeesCreditProvider = StateProvider<SchoolFeesCreditModel?>((ref) => null);
+final schoolFeesCreditProvider = StateProvider<SchoolFeesCreditModel?>(
+  (ref) => null,
+);
 
 class SchoolFeesCreditService {
   double calculateCeiling({
@@ -25,7 +29,7 @@ class SchoolFeesCreditService {
       numberOfChildren: numberOfChildren,
       isSecondaryEducation: isSecondaryEducation,
     );
-    
+
     final eligibleExpenses = expenses.clamp(0, ceiling);
     return eligibleExpenses * 0.50;
   }
@@ -35,15 +39,17 @@ class SchoolFeesCreditService {
       numberOfChildren: model.numberOfChildren,
       isSecondaryEducation: model.isSecondaryEducation,
     );
-    
+
     final credit = calculateCredit(
       expenses: model.expenses,
       numberOfChildren: model.numberOfChildren,
       isSecondaryEducation: model.isSecondaryEducation,
     );
-    
-    final excessExpenses = model.expenses > ceiling ? model.expenses - ceiling : 0.0;
-    
+
+    final excessExpenses = model.expenses > ceiling
+        ? model.expenses - ceiling
+        : 0.0;
+
     return {
       'expenses': model.expenses,
       'ceiling': ceiling,

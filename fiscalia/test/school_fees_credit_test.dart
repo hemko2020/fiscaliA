@@ -99,10 +99,7 @@ void main() {
         isSecondaryEducation: false,
       );
 
-      final updated = model.copyWith(
-        expenses: 400,
-        isSecondaryEducation: true,
-      );
+      final updated = model.copyWith(expenses: 400, isSecondaryEducation: true);
 
       expect(updated.expenses, 400);
       expect(updated.numberOfChildren, 1);

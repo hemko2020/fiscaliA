@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'dispositif_model.g.dart';
-
 enum CategorieDispositif { basique, avance, expert }
 
 enum TypeDispositif { reduction, credit, deduction }

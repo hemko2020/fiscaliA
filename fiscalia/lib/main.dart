@@ -4,33 +4,17 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'app.dart';
 import 'data/models/foyer_fiscal_model.dart';
 import 'data/models/simulation_model.dart';
-import 'data/models/dispositif_model.dart';
 import 'data/models/home_employment_credit_model.dart';
 import 'data/models/child_care_credit_model.dart';
 import 'data/models/donation_credit_model.dart';
 import 'data/models/niche_ceiling_tracker_model.dart';
 import 'data/models/school_fees_credit_model.dart';
+import 'data/models/union_dues_credit_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-
-  Hive.registerAdapter(SituationFamilialeAdapter());
-  Hive.registerAdapter(FoyerFiscalModelAdapter());
-  Hive.registerAdapter(RevenuModelAdapter());
-  Hive.registerAdapter(SimulationModelAdapter());
-  Hive.registerAdapter(ReductionModelAdapter());
-  Hive.registerAdapter(CreditModelAdapter());
-  Hive.registerAdapter(CategorieDispositifAdapter());
-  Hive.registerAdapter(TypeDispositifAdapter());
-  Hive.registerAdapter(DispositifModelAdapter());
-  Hive.registerAdapter(HomeEmploymentCreditModelAdapter());
-  Hive.registerAdapter(ChildCareCreditModelAdapter());
-  Hive.registerAdapter(DonationCreditModelAdapter());
-  Hive.registerAdapter(NicheCeilingTrackerModelAdapter());
-  Hive.registerAdapter(NicheCreditEntryAdapter());
-  Hive.registerAdapter(SchoolFeesCreditModelAdapter());
 
   await Hive.openBox<FoyerFiscalModel>('foyerFiscal');
   await Hive.openBox<SimulationModel>('simulations');
@@ -39,6 +23,7 @@ void main() async {
   await Hive.openBox<DonationCreditModel>('donationCredits');
   await Hive.openBox<NicheCeilingTrackerModel>('nicheCeilingTracker');
   await Hive.openBox<SchoolFeesCreditModel>('schoolFeesCredits');
+  await Hive.openBox<UnionDuesCreditModel>('unionDuesCredits');
   await Hive.openBox('settings');
 
   runApp(const ProviderScope(child: FiscalIAApp()));
