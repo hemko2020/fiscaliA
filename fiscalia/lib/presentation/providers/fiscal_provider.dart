@@ -38,11 +38,14 @@ class TaxCalculator {
     impotBrut *= parts;
 
     // Apply family quotient ceiling (plafond du quotient familial)
-    final halfParts = parts - (foyer.situationFamiliale == SituationFamiliale.marie ||
-            foyer.situationFamiliale == SituationFamiliale.pacse
-        ? 2
-        : 1);
-    final plafondQuotientFamilial = halfParts * TaxBrackets2026.familyQuotientCeiling;
+    final halfParts =
+        parts -
+        (foyer.situationFamiliale == SituationFamiliale.marie ||
+                foyer.situationFamiliale == SituationFamiliale.pacse
+            ? 2
+            : 1);
+    final plafondQuotientFamilial =
+        halfParts * TaxBrackets2026.familyQuotientCeiling;
 
     double impotApresPlafond = impotBrut;
     double reductionQuotientFamilial = 0;
@@ -71,7 +74,10 @@ class TaxCalculator {
       }
     }
 
-    final impotApresDecote = (impotApresPlafond - decote).clamp(0, double.infinity);
+    final impotApresDecote = (impotApresPlafond - decote).clamp(
+      0,
+      double.infinity,
+    );
     final impotNet = impotApresDecote;
     final tauxMoyen = foyer.revenuNetImposable > 0
         ? impotNet / foyer.revenuNetImposable
@@ -127,7 +133,9 @@ class TaxCalculator {
     final deduction10 = calculerDeduction10Pourcent(revenuBrut);
     final depensesReellesDeductibles = depensesReelles.clamp(0, revenuBrut);
 
-    final meilleurOption = depensesReellesDeductibles > deduction10 ? 'reelles' : 'forfait';
+    final meilleurOption = depensesReellesDeductibles > deduction10
+        ? 'reelles'
+        : 'forfait';
     final economie = (depensesReellesDeductibles - deduction10).abs();
 
     return {
@@ -139,19 +147,22 @@ class TaxCalculator {
     };
   }
 
-  Map<String, dynamic> calculerImpotComplet(FoyerFiscalModel foyer, {
+  Map<String, dynamic> calculerImpotComplet(
+    FoyerFiscalModel foyer, {
     double depensesReelles = 0,
     bool useRealExpenses = false,
   }) {
     final result = calculerImpot(foyer);
-    final isCouple = foyer.situationFamiliale == SituationFamiliale.marie ||
+    final isCouple =
+        foyer.situationFamiliale == SituationFamiliale.marie ||
         foyer.situationFamiliale == SituationFamiliale.pacse;
 
     // Calculate CEHR
     final cehr = calculerCehr(foyer.revenuNetImposable, isCouple);
 
     // Calculate expenses comparison
-    final revenuBrut = foyer.revenuNetImposable * 1.25; // Approximate gross from net
+    final revenuBrut =
+        foyer.revenuNetImposable * 1.25; // Approximate gross from net
     final expensesComparison = comparerDepensesReellesVs10Pourcent(
       revenuBrut: revenuBrut,
       depensesReelles: depensesReelles,
@@ -162,7 +173,8 @@ class TaxCalculator {
 
     // Apply better expense option if selected
     if (useRealExpenses && depensesReelles > 0) {
-      final deduction = (expensesComparison['meilleurOption'] as String) == 'reelles'
+      final deduction =
+          (expensesComparison['meilleurOption'] as String) == 'reelles'
           ? depensesReelles
           : expensesComparison['deduction10Pourcent'] as double;
       impotApresDeduction = (impotNet - deduction).clamp(0, double.infinity);

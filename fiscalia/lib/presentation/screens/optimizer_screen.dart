@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
+import 'home_employment_credit_screen.dart';
+import 'child_care_credit_screen.dart';
+import 'donation_credit_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
   const OptimizerScreen({super.key});
@@ -11,10 +14,7 @@ class OptimizerScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Optimiser'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.psychology),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.psychology), onPressed: () {}),
         ],
       ),
       body: SingleChildScrollView(
@@ -39,9 +39,9 @@ class OptimizerScreen extends ConsumerWidget {
           children: [
             Text(
               'Radar Fiscal',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Container(
@@ -50,7 +50,7 @@ class OptimizerScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.primaryBlue.withValues(alpha:0.3),
+                  color: AppColors.primaryBlue.withValues(alpha: 0.3),
                   width: 20,
                 ),
               ),
@@ -65,11 +65,11 @@ class OptimizerScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'À venir',
+                      'Analyse',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.primaryBlue,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: AppColors.primaryBlue,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -77,10 +77,10 @@ class OptimizerScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Complétez votre profil pour voir vos économies potentielles',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+              'Sélectionnez une recommandation pour optimiser vos impôts',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
               textAlign: TextAlign.center,
             ),
           ],
@@ -95,9 +95,9 @@ class OptimizerScreen extends ConsumerWidget {
       children: [
         Text(
           'Recommandations',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
         _buildRecommendationCard(
@@ -107,6 +107,7 @@ class OptimizerScreen extends ConsumerWidget {
           subtitle: 'Estimez vos dépenses professionnelles',
           economy: '+1,800 €',
           risk: 1,
+          onTap: () {},
         ),
         _buildRecommendationCard(
           context,
@@ -115,6 +116,30 @@ class OptimizerScreen extends ConsumerWidget {
           subtitle: 'Garde d\'enfants ou ménage',
           economy: '+750 €',
           risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeEmploymentCreditScreen(),
+              ),
+            );
+          },
+        ),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.child_care,
+          title: 'Garde d\'enfants',
+          subtitle: 'Crèche, assistante maternelle',
+          economy: '+1,150 €',
+          risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChildCareCreditScreen(),
+              ),
+            );
+          },
         ),
         _buildRecommendationCard(
           context,
@@ -123,6 +148,14 @@ class OptimizerScreen extends ConsumerWidget {
           subtitle: 'Réduction de 66% ou 75%',
           economy: '+330 €',
           risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DonationCreditScreen(),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -135,64 +168,73 @@ class OptimizerScreen extends ConsumerWidget {
     required String subtitle,
     required String economy,
     required int risk,
+    required VoidCallback onTap,
   }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.accentGreen.withValues(alpha:0.1),
-                borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.accentGreen.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: AppColors.accentGreen),
               ),
-              child: Icon(icon, color: AppColors.accentGreen),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      subtitle,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    title,
+                    economy,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: AppColors.accentGreen,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(5, (index) {
+                      return Icon(
+                        Icons.circle,
+                        size: 8,
+                        color: index < risk
+                            ? AppColors.riskLow
+                            : AppColors.textSecondary.withValues(alpha: 0.3),
+                      );
+                    }),
                   ),
                 ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  economy,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: AppColors.accentGreen,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(5, (index) {
-                    return Icon(
-                      Icons.circle,
-                      size: 8,
-                      color: index < risk ? AppColors.riskLow : AppColors.textSecondary.withValues(alpha:0.3),
-                    );
-                  }),
-                ),
-              ],
-            ),
-          ],
+              const SizedBox(width: 8),
+              Icon(Icons.chevron_right, color: AppColors.textSecondary),
+            ],
+          ),
         ),
       ),
     );

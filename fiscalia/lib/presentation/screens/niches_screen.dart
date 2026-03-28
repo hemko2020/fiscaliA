@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/constants/tax_brackets.dart';
+import 'niche_ceiling_tracker_screen.dart';
 
 class NichesScreen extends ConsumerStatefulWidget {
   const NichesScreen({super.key});
@@ -13,14 +14,30 @@ class NichesScreen extends ConsumerStatefulWidget {
 class _NichesScreenState extends ConsumerState<NichesScreen> {
   final double _usedNiche = 2500;
 
-  double get _remainingNiche => TaxBrackets2026.nicheCeilingGeneral - _usedNiche;
-  double get _percentageUsed => (_usedNiche / TaxBrackets2026.nicheCeilingGeneral) * 100;
+  double get _remainingNiche =>
+      TaxBrackets2026.nicheCeilingGeneral - _usedNiche;
+  double get _percentageUsed =>
+      (_usedNiche / TaxBrackets2026.nicheCeilingGeneral) * 100;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nich(es Fiscales'),
+        title: const Text('Niches Fiscales'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.analytics),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NicheCeilingTrackerScreen(),
+                ),
+              );
+            },
+            tooltip: 'Suivi du plafond',
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -46,9 +63,9 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
           children: [
             Text(
               'Plafond des niches',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             Stack(
@@ -60,13 +77,15 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
                   child: CircularProgressIndicator(
                     value: _percentageUsed / 100,
                     strokeWidth: 15,
-                    backgroundColor: AppColors.textSecondary.withValues(alpha:0.2),
+                    backgroundColor: AppColors.textSecondary.withValues(
+                      alpha: 0.2,
+                    ),
                     valueColor: AlwaysStoppedAnimation(
                       _percentageUsed > 90
                           ? AppColors.accentRed
                           : _percentageUsed > 70
-                              ? AppColors.accentOrange
-                              : AppColors.accentGreen,
+                          ? AppColors.accentOrange
+                          : AppColors.accentGreen,
                     ),
                   ),
                 ),
@@ -74,9 +93,8 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
                   children: [
                     Text(
                       '${_percentageUsed.toStringAsFixed(0)}%',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'utilisé',
@@ -90,8 +108,18 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStatItem(context, 'Utilisé', '${_usedNiche.toStringAsFixed(0)} €', AppColors.accentOrange),
-                _buildStatItem(context, 'Restant', '${_remainingNiche.toStringAsFixed(0)} €', AppColors.accentGreen),
+                _buildStatItem(
+                  context,
+                  'Utilisé',
+                  '${_usedNiche.toStringAsFixed(0)} €',
+                  AppColors.accentOrange,
+                ),
+                _buildStatItem(
+                  context,
+                  'Restant',
+                  '${_remainingNiche.toStringAsFixed(0)} €',
+                  AppColors.accentGreen,
+                ),
               ],
             ),
           ],
@@ -100,21 +128,26 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
     );
   }
 
-  Widget _buildStatItem(BuildContext context, String label, String value, Color color) {
+  Widget _buildStatItem(
+    BuildContext context,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Column(
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
         ),
         Text(
           value,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: color,
-                fontWeight: FontWeight.bold,
-              ),
+            color: color,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
@@ -126,9 +159,9 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
       children: [
         Text(
           'Dispositifs utilisés',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
         _buildDeviceItem(context, 'Emploi à domicile', 2000, Icons.home),
@@ -138,7 +171,12 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
     );
   }
 
-  Widget _buildDeviceItem(BuildContext context, String name, double amount, IconData icon) {
+  Widget _buildDeviceItem(
+    BuildContext context,
+    String name,
+    double amount,
+    IconData icon,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
@@ -158,13 +196,13 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
       children: [
         Text(
           'Suggestions (hors plafond)',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
         Card(
-          color: AppColors.accentGreen.withValues(alpha:0.1),
+          color: AppColors.accentGreen.withValues(alpha: 0.1),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -179,23 +217,18 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
                         children: [
                           Text(
                             'PER (Plan Épargne Retraite)',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             'Jusqu\'à 37,094 €/an déductible',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.textSecondary),
                           ),
                         ],
                       ),
                     ),
-                    const Text(
-                      '→',
-                      style: TextStyle(fontSize: 20),
-                    ),
+                    const Text('→', style: TextStyle(fontSize: 20)),
                   ],
                 ),
               ],
@@ -203,7 +236,7 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
           ),
         ),
         Card(
-          color: AppColors.accentGreen.withValues(alpha:0.1),
+          color: AppColors.accentGreen.withValues(alpha: 0.1),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -218,23 +251,18 @@ class _NichesScreenState extends ConsumerState<NichesScreen> {
                         children: [
                           Text(
                             'Déficit foncier',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           Text(
                             'Jusqu\'à 10,700 €/an déductible',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.textSecondary),
                           ),
                         ],
                       ),
                     ),
-                    const Text(
-                      '→',
-                      style: TextStyle(fontSize: 20),
-                    ),
+                    const Text('→', style: TextStyle(fontSize: 20)),
                   ],
                 ),
               ],
