@@ -58,10 +58,7 @@ void main() {
         amount: 1000,
       );
 
-      final updated = model.copyWith(
-        amount: 2000.0,
-        category: 'reduction',
-      );
+      final updated = model.copyWith(amount: 2000.0, category: 'reduction');
 
       expect(updated.deviceId, 'test-1');
       expect(updated.amount, 2000.0);
@@ -249,7 +246,10 @@ void main() {
 
     test('should get correct category display name', () {
       expect(service.getCategoryDisplayName('credit'), 'Crédits d\'impôt');
-      expect(service.getCategoryDisplayName('reduction'), 'Réductions fiscales');
+      expect(
+        service.getCategoryDisplayName('reduction'),
+        'Réductions fiscales',
+      );
       expect(service.getCategoryDisplayName('deduction'), 'Déductions');
       expect(service.getCategoryDisplayName('niche'), 'Niches fiscales');
     });
