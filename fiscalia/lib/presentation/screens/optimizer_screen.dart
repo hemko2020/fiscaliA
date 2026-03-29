@@ -6,6 +6,7 @@ import 'child_care_credit_screen.dart';
 import 'donation_credit_screen.dart';
 import 'school_fees_credit_screen.dart';
 import 'union_dues_credit_screen.dart';
+import 'alimony_deduction_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
   const OptimizerScreen({super.key});
@@ -187,6 +188,22 @@ class OptimizerScreen extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => const UnionDuesCreditScreen(),
+              ),
+            );
+          },
+        ),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.family_restroom,
+          title: 'Pension alimentaire',
+          subtitle: 'Déduction fiscale',
+          economy: '+5 000 €',
+          risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AlimonyDeductionScreen(),
               ),
             );
           },
