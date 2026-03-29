@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'home_employment_credit_model.g.dart';
-
 @HiveType(typeId: 6)
 class HomeEmploymentCreditModel {
   @HiveField(0)

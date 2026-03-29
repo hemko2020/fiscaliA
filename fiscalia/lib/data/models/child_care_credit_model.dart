@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'child_care_credit_model.g.dart';
-
 @HiveType(typeId: 7)
 class ChildCareCreditModel {
   @HiveField(0)

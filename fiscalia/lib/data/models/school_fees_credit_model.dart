@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'school_fees_credit_model.g.dart';
-
 @HiveType(typeId: 11)
 class SchoolFeesCreditModel {
   @HiveField(0)

@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'donation_credit_model.g.dart';
-
 enum DonationType {
   @HiveField(0)
   generalInterest,
