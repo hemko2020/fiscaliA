@@ -7,6 +7,7 @@ import 'donation_credit_screen.dart';
 import 'school_fees_credit_screen.dart';
 import 'union_dues_credit_screen.dart';
 import 'alimony_deduction_screen.dart';
+import 'device_distribution_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
   const OptimizerScreen({super.key});
@@ -204,6 +205,22 @@ class OptimizerScreen extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => const AlimonyDeductionScreen(),
+              ),
+            );
+          },
+        ),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.pie_chart,
+          title: 'Répartition des dispositifs',
+          subtitle: 'Visualisation et analyse',
+          economy: '+0 €',
+          risk: 0,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DeviceDistributionScreen(),
               ),
             );
           },
