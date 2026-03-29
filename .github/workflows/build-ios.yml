@@ -9,6 +9,9 @@ jobs:
   build:
     name: Build iOS
     runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./fiscalia
     steps:
       - uses: actions/checkout@v4
 
@@ -18,17 +21,13 @@ jobs:
           channel: 'stable'
 
       - name: Install dependencies
-        run: |
-          cd fiscalia
-          flutter pub get
+        run: flutter pub get
 
       - name: Build iOS
-        run: |
-          cd fiscalia
-          flutter build ios --simulator --no-codesign
+        run: flutter build ios --simulator --no-codesign
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: fiscalia/build/ios/iphonesimulator/
+          path: build/ios/iphonesimulator/

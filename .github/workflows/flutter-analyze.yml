@@ -10,6 +10,9 @@ jobs:
   analyze:
     name: Flutter Analyze
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./fiscalia
     steps:
       - uses: actions/checkout@v4
 
@@ -19,11 +22,7 @@ jobs:
           channel: 'stable'
 
       - name: Install dependencies
-        run: |
-          cd fiscalia
-          flutter pub get
+        run: flutter pub get
 
       - name: Analyze
-        run: |
-          cd fiscalia
-          flutter analyze
+        run: flutter analyze
