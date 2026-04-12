@@ -1,0 +1,31 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "description": "FiscalIA - Application de gestion fiscale",
+  "provider": {
+    "ollama": {
+      "models": {
+        "qwopus:27b-q4": {
+          "_launch": true,
+          "name": "qwopus:27b-q4"
+        }
+      },
+      "name": "Ollama (local)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://127.0.0.1:11434/v1"
+      }
+    }
+  },
+  "rules": {
+    "files": ["*.dart", "*.yaml", "*.md"],
+    "ignore": ["*.g.dart", ".dart_tool/", "build/", "android/", "ios/", ".git/"]
+  },
+  "agent": {
+    "build": {
+      "model": "ollama/qwopus:27b-q4"
+    },
+    "plan": {
+      "model": "ollama/qwopus:27b-q4"
+    }
+  }
+}
