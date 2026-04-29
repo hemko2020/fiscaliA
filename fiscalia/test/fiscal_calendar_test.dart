@@ -1,8 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:fiscalia/data/models/fiscal_calendar_model.dart';
 import 'package:fiscalia/presentation/providers/fiscal_calendar_provider.dart';
 
 void main() {
+  setUpAll(() async {
+    // Initialize Hive for tests
+    Hive.init('test_hive_dir');
+    if (!Hive.isBoxOpen('settings')) {
+      await Hive.openBox('settings');
+    }
+  });
+
+  tearDownAll(() async {
+    await Hive.deleteFromDisk();
+  });
   group('FiscalCalendarModel', () {
     test('should create model with correct values', () {
       final event = FiscalCalendarModel(
@@ -302,6 +316,59 @@ void main() {
       expect(service.getEventTypeIcon(FiscalEventType.payment), '💳');
       expect(service.getEventTypeIcon(FiscalEventType.notification), '📧');
       expect(service.getEventTypeIcon(FiscalEventType.reminder), '🔔');
+    });
+  });
+
+  group('FiscalCalendarProvider Integration', () {
+    late ProviderContainer container;
+
+    setUp(() {
+      // Clear zipCode before each test
+      Hive.box('settings').put('zipCode', '');
+      container = ProviderContainer();
+    });
+
+    tearDown(() {
+      container.dispose();
+    });
+
+    test('should return all events when zip code is empty', () {
+      final events = container.read(fiscalCalendarProvider);
+
+      // Should contain events for all 3 departments
+      final hasDept1 = events.any((e) => e.department == '1-19');
+      final hasDept2 = events.any((e) => e.department == '20-54');
+      final hasDept3 = events.any((e) => e.department == '55-976');
+
+      expect(hasDept1, isTrue);
+      expect(hasDept2, isTrue);
+      expect(hasDept3, isTrue);
+    });
+
+    test('should filter events when zip code is set to department 75', () {
+      // Set zip code to Paris (75)
+      container.read(userZipCodeProvider.notifier).setZipCode('75001');
+
+      final events = container.read(fiscalCalendarProvider);
+
+      // Should ONLY contain department 55-976 for specific events
+      final hasDept1 = events.any(
+        (e) => e.isDepartmentSpecific && e.department == '1-19',
+      );
+      final hasDept2 = events.any(
+        (e) => e.isDepartmentSpecific && e.department == '20-54',
+      );
+      final hasDept3 = events.any(
+        (e) => e.isDepartmentSpecific && e.department == '55-976',
+      );
+
+      expect(hasDept1, isFalse);
+      expect(hasDept2, isFalse);
+      expect(hasDept3, isTrue);
+
+      // Should still contain general events
+      final hasGeneral = events.any((e) => !e.isDepartmentSpecific);
+      expect(hasGeneral, isTrue);
     });
   });
 }

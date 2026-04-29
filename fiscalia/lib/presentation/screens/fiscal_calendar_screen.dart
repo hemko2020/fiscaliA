@@ -20,13 +20,6 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: DateTime.now().month - 1);
-
-    // Initialiser les événements par défaut
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final service = ref.read(fiscalCalendarServiceProvider);
-      ref.read(fiscalCalendarProvider.notifier).state = service
-          .getDefaultFiscalCalendar();
-    });
   }
 
   @override
@@ -35,10 +28,59 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
     super.dispose();
   }
 
+  void _showZipCodeDialog(BuildContext context) {
+    final currentZipCode = ref.read(userZipCodeProvider);
+    final controller = TextEditingController(text: currentZipCode);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Votre département'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Entrez votre code postal pour obtenir les dates limites de déclaration spécifiques à votre département.',
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              maxLength: 5,
+              decoration: const InputDecoration(
+                labelText: 'Code postal',
+                hintText: 'Ex: 75001',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (controller.text.length >= 2) {
+                ref
+                    .read(userZipCodeProvider.notifier)
+                    .setZipCode(controller.text);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Enregistrer'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final events = ref.watch(fiscalCalendarProvider);
     final service = ref.watch(fiscalCalendarServiceProvider);
+    final zipCode = ref.watch(userZipCodeProvider);
 
     final upcomingEvents = service.getUpcomingEvents(events);
     final currentMonthEvents = service.getEventsForMonth(
@@ -52,17 +94,90 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
         title: const Text('Calendrier Fiscal'),
         backgroundColor: AppColors.primaryBlue,
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.location_on),
+            tooltip: 'Définir le département',
+            onPressed: () => _showZipCodeDialog(context),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _buildLocationBanner(context, zipCode, service),
+            const SizedBox(height: 16),
             _buildUpcomingEventsSection(context, upcomingEvents, service),
             const SizedBox(height: 24),
             _buildMonthlyCalendarSection(context, currentMonthEvents, service),
             const SizedBox(height: 24),
             _buildEventTypesLegend(context, service),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLocationBanner(
+    BuildContext context,
+    String zipCode,
+    FiscalCalendarService service,
+  ) {
+    final hasZipCode = zipCode.isNotEmpty;
+    final departmentInfo = hasZipCode
+        ? 'Département: ${zipCode.substring(0, 2)} (Zone ${service.getDepartmentForZipCode(zipCode)})'
+        : 'Département non renseigné';
+
+    return InkWell(
+      onTap: () => _showZipCodeDialog(context),
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: hasZipCode
+              ? AppColors.accentGreen.withValues(alpha: 0.1)
+              : AppColors.accentOrange.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: hasZipCode
+                ? AppColors.accentGreen.withValues(alpha: 0.5)
+                : AppColors.accentOrange.withValues(alpha: 0.5),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              hasZipCode ? Icons.check_circle : Icons.warning_amber,
+              color: hasZipCode
+                  ? AppColors.accentGreen
+                  : AppColors.accentOrange,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    departmentInfo,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: hasZipCode
+                          ? AppColors.accentGreen
+                          : AppColors.accentOrange,
+                    ),
+                  ),
+                  Text(
+                    hasZipCode
+                        ? 'Dates limites adaptées à votre département'
+                        : 'Appuyez pour personnaliser vos dates limites',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.grey),
           ],
         ),
       ),
