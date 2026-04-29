@@ -8,6 +8,7 @@ import 'school_fees_credit_screen.dart';
 import 'union_dues_credit_screen.dart';
 import 'alimony_deduction_screen.dart';
 import 'device_distribution_screen.dart';
+import 'fiscal_calendar_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
   const OptimizerScreen({super.key});
@@ -221,6 +222,22 @@ class OptimizerScreen extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => const DeviceDistributionScreen(),
+              ),
+            );
+          },
+        ),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.calendar_today,
+          title: 'Calendrier Fiscal',
+          subtitle: 'Dates clés et échéances',
+          economy: '+0 €',
+          risk: 0,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FiscalCalendarScreen(),
               ),
             );
           },
