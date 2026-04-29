@@ -8,7 +8,8 @@ class FiscalCalendarScreen extends ConsumerStatefulWidget {
   const FiscalCalendarScreen({super.key});
 
   @override
-  ConsumerState<FiscalCalendarScreen> createState() => _FiscalCalendarScreenState();
+  ConsumerState<FiscalCalendarScreen> createState() =>
+      _FiscalCalendarScreenState();
 }
 
 class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
@@ -19,11 +20,12 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: DateTime.now().month - 1);
-    
+
     // Initialiser les événements par défaut
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final service = ref.read(fiscalCalendarServiceProvider);
-      ref.read(fiscalCalendarProvider.notifier).state = service.getDefaultFiscalCalendar();
+      ref.read(fiscalCalendarProvider.notifier).state = service
+          .getDefaultFiscalCalendar();
     });
   }
 
@@ -37,9 +39,13 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
   Widget build(BuildContext context) {
     final events = ref.watch(fiscalCalendarProvider);
     final service = ref.watch(fiscalCalendarServiceProvider);
-    
+
     final upcomingEvents = service.getUpcomingEvents(events);
-    final currentMonthEvents = service.getEventsForMonth(events, _currentMonth.year, _currentMonth.month);
+    final currentMonthEvents = service.getEventsForMonth(
+      events,
+      _currentMonth.year,
+      _currentMonth.month,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +69,11 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
     );
   }
 
-  Widget _buildUpcomingEventsSection(BuildContext context, List<FiscalCalendarModel> events, FiscalCalendarService service) {
+  Widget _buildUpcomingEventsSection(
+    BuildContext context,
+    List<FiscalCalendarModel> events,
+    FiscalCalendarService service,
+  ) {
     if (events.isEmpty) {
       return Card(
         color: AppColors.primaryBlue.withValues(alpha: 0.1),
@@ -87,9 +97,9 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
               const SizedBox(height: 8),
               Text(
                 'Vous êtes à jour avec vos obligations fiscales',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
               ),
             ],
           ),
@@ -114,7 +124,9 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
           ],
         ),
         const SizedBox(height: 16),
-        ...events.take(5).map((event) => _buildEventCard(context, event, service)),
+        ...events
+            .take(5)
+            .map((event) => _buildEventCard(context, event, service)),
         if (events.length > 5) ...[
           const SizedBox(height: 12),
           Center(
@@ -131,9 +143,13 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
     );
   }
 
-  Widget _buildEventCard(BuildContext context, FiscalCalendarModel event, FiscalCalendarService service) {
+  Widget _buildEventCard(
+    BuildContext context,
+    FiscalCalendarModel event,
+    FiscalCalendarService service,
+  ) {
     final daysUntil = service.getDaysUntilEvent(event);
-    
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
@@ -157,33 +173,41 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
               _formatEventDate(event.date),
               style: TextStyle(
                 color: daysUntil <= 7 ? AppColors.accentOrange : Colors.grey,
-                fontWeight: daysUntil <= 7 ? FontWeight.bold : FontWeight.normal,
+                fontWeight: daysUntil <= 7
+                    ? FontWeight.bold
+                    : FontWeight.normal,
               ),
             ),
             if (daysUntil <= 30) ...[
               const SizedBox(height: 4),
               Text(
-                daysUntil == 0 ? "Aujourd'hui" : 
-                daysUntil == 1 ? "Demain" :
-                "Dans $daysUntil jours",
+                daysUntil == 0
+                    ? "Aujourd'hui"
+                    : daysUntil == 1
+                    ? "Demain"
+                    : "Dans $daysUntil jours",
                 style: TextStyle(
-                  color: daysUntil <= 7 ? AppColors.accentOrange : AppColors.accentGreen,
+                  color: daysUntil <= 7
+                      ? AppColors.accentOrange
+                      : AppColors.accentGreen,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ],
         ),
-        trailing: daysUntil <= 7 ? Icon(
-          Icons.priority_high,
-          color: AppColors.accentOrange,
-          size: 24,
-        ) : null,
+        trailing: daysUntil <= 7
+            ? Icon(Icons.priority_high, color: AppColors.accentOrange, size: 24)
+            : null,
       ),
     );
   }
 
-  Widget _buildMonthlyCalendarSection(BuildContext context, List<FiscalCalendarModel> events, FiscalCalendarService service) {
+  Widget _buildMonthlyCalendarSection(
+    BuildContext context,
+    List<FiscalCalendarModel> events,
+    FiscalCalendarService service,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -236,13 +260,19 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
             ),
           ),
         ] else ...[
-          ...events.map((event) => _buildCompactEventCard(context, event, service)),
+          ...events.map(
+            (event) => _buildCompactEventCard(context, event, service),
+          ),
         ],
       ],
     );
   }
 
-  Widget _buildCompactEventCard(BuildContext context, FiscalCalendarModel event, FiscalCalendarService service) {
+  Widget _buildCompactEventCard(
+    BuildContext context,
+    FiscalCalendarModel event,
+    FiscalCalendarService service,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       elevation: 1,
@@ -271,9 +301,9 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
         ),
         subtitle: Text(
           event.description,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Colors.grey,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: Colors.grey),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -286,7 +316,10 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
     );
   }
 
-  Widget _buildEventTypesLegend(BuildContext context, FiscalCalendarService service) {
+  Widget _buildEventTypesLegend(
+    BuildContext context,
+    FiscalCalendarService service,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -301,21 +334,21 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
         Wrap(
           spacing: 16,
           runSpacing: 8,
-          children: FiscalEventType.values.map((type) => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.circle,
-                color: _getEventColor(type),
-                size: 12,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                service.getEventTypeDisplayName(type),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          )).toList(),
+          children: FiscalEventType.values
+              .map(
+                (type) => Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.circle, color: _getEventColor(type), size: 12),
+                    const SizedBox(width: 4),
+                    Text(
+                      service.getEventTypeDisplayName(type),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              )
+              .toList(),
         ),
       ],
     );
@@ -340,15 +373,38 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
 
   String _formatEventDate(DateTime date) {
     final days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
-    final months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
-    
+    final months = [
+      'Jan',
+      'Fév',
+      'Mar',
+      'Avr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Aoû',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Déc',
+    ];
+
     return '${days[date.weekday % 7]} ${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
   String _formatMonthYear(DateTime date) {
     final months = [
-      'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-      'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+      'Janvier',
+      'Février',
+      'Mars',
+      'Avril',
+      'Mai',
+      'Juin',
+      'Juillet',
+      'Août',
+      'Septembre',
+      'Octobre',
+      'Novembre',
+      'Décembre',
     ];
     return '${months[date.month - 1]} ${date.year}';
   }

@@ -6,28 +6,28 @@ part 'fiscal_calendar_model.g.dart';
 class FiscalCalendarModel {
   @HiveField(0)
   final String id;
-  
+
   @HiveField(1)
   final String title;
-  
+
   @HiveField(2)
   final String description;
-  
+
   @HiveField(3)
   final DateTime date;
-  
+
   @HiveField(4)
   final FiscalEventType type;
-  
+
   @HiveField(5)
   final String department;
-  
+
   @HiveField(6)
   final bool isDepartmentSpecific;
-  
+
   @HiveField(7)
   final bool isReminderEnabled;
-  
+
   @HiveField(8)
   final int reminderDaysBefore;
 
@@ -103,19 +103,19 @@ class FiscalCalendarModel {
 enum FiscalEventType {
   @HiveField(0)
   declaration,
-  
+
   @HiveField(1)
   deadline,
-  
+
   @HiveField(2)
   contribution,
-  
+
   @HiveField(3)
   payment,
-  
+
   @HiveField(4)
   notification,
-  
+
   @HiveField(5)
   reminder,
 }
