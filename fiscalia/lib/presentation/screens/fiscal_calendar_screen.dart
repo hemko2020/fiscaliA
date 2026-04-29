@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/fiscal_calendar_model.dart';
 import '../providers/fiscal_calendar_provider.dart';
+import 'notification_settings_screen.dart';
 
 class FiscalCalendarScreen extends ConsumerStatefulWidget {
   const FiscalCalendarScreen({super.key});
@@ -95,6 +96,18 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
         backgroundColor: AppColors.primaryBlue,
         foregroundColor: Colors.white,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            tooltip: 'Paramètres de notification',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationSettingsScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.location_on),
             tooltip: 'Définir le département',
