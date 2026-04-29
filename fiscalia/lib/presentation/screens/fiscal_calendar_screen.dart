@@ -31,7 +31,7 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
   void _showZipCodeDialog(BuildContext context) {
     final currentZipCode = ref.read(userZipCodeProvider);
     final controller = TextEditingController(text: currentZipCode);
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -63,7 +63,9 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
           FilledButton(
             onPressed: () {
               if (controller.text.length >= 2) {
-                ref.read(userZipCodeProvider.notifier).setZipCode(controller.text);
+                ref
+                    .read(userZipCodeProvider.notifier)
+                    .setZipCode(controller.text);
                 Navigator.pop(context);
               }
             },
@@ -118,9 +120,13 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
     );
   }
 
-  Widget _buildLocationBanner(BuildContext context, String zipCode, FiscalCalendarService service) {
+  Widget _buildLocationBanner(
+    BuildContext context,
+    String zipCode,
+    FiscalCalendarService service,
+  ) {
     final hasZipCode = zipCode.isNotEmpty;
-    final departmentInfo = hasZipCode 
+    final departmentInfo = hasZipCode
         ? 'Département: ${zipCode.substring(0, 2)} (Zone ${service.getDepartmentForZipCode(zipCode)})'
         : 'Département non renseigné';
 
@@ -130,13 +136,13 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: hasZipCode 
-              ? AppColors.accentGreen.withValues(alpha: 0.1) 
+          color: hasZipCode
+              ? AppColors.accentGreen.withValues(alpha: 0.1)
               : AppColors.accentOrange.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: hasZipCode 
-                ? AppColors.accentGreen.withValues(alpha: 0.5) 
+            color: hasZipCode
+                ? AppColors.accentGreen.withValues(alpha: 0.5)
                 : AppColors.accentOrange.withValues(alpha: 0.5),
           ),
         ),
@@ -144,7 +150,9 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
           children: [
             Icon(
               hasZipCode ? Icons.check_circle : Icons.warning_amber,
-              color: hasZipCode ? AppColors.accentGreen : AppColors.accentOrange,
+              color: hasZipCode
+                  ? AppColors.accentGreen
+                  : AppColors.accentOrange,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -155,11 +163,13 @@ class _FiscalCalendarScreenState extends ConsumerState<FiscalCalendarScreen> {
                     departmentInfo,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: hasZipCode ? AppColors.accentGreen : AppColors.accentOrange,
+                      color: hasZipCode
+                          ? AppColors.accentGreen
+                          : AppColors.accentOrange,
                     ),
                   ),
                   Text(
-                    hasZipCode 
+                    hasZipCode
                         ? 'Dates limites adaptées à votre département'
                         : 'Appuyez pour personnaliser vos dates limites',
                     style: Theme.of(context).textTheme.bodySmall,

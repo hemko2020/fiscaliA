@@ -334,12 +334,12 @@ void main() {
 
     test('should return all events when zip code is empty', () {
       final events = container.read(fiscalCalendarProvider);
-      
+
       // Should contain events for all 3 departments
       final hasDept1 = events.any((e) => e.department == '1-19');
       final hasDept2 = events.any((e) => e.department == '20-54');
       final hasDept3 = events.any((e) => e.department == '55-976');
-      
+
       expect(hasDept1, isTrue);
       expect(hasDept2, isTrue);
       expect(hasDept3, isTrue);
@@ -348,18 +348,24 @@ void main() {
     test('should filter events when zip code is set to department 75', () {
       // Set zip code to Paris (75)
       container.read(userZipCodeProvider.notifier).setZipCode('75001');
-      
+
       final events = container.read(fiscalCalendarProvider);
-      
+
       // Should ONLY contain department 55-976 for specific events
-      final hasDept1 = events.any((e) => e.isDepartmentSpecific && e.department == '1-19');
-      final hasDept2 = events.any((e) => e.isDepartmentSpecific && e.department == '20-54');
-      final hasDept3 = events.any((e) => e.isDepartmentSpecific && e.department == '55-976');
-      
+      final hasDept1 = events.any(
+        (e) => e.isDepartmentSpecific && e.department == '1-19',
+      );
+      final hasDept2 = events.any(
+        (e) => e.isDepartmentSpecific && e.department == '20-54',
+      );
+      final hasDept3 = events.any(
+        (e) => e.isDepartmentSpecific && e.department == '55-976',
+      );
+
       expect(hasDept1, isFalse);
       expect(hasDept2, isFalse);
       expect(hasDept3, isTrue);
-      
+
       // Should still contain general events
       final hasGeneral = events.any((e) => !e.isDepartmentSpecific);
       expect(hasGeneral, isTrue);

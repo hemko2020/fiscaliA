@@ -2,12 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import '../../data/models/fiscal_calendar_model.dart';
 
-final userZipCodeProvider = StateNotifierProvider<ZipCodeNotifier, String>((ref) {
+final userZipCodeProvider = StateNotifierProvider<ZipCodeNotifier, String>((
+  ref,
+) {
   return ZipCodeNotifier();
 });
 
 class ZipCodeNotifier extends StateNotifier<String> {
-  ZipCodeNotifier() : super(Hive.box('settings').get('zipCode', defaultValue: ''));
+  ZipCodeNotifier()
+    : super(Hive.box('settings').get('zipCode', defaultValue: ''));
 
   void setZipCode(String zipCode) {
     Hive.box('settings').put('zipCode', zipCode);
@@ -18,15 +21,15 @@ class ZipCodeNotifier extends StateNotifier<String> {
 final fiscalCalendarProvider = Provider<List<FiscalCalendarModel>>((ref) {
   final service = ref.watch(fiscalCalendarServiceProvider);
   final zipCode = ref.watch(userZipCodeProvider);
-  
+
   final allEvents = service.getDefaultFiscalCalendar();
-  
+
   if (zipCode.isEmpty) {
     return allEvents;
   }
-  
+
   final department = service.getDepartmentForZipCode(zipCode);
-  
+
   return allEvents.where((event) {
     if (!event.isDepartmentSpecific) return true;
     return event.department == department;
