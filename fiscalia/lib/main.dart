@@ -11,11 +11,17 @@ import 'data/models/niche_ceiling_tracker_model.dart';
 import 'data/models/school_fees_credit_model.dart';
 import 'data/models/union_dues_credit_model.dart';
 import 'data/models/alimony_deduction_model.dart';
+import 'data/models/device_distribution_model.dart';
+import 'data/models/fiscal_calendar_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
+
+  // Register adapters
+  Hive.registerAdapter(FiscalCalendarModelAdapter());
+  Hive.registerAdapter(FiscalEventTypeAdapter());
 
   await Hive.openBox<FoyerFiscalModel>('foyerFiscal');
   await Hive.openBox<SimulationModel>('simulations');
@@ -26,6 +32,8 @@ void main() async {
   await Hive.openBox<SchoolFeesCreditModel>('schoolFeesCredits');
   await Hive.openBox<UnionDuesCreditModel>('unionDuesCredits');
   await Hive.openBox<AlimonyDeductionModel>('alimonyDeductions');
+  await Hive.openBox<FiscalCalendarModel>('fiscalCalendar');
+  await Hive.openBox<DeviceDistributionModel>('deviceDistribution');
   await Hive.openBox('settings');
 
   runApp(const ProviderScope(child: FiscalIAApp()));
