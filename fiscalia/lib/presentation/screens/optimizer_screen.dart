@@ -9,6 +9,7 @@ import 'union_dues_credit_screen.dart';
 import 'alimony_deduction_screen.dart';
 import 'device_distribution_screen.dart';
 import 'per_tracker_screen.dart';
+import 'education/educational_center_screen.dart';
 import 'fiscal_calendar_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
@@ -104,6 +105,23 @@ class OptimizerScreen extends ConsumerWidget {
           style: Theme.of(
             context,
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.school,
+          title: 'Centre Éducatif',
+          subtitle: 'Fiches, FAQ et Glossaire fiscal',
+          economy: 'Apprendre',
+          risk: 0,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EducationalCenterScreen(),
+              ),
+            );
+          },
         ),
         const SizedBox(height: 12),
         _buildRecommendationCard(
