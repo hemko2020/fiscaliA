@@ -107,23 +107,21 @@ class OptimizerScreen extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         _buildRecommendationCard(
-                context,
-                icon: Icons.savings,
-                title: 'Suivi PER',
-                subtitle: 'Gérez vos versements et plafonds',
-                economy: 'Optimiser',
-                risk: 1,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PerTrackerScreen(),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-              _buildRecommendationCard(
+          context,
+          icon: Icons.savings,
+          title: 'Suivi PER',
+          subtitle: 'Gérez vos versements et plafonds',
+          economy: 'Optimiser',
+          risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PerTrackerScreen()),
+            );
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildRecommendationCard(
           context,
           icon: Icons.receipt_long,
           title: 'Frais réels',

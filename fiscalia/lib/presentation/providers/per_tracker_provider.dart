@@ -4,9 +4,10 @@ import 'package:uuid/uuid.dart';
 
 import '../../data/models/per_tracker_model.dart';
 
-final perTrackerProvider = StateNotifierProvider<PerTrackerNotifier, PerTrackerModel?>((ref) {
-  return PerTrackerNotifier();
-});
+final perTrackerProvider =
+    StateNotifierProvider<PerTrackerNotifier, PerTrackerModel?>((ref) {
+      return PerTrackerNotifier();
+    });
 
 class PerTrackerNotifier extends StateNotifier<PerTrackerModel?> {
   final _box = Hive.box<PerTrackerModel>('perTracker');
@@ -26,18 +27,20 @@ class PerTrackerNotifier extends StateNotifier<PerTrackerModel?> {
     double carryoverYear2 = 0,
     double carryoverYear3 = 0,
   }) async {
-    final model = state?.copyWith(
-      currentYearCeiling: currentYearCeiling,
-      carryoverYear1: carryoverYear1,
-      carryoverYear2: carryoverYear2,
-      carryoverYear3: carryoverYear3,
-    ) ?? PerTrackerModel(
-      id: _uuid.v4(),
-      currentYearCeiling: currentYearCeiling,
-      carryoverYear1: carryoverYear1,
-      carryoverYear2: carryoverYear2,
-      carryoverYear3: carryoverYear3,
-    );
+    final model =
+        state?.copyWith(
+          currentYearCeiling: currentYearCeiling,
+          carryoverYear1: carryoverYear1,
+          carryoverYear2: carryoverYear2,
+          carryoverYear3: carryoverYear3,
+        ) ??
+        PerTrackerModel(
+          id: _uuid.v4(),
+          currentYearCeiling: currentYearCeiling,
+          carryoverYear1: carryoverYear1,
+          carryoverYear2: carryoverYear2,
+          carryoverYear3: carryoverYear3,
+        );
 
     await _box.put(model.id, model);
     state = model;
@@ -50,7 +53,7 @@ class PerTrackerNotifier extends StateNotifier<PerTrackerModel?> {
     await _box.put(updated.id, updated);
     state = updated;
   }
-  
+
   Future<void> deletePer() async {
     if (state != null) {
       await _box.delete(state!.id);

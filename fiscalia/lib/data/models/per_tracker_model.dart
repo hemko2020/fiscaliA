@@ -63,7 +63,8 @@ class PerTrackerModel {
       carryoverYear1: carryoverYear1 ?? this.carryoverYear1,
       carryoverYear2: carryoverYear2 ?? this.carryoverYear2,
       carryoverYear3: carryoverYear3 ?? this.carryoverYear3,
-      totalContributedThisYear: totalContributedThisYear ?? this.totalContributedThisYear,
+      totalContributedThisYear:
+          totalContributedThisYear ?? this.totalContributedThisYear,
     );
   }
 }

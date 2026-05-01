@@ -55,7 +55,7 @@ void main() {
   group('PerCalculationService', () {
     test('should calculate potential savings correctly', () {
       final service = PerCalculationService();
-      
+
       // 1000€ contribution with 30% TMI
       final savings = service.calculatePotentialSavings(1000, 30);
       expect(savings, 300);

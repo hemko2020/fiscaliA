@@ -24,7 +24,7 @@ void main() {
       expect(updated.isPushEnabled, isTrue);
       expect(updated.reminderDaysBefore, 15);
       expect(updated.notifyPayments, isFalse);
-      
+
       // Unchanged fields
       expect(updated.notifyDeadlines, isTrue);
       expect(updated.notifyDeclarations, isTrue);

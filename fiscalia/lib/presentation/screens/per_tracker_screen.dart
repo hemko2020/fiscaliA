@@ -33,11 +33,14 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
   void _loadExistingData() {
     final per = ref.read(perTrackerProvider);
     if (per != null) {
-      _currentCeilingController.text = per.currentYearCeiling.toStringAsFixed(0);
+      _currentCeilingController.text = per.currentYearCeiling.toStringAsFixed(
+        0,
+      );
       _carryover1Controller.text = per.carryoverYear1.toStringAsFixed(0);
       _carryover2Controller.text = per.carryoverYear2.toStringAsFixed(0);
       _carryover3Controller.text = per.carryoverYear3.toStringAsFixed(0);
-      _contributionController.text = per.totalContributedThisYear.toStringAsFixed(0);
+      _contributionController.text = per.totalContributedThisYear
+          .toStringAsFixed(0);
     }
   }
 
@@ -53,16 +56,19 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
 
   void _saveSettings() {
     if (_formKey.currentState!.validate()) {
-      ref.read(perTrackerProvider.notifier).savePerData(
-        currentYearCeiling: double.tryParse(_currentCeilingController.text) ?? 0,
-        carryoverYear1: double.tryParse(_carryover1Controller.text) ?? 0,
-        carryoverYear2: double.tryParse(_carryover2Controller.text) ?? 0,
-        carryoverYear3: double.tryParse(_carryover3Controller.text) ?? 0,
-      );
-      
+      ref
+          .read(perTrackerProvider.notifier)
+          .savePerData(
+            currentYearCeiling:
+                double.tryParse(_currentCeilingController.text) ?? 0,
+            carryoverYear1: double.tryParse(_carryover1Controller.text) ?? 0,
+            carryoverYear2: double.tryParse(_carryover2Controller.text) ?? 0,
+            carryoverYear3: double.tryParse(_carryover3Controller.text) ?? 0,
+          );
+
       final contribution = double.tryParse(_contributionController.text) ?? 0;
       ref.read(perTrackerProvider.notifier).updateContributions(contribution);
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Données PER enregistrées avec succès')),
       );
@@ -72,7 +78,7 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
   @override
   Widget build(BuildContext context) {
     final per = ref.watch(perTrackerProvider);
-    
+
     // Calculate TMI for savings projection (Using default FoyerFiscal for now, as it's not globally provided)
     final taxCalculator = ref.read(taxCalculatorProvider);
     final defaultFoyer = FoyerFiscalModel(
@@ -97,14 +103,14 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
             children: [
               _buildHeaderInfo(),
               const SizedBox(height: 24),
-              
+
               if (per != null) ...[
                 _buildDashboard(per, tmi),
                 const SizedBox(height: 24),
                 _buildExpirationWarning(per),
                 const SizedBox(height: 24),
               ],
-              
+
               _buildInputSection(),
             ],
           ),
@@ -154,8 +160,11 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
 
   Widget _buildDashboard(PerTrackerModel per, double tmi) {
     final calcService = ref.read(perCalculationServiceProvider);
-    final potentialSavings = calcService.calculatePotentialSavings(per.remainingCeiling, tmi);
-    
+    final potentialSavings = calcService.calculatePotentialSavings(
+      per.remainingCeiling,
+      tmi,
+    );
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -169,11 +178,11 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
-            
+
             // Progress Bar
             LinearProgressIndicator(
-              value: per.totalAvailableCeiling > 0 
-                  ? per.totalContributedThisYear / per.totalAvailableCeiling 
+              value: per.totalAvailableCeiling > 0
+                  ? per.totalContributedThisYear / per.totalAvailableCeiling
                   : 0,
               backgroundColor: Colors.grey.shade200,
               color: AppColors.accentGreen,
@@ -181,18 +190,30 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               borderRadius: BorderRadius.circular(6),
             ),
             const SizedBox(height: 16),
-            
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildStatColumn('Versé', '${per.totalContributedThisYear.toStringAsFixed(0)} €', AppColors.accentGreen),
-                _buildStatColumn('Plafond Total', '${per.totalAvailableCeiling.toStringAsFixed(0)} €', AppColors.primaryBlue),
-                _buildStatColumn('Reste', '${per.remainingCeiling.toStringAsFixed(0)} €', AppColors.accentOrange),
+                _buildStatColumn(
+                  'Versé',
+                  '${per.totalContributedThisYear.toStringAsFixed(0)} €',
+                  AppColors.accentGreen,
+                ),
+                _buildStatColumn(
+                  'Plafond Total',
+                  '${per.totalAvailableCeiling.toStringAsFixed(0)} €',
+                  AppColors.primaryBlue,
+                ),
+                _buildStatColumn(
+                  'Reste',
+                  '${per.remainingCeiling.toStringAsFixed(0)} €',
+                  AppColors.accentOrange,
+                ),
               ],
             ),
-            
+
             const Divider(height: 32),
-            
+
             // Projection
             Container(
               padding: const EdgeInsets.all(12),
@@ -208,18 +229,25 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Économie d\'impôt potentielle maximale', 
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                        const Text(
+                          'Économie d\'impôt potentielle maximale',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         Text(
                           '+ ${potentialSavings.toStringAsFixed(0)} €',
                           style: TextStyle(
-                            fontSize: 24, 
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: AppColors.accentGreen,
                           ),
                         ),
-                        Text('Si vous versez les ${per.remainingCeiling.toStringAsFixed(0)} € restants avant le 31 décembre (TMI: ${tmi.toStringAsFixed(0)}%)',
-                          style: const TextStyle(fontSize: 11)),
+                        Text(
+                          'Si vous versez les ${per.remainingCeiling.toStringAsFixed(0)} € restants avant le 31 décembre (TMI: ${tmi.toStringAsFixed(0)}%)',
+                          style: const TextStyle(fontSize: 11),
+                        ),
                       ],
                     ),
                   ),
@@ -236,16 +264,26 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+        Text(
+          label,
+          style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+        ),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(
+          value,
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildExpirationWarning(PerTrackerModel per) {
     if (!per.isApproachingExpiration) return const SizedBox.shrink();
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -255,7 +293,11 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded, color: AppColors.accentOrange, size: 32),
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: AppColors.accentOrange,
+            size: 32,
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -263,7 +305,10 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               children: [
                 const Text(
                   'Attention : Plafond expirant',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.accentOrange),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.accentOrange,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -292,7 +337,7 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            
+
             TextFormField(
               controller: _currentCeilingController,
               decoration: const InputDecoration(
@@ -303,10 +348,13 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
-            
-            const Text('Plafonds non utilisés des années précédentes :', style: TextStyle(fontWeight: FontWeight.bold)),
+
+            const Text(
+              'Plafonds non utilisés des années précédentes :',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
-            
+
             TextFormField(
               controller: _carryover1Controller,
               decoration: const InputDecoration(
@@ -316,7 +364,7 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
-            
+
             TextFormField(
               controller: _carryover2Controller,
               decoration: const InputDecoration(
@@ -326,7 +374,7 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
-            
+
             TextFormField(
               controller: _carryover3Controller,
               decoration: const InputDecoration(
@@ -335,9 +383,9 @@ class _PerTrackerScreenState extends ConsumerState<PerTrackerScreen> {
               ),
               keyboardType: TextInputType.number,
             ),
-            
+
             const Divider(height: 32),
-            
+
             TextFormField(
               controller: _contributionController,
               decoration: const InputDecoration(
