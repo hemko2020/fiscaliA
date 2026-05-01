@@ -210,4 +210,9 @@ class TaxCalculator {
 
     return result;
   }
+
+  double getTMI(FoyerFiscalModel foyer) {
+    final res = calculerImpot(foyer);
+    return res['taux_marginal'] ?? 0.0;
+  }
 }

@@ -8,6 +8,7 @@ import 'school_fees_credit_screen.dart';
 import 'union_dues_credit_screen.dart';
 import 'alimony_deduction_screen.dart';
 import 'device_distribution_screen.dart';
+import 'per_tracker_screen.dart';
 import 'fiscal_calendar_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
@@ -103,6 +104,21 @@ class OptimizerScreen extends ConsumerWidget {
           style: Theme.of(
             context,
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.savings,
+          title: 'Suivi PER',
+          subtitle: 'Gérez vos versements et plafonds',
+          economy: 'Optimiser',
+          risk: 1,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PerTrackerScreen()),
+            );
+          },
         ),
         const SizedBox(height: 12),
         _buildRecommendationCard(

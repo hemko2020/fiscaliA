@@ -8,7 +8,10 @@ import '../providers/fiscal_calendar_provider.dart';
 class NotificationSettingsScreen extends ConsumerWidget {
   const NotificationSettingsScreen({super.key});
 
-  Future<void> _updateAndReschedule(WidgetRef ref, NotificationSettingsModel settings) async {
+  Future<void> _updateAndReschedule(
+    WidgetRef ref,
+    NotificationSettingsModel settings,
+  ) async {
     final notifier = ref.read(notificationSettingsProvider.notifier);
     await notifier.updateSettings(settings);
 
@@ -43,28 +46,43 @@ class NotificationSettingsScreen extends ConsumerWidget {
               children: [
                 SwitchListTile(
                   title: const Text('Échéances (ex: PER)'),
-                  subtitle: const Text('Rappels pour les dates limites de cotisation'),
+                  subtitle: const Text(
+                    'Rappels pour les dates limites de cotisation',
+                  ),
                   value: settings.notifyDeadlines,
                   onChanged: (value) {
-                    _updateAndReschedule(ref, settings.copyWith(notifyDeadlines: value));
+                    _updateAndReschedule(
+                      ref,
+                      settings.copyWith(notifyDeadlines: value),
+                    );
                   },
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
                   title: const Text('Déclarations'),
-                  subtitle: const Text('Rappels pour les périodes de déclaration d\'impôts'),
+                  subtitle: const Text(
+                    'Rappels pour les périodes de déclaration d\'impôts',
+                  ),
                   value: settings.notifyDeclarations,
                   onChanged: (value) {
-                    _updateAndReschedule(ref, settings.copyWith(notifyDeclarations: value));
+                    _updateAndReschedule(
+                      ref,
+                      settings.copyWith(notifyDeclarations: value),
+                    );
                   },
                 ),
                 const Divider(height: 1),
                 SwitchListTile(
                   title: const Text('Paiements'),
-                  subtitle: const Text('Rappels pour les échéances de paiement'),
+                  subtitle: const Text(
+                    'Rappels pour les échéances de paiement',
+                  ),
                   value: settings.notifyPayments,
                   onChanged: (value) {
-                    _updateAndReschedule(ref, settings.copyWith(notifyPayments: value));
+                    _updateAndReschedule(
+                      ref,
+                      settings.copyWith(notifyPayments: value),
+                    );
                   },
                 ),
               ],
@@ -86,7 +104,10 @@ class NotificationSettingsScreen extends ConsumerWidget {
                     }).toList(),
                     onChanged: (value) {
                       if (value != null) {
-                        _updateAndReschedule(ref, settings.copyWith(reminderDaysBefore: value));
+                        _updateAndReschedule(
+                          ref,
+                          settings.copyWith(reminderDaysBefore: value),
+                        );
                       }
                     },
                   ),
@@ -99,7 +120,12 @@ class NotificationSettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMainSwitch(BuildContext context, NotificationSettingsModel settings, NotificationSettingsNotifier notifier, WidgetRef ref) {
+  Widget _buildMainSwitch(
+    BuildContext context,
+    NotificationSettingsModel settings,
+    NotificationSettingsNotifier notifier,
+    WidgetRef ref,
+  ) {
     return Card(
       elevation: 2,
       child: SwitchListTile(
@@ -107,7 +133,9 @@ class NotificationSettingsScreen extends ConsumerWidget {
           'Activer les notifications',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: const Text('Recevoir des rappels pour les dates fiscales importantes'),
+        subtitle: const Text(
+          'Recevoir des rappels pour les dates fiscales importantes',
+        ),
         value: settings.isPushEnabled,
         activeTrackColor: AppColors.accentGreen,
         onChanged: (value) async {
@@ -119,7 +147,9 @@ class NotificationSettingsScreen extends ConsumerWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Les permissions de notification ont été refusées.'),
+                    content: Text(
+                      'Les permissions de notification ont été refusées.',
+                    ),
                   ),
                 );
               }
@@ -152,9 +182,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
         side: BorderSide(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        children: children,
-      ),
+      child: Column(children: children),
     );
   }
 }

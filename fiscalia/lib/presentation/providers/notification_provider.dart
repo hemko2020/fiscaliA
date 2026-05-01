@@ -7,11 +7,16 @@ import 'package:timezone/timezone.dart' as tz;
 import '../../data/models/notification_settings_model.dart';
 import '../../data/models/fiscal_calendar_model.dart';
 
-final notificationSettingsProvider = StateNotifierProvider<NotificationSettingsNotifier, NotificationSettingsModel>((ref) {
-  return NotificationSettingsNotifier();
-});
+final notificationSettingsProvider =
+    StateNotifierProvider<
+      NotificationSettingsNotifier,
+      NotificationSettingsModel
+    >((ref) {
+      return NotificationSettingsNotifier();
+    });
 
-class NotificationSettingsNotifier extends StateNotifier<NotificationSettingsModel> {
+class NotificationSettingsNotifier
+    extends StateNotifier<NotificationSettingsModel> {
   final _box = Hive.box<NotificationSettingsModel>('notificationSettings');
 
   NotificationSettingsNotifier() : super(_getInitialState()) {
@@ -34,25 +39,28 @@ class NotificationSettingsNotifier extends StateNotifier<NotificationSettingsMod
 
   Future<bool> requestPermissions() async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    
+
     // Initialize for Android and iOS
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings();
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings();
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        );
+
+    await flutterLocalNotificationsPlugin.initialize(
+      settings: initializationSettings,
     );
-    
-    await flutterLocalNotificationsPlugin.initialize(settings: initializationSettings);
 
     final bool? result = await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-        
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >()
+        ?.requestPermissions(alert: true, badge: true, sound: true);
+
     // Android 13+ requires explicit permission request too, but we handle the simple case here.
     return result ?? true;
   }
@@ -64,7 +72,8 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
 
 class NotificationService {
   final Ref _ref;
-  final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   NotificationService(this._ref);
 
@@ -72,11 +81,13 @@ class NotificationService {
     await _notificationsPlugin.cancelAll();
   }
 
-  Future<void> scheduleEventNotifications(List<FiscalCalendarModel> events) async {
+  Future<void> scheduleEventNotifications(
+    List<FiscalCalendarModel> events,
+  ) async {
     final settings = _ref.read(notificationSettingsProvider);
-    
+
     await _notificationsPlugin.cancelAll();
-    
+
     if (!settings.isPushEnabled) return;
 
     int notificationId = 0;
@@ -85,8 +96,10 @@ class NotificationService {
     for (final event in events) {
       if (!_shouldNotifyForEvent(event, settings)) continue;
 
-      final reminderDate = event.date.subtract(Duration(days: settings.reminderDaysBefore));
-      
+      final reminderDate = event.date.subtract(
+        Duration(days: settings.reminderDaysBefore),
+      );
+
       // Only schedule if the reminder date is in the future
       if (reminderDate.isAfter(now)) {
         await _scheduleNotification(
@@ -96,20 +109,29 @@ class NotificationService {
           scheduledDate: reminderDate,
         );
       }
-      
+
       // Also schedule on the day of the event
       if (event.date.isAfter(now)) {
         await _scheduleNotification(
           id: notificationId++,
           title: 'Aujourd\'hui : ${event.title}',
           body: 'N\'oubliez pas : ${event.description}',
-          scheduledDate: DateTime(event.date.year, event.date.month, event.date.day, 9, 0), // 9 AM
+          scheduledDate: DateTime(
+            event.date.year,
+            event.date.month,
+            event.date.day,
+            9,
+            0,
+          ), // 9 AM
         );
       }
     }
   }
 
-  bool _shouldNotifyForEvent(FiscalCalendarModel event, NotificationSettingsModel settings) {
+  bool _shouldNotifyForEvent(
+    FiscalCalendarModel event,
+    NotificationSettingsModel settings,
+  ) {
     switch (event.type) {
       case FiscalEventType.deadline:
         return settings.notifyDeadlines;
