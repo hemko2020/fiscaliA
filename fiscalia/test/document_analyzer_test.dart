@@ -12,7 +12,8 @@ void main() {
     });
 
     test('should extract net taxable income', () {
-      const text = '... some text ...\nNet imposable 2500,50\n... more text ...';
+      const text =
+          '... some text ...\nNet imposable 2500,50\n... more text ...';
       final parsed = parser.parseText(text);
       expect(parsed.netTaxableIncome, 2500.50);
     });
@@ -23,7 +24,7 @@ void main() {
       Titre restaurant part employeur : 120,00
       Net fiscal mensuel 3000.00
       ''';
-      
+
       final parsed = parser.parseText(text);
       expect(parsed.netTaxableIncome, 3000.0);
       expect(parsed.transportAllowance, 42.10);
@@ -46,20 +47,25 @@ void main() {
       analyzer = DeductionAnalyzerService();
     });
 
-    test('should recommend 10% standard deduction if real expenses are low', () {
-      // Net income: 3000/month (36000/year). 10% = 3600
-      const parsed = ParsedDocumentData(
-        netTaxableIncome: 3000,
-        transportAllowance: 80, // High allowance makes real expenses less attractive
-        mealVoucherEmployerContribution: 100, // Very high employer contribution
-        mealVoucherCount: 20,
-      );
+    test(
+      'should recommend 10% standard deduction if real expenses are low',
+      () {
+        // Net income: 3000/month (36000/year). 10% = 3600
+        const parsed = ParsedDocumentData(
+          netTaxableIncome: 3000,
+          transportAllowance:
+              80, // High allowance makes real expenses less attractive
+          mealVoucherEmployerContribution:
+              100, // Very high employer contribution
+          mealVoucherCount: 20,
+        );
 
-      final analysis = analyzer.analyze(parsed, distanceToWorkKm: 5);
-      
-      expect(analysis.standardDeduction, 300.0); // Monthly 10%
-      expect(analysis.isRealExpensesBetter, isFalse);
-    });
+        final analysis = analyzer.analyze(parsed, distanceToWorkKm: 5);
+
+        expect(analysis.standardDeduction, 300.0); // Monthly 10%
+        expect(analysis.isRealExpensesBetter, isFalse);
+      },
+    );
 
     test('should recommend real expenses if distance is high', () {
       const parsed = ParsedDocumentData(
@@ -71,11 +77,11 @@ void main() {
 
       // Distance is 40km (80km round trip)
       final analysis = analyzer.analyze(parsed, distanceToWorkKm: 40);
-      
+
       expect(analysis.standardDeduction, 200.0); // Monthly 10%
       expect(analysis.isRealExpensesBetter, isTrue);
       // Real expenses should be much higher than 200
-      expect(analysis.estimatedRealExpenses / 12, greaterThan(200.0)); 
+      expect(analysis.estimatedRealExpenses / 12, greaterThan(200.0));
     });
   });
 }

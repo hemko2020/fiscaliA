@@ -9,7 +9,8 @@ class DocumentScannerScreen extends ConsumerStatefulWidget {
   const DocumentScannerScreen({super.key});
 
   @override
-  ConsumerState<DocumentScannerScreen> createState() => _DocumentScannerScreenState();
+  ConsumerState<DocumentScannerScreen> createState() =>
+      _DocumentScannerScreenState();
 }
 
 class _DocumentScannerScreenState extends ConsumerState<DocumentScannerScreen> {
@@ -101,7 +102,7 @@ class _DocumentScannerScreenState extends ConsumerState<DocumentScannerScreen> {
           documents.isEmpty
               ? _buildEmptyState()
               : _buildDocumentList(documents),
-          
+
           if (_isProcessing)
             Container(
               color: Colors.black.withValues(alpha: 0.5),
@@ -113,7 +114,10 @@ class _DocumentScannerScreenState extends ConsumerState<DocumentScannerScreen> {
                     SizedBox(height: 16),
                     Text(
                       'Analyse en cours...',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     SizedBox(height: 8),
                     Text(
@@ -147,13 +151,21 @@ class _DocumentScannerScreenState extends ConsumerState<DocumentScannerScreen> {
             const SizedBox(height: 24),
             const Text(
               'Aucun document',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primaryBlue),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryBlue,
+              ),
             ),
             const SizedBox(height: 12),
             Text(
               'Ajoutez vos fiches de paie ou reçus fiscaux. Notre IA locale analysera le texte pour trouver des déductions sans que vos données ne quittent votre téléphone.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.grey.shade600, height: 1.5),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey.shade600,
+                height: 1.5,
+              ),
             ),
           ],
         ),
@@ -168,15 +180,22 @@ class _DocumentScannerScreenState extends ConsumerState<DocumentScannerScreen> {
       itemBuilder: (context, index) {
         final doc = documents[index];
         final isPdf = doc.documentType == 'pdf';
-        
+
         return Card(
           elevation: 2,
           margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
             leading: CircleAvatar(
-              backgroundColor: isPdf ? AppColors.accentOrange.withValues(alpha: 0.1) : AppColors.primaryBlue.withValues(alpha: 0.1),
+              backgroundColor: isPdf
+                  ? AppColors.accentOrange.withValues(alpha: 0.1)
+                  : AppColors.primaryBlue.withValues(alpha: 0.1),
               child: Icon(
                 isPdf ? Icons.picture_as_pdf : Icons.image,
                 color: isPdf ? AppColors.accentOrange : AppColors.primaryBlue,
@@ -195,7 +214,11 @@ class _DocumentScannerScreenState extends ConsumerState<DocumentScannerScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.check_circle, color: AppColors.accentGreen, size: 20),
+                const Icon(
+                  Icons.check_circle,
+                  color: AppColors.accentGreen,
+                  size: 20,
+                ),
                 const SizedBox(width: 16),
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),

@@ -15,16 +15,28 @@ class DocumentParserService {
 
     // Regex definitions
     // Matches: Net imposable, Net fiscal, Cumul imposable
-    final netImposableRegex = RegExp(r'(?:net\s*imposable|net\s*fiscal|cumul\s*imposable)[^\d]*(\d+(?:[ ,]\d+)*(?:[.,]\d+)?)', caseSensitive: false);
-    
+    final netImposableRegex = RegExp(
+      r'(?:net\s*imposable|net\s*fiscal|cumul\s*imposable)[^\d]*(\d+(?:[ ,]\d+)*(?:[.,]\d+)?)',
+      caseSensitive: false,
+    );
+
     // Matches: Transport, Navigo, Abonnement, Indemnité transport
-    final transportRegex = RegExp(r'(?:transport|navigo|abonnement)[^\d]*(\d+(?:[ ,]\d+)*(?:[.,]\d+)?)', caseSensitive: false);
-    
+    final transportRegex = RegExp(
+      r'(?:transport|navigo|abonnement)[^\d]*(\d+(?:[ ,]\d+)*(?:[.,]\d+)?)',
+      caseSensitive: false,
+    );
+
     // Matches: Ticket(s) restaurant, Titre(s) restaurant
-    final mealVoucherRegex = RegExp(r'(?:ticket[s]?\s*restaurant|titre[s]?\s*restaurant|tr\s*employeur)[^\d]*(\d+(?:[ ,]\d+)*(?:[.,]\d+)?)', caseSensitive: false);
-    
+    final mealVoucherRegex = RegExp(
+      r'(?:ticket[s]?\s*restaurant|titre[s]?\s*restaurant|tr\s*employeur)[^\d]*(\d+(?:[ ,]\d+)*(?:[.,]\d+)?)',
+      caseSensitive: false,
+    );
+
     // Matches: Avantage en nature véhicule
-    final companyCarRegex = RegExp(r'avantage\s*en\s*nature\s*v[é|e]hicule', caseSensitive: false);
+    final companyCarRegex = RegExp(
+      r'avantage\s*en\s*nature\s*v[é|e]hicule',
+      caseSensitive: false,
+    );
 
     double? netIncome;
     double? transportAllowance;
@@ -62,7 +74,9 @@ class DocumentParserService {
       transportAllowance: transportAllowance,
       mealVoucherEmployerContribution: mealVoucherContrib,
       hasCompanyCar: hasCompanyCar,
-      mealVoucherCount: mealVoucherContrib != null ? 20 : null, // Heuristic estimation per month
+      mealVoucherCount: mealVoucherContrib != null
+          ? 20
+          : null, // Heuristic estimation per month
     );
   }
 

@@ -3,9 +3,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../data/models/tax_document_model.dart';
 import 'document_scanner_service.dart';
 
-final documentProvider = StateNotifierProvider<DocumentNotifier, List<TaxDocumentModel>>((ref) {
-  return DocumentNotifier(ref);
-});
+final documentProvider =
+    StateNotifierProvider<DocumentNotifier, List<TaxDocumentModel>>((ref) {
+      return DocumentNotifier(ref);
+    });
 
 class DocumentNotifier extends StateNotifier<List<TaxDocumentModel>> {
   final Ref _ref;
@@ -26,7 +27,7 @@ class DocumentNotifier extends StateNotifier<List<TaxDocumentModel>> {
 
     final service = _ref.read(documentScannerServiceProvider);
     final doc = await service.pickPdf();
-    
+
     if (doc != null) {
       await _box.put(doc.id, doc);
       state = [doc, ...state];
@@ -38,7 +39,7 @@ class DocumentNotifier extends StateNotifier<List<TaxDocumentModel>> {
 
     final service = _ref.read(documentScannerServiceProvider);
     final doc = await service.takePhoto();
-    
+
     if (doc != null) {
       await _box.put(doc.id, doc);
       state = [doc, ...state];

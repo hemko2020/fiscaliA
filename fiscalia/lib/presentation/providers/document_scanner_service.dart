@@ -26,7 +26,7 @@ class DocumentScannerService {
     if (result != null && result.files.single.path != null) {
       final file = File(result.files.single.path!);
       final text = await _extractTextFromPdf(file);
-      
+
       final savedFile = await _saveFileLocally(file, result.files.single.name);
 
       return TaxDocumentModel(
@@ -50,7 +50,7 @@ class DocumentScannerService {
     if (image != null) {
       final file = File(image.path);
       final text = await _extractTextFromImage(file);
-      
+
       final fileName = 'scan_${DateTime.now().millisecondsSinceEpoch}.jpg';
       final savedFile = await _saveFileLocally(file, fileName);
 
@@ -68,7 +68,9 @@ class DocumentScannerService {
 
   Future<String> _extractTextFromPdf(File file) async {
     try {
-      final PdfDocument document = PdfDocument(inputBytes: file.readAsBytesSync());
+      final PdfDocument document = PdfDocument(
+        inputBytes: file.readAsBytesSync(),
+      );
       String text = PdfTextExtractor(document).extractText();
       document.dispose();
       return text.trim();
@@ -80,9 +82,13 @@ class DocumentScannerService {
   Future<String> _extractTextFromImage(File file) async {
     try {
       final inputImage = InputImage.fromFile(file);
-      final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-      final RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
-      
+      final textRecognizer = TextRecognizer(
+        script: TextRecognitionScript.latin,
+      );
+      final RecognizedText recognizedText = await textRecognizer.processImage(
+        inputImage,
+      );
+
       textRecognizer.close();
       return recognizedText.text.trim();
     } catch (e) {
@@ -96,7 +102,7 @@ class DocumentScannerService {
     if (!await docsDir.exists()) {
       await docsDir.create(recursive: true);
     }
-    
+
     final destinationFile = File('${docsDir.path}/$fileName');
     return await sourceFile.copy(destinationFile.path);
   }

@@ -4,7 +4,7 @@ class ParsedDocumentData {
   final double? mealVoucherEmployerContribution;
   final int? mealVoucherCount;
   final bool hasCompanyCar;
-  
+
   const ParsedDocumentData({
     this.netTaxableIncome,
     this.transportAllowance,
@@ -25,7 +25,9 @@ class ParsedDocumentData {
     return ParsedDocumentData(
       netTaxableIncome: netTaxableIncome ?? this.netTaxableIncome,
       transportAllowance: transportAllowance ?? this.transportAllowance,
-      mealVoucherEmployerContribution: mealVoucherEmployerContribution ?? this.mealVoucherEmployerContribution,
+      mealVoucherEmployerContribution:
+          mealVoucherEmployerContribution ??
+          this.mealVoucherEmployerContribution,
       mealVoucherCount: mealVoucherCount ?? this.mealVoucherCount,
       hasCompanyCar: hasCompanyCar ?? this.hasCompanyCar,
     );
