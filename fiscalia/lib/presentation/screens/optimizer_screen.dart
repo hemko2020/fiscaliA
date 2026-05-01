@@ -10,6 +10,7 @@ import 'alimony_deduction_screen.dart';
 import 'device_distribution_screen.dart';
 import 'per_tracker_screen.dart';
 import 'education/educational_center_screen.dart';
+import 'documents/document_scanner_screen.dart';
 import 'fiscal_calendar_screen.dart';
 
 class OptimizerScreen extends ConsumerWidget {
@@ -105,6 +106,23 @@ class OptimizerScreen extends ConsumerWidget {
           style: Theme.of(
             context,
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        _buildRecommendationCard(
+          context,
+          icon: Icons.document_scanner,
+          title: 'Analyse IA Documents',
+          subtitle: 'Scannez vos fiches de paie et reçus',
+          economy: 'Nouveau',
+          risk: 0,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DocumentScannerScreen(),
+              ),
+            );
+          },
         ),
         const SizedBox(height: 12),
         _buildRecommendationCard(
