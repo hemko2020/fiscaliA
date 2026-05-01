@@ -93,7 +93,9 @@ class ContentSheetScreen extends ConsumerWidget {
     Color? iconColor,
   }) {
     return Container(
-      padding: backgroundColor != null ? const EdgeInsets.all(16) : EdgeInsets.zero,
+      padding: backgroundColor != null
+          ? const EdgeInsets.all(16)
+          : EdgeInsets.zero,
       decoration: BoxDecoration(
         color: backgroundColor ?? Colors.transparent,
         borderRadius: BorderRadius.circular(12),
@@ -108,17 +110,14 @@ class ContentSheetScreen extends ConsumerWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: iconColor ?? AppColors.primaryBlue,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: iconColor ?? AppColors.primaryBlue,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            content,
-            style: const TextStyle(fontSize: 15, height: 1.5),
-          ),
+          Text(content, style: const TextStyle(fontSize: 15, height: 1.5)),
         ],
       ),
     );
@@ -138,15 +137,16 @@ class ContentSheetScreen extends ConsumerWidget {
       ),
       child: ExpansionTile(
         leading: Icon(icon, color: Colors.grey.shade700),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         childrenPadding: const EdgeInsets.all(16).copyWith(top: 0),
         children: [
           Text(
             content,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade800, height: 1.5),
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade800,
+              height: 1.5,
+            ),
           ),
         ],
       ),
@@ -169,7 +169,10 @@ class ContentSheetScreen extends ConsumerWidget {
             return Chip(
               label: Text(term),
               backgroundColor: AppColors.primaryBlue.withValues(alpha: 0.1),
-              labelStyle: const TextStyle(color: AppColors.primaryBlue, fontSize: 12),
+              labelStyle: const TextStyle(
+                color: AppColors.primaryBlue,
+                fontSize: 12,
+              ),
               side: BorderSide.none,
             );
           }).toList(),

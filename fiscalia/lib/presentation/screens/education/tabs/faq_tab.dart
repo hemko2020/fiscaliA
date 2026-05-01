@@ -22,7 +22,8 @@ class FaqTab extends ConsumerWidget {
               suffixIcon: searchQuery.isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.clear),
-                      onPressed: () => ref.read(faqSearchQueryProvider.notifier).state = '',
+                      onPressed: () =>
+                          ref.read(faqSearchQueryProvider.notifier).state = '',
                     )
                   : null,
               border: OutlineInputBorder(
@@ -31,7 +32,8 @@ class FaqTab extends ConsumerWidget {
               filled: true,
               fillColor: Colors.grey.shade50,
             ),
-            onChanged: (value) => ref.read(faqSearchQueryProvider.notifier).state = value,
+            onChanged: (value) =>
+                ref.read(faqSearchQueryProvider.notifier).state = value,
           ),
         ),
         Expanded(
@@ -45,13 +47,20 @@ class FaqTab extends ConsumerWidget {
                     return Card(
                       elevation: 1,
                       margin: const EdgeInsets.only(bottom: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: ExpansionTile(
                         title: Text(
                           faq.question,
-                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
                         ),
-                        childrenPadding: const EdgeInsets.all(16).copyWith(top: 0),
+                        childrenPadding: const EdgeInsets.all(
+                          16,
+                        ).copyWith(top: 0),
                         children: [
                           Text(
                             faq.answer,
@@ -67,15 +76,21 @@ class FaqTab extends ConsumerWidget {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8),
                                 child: Chip(
-                                  label: Text(tag, style: const TextStyle(fontSize: 10)),
-                                  backgroundColor: AppColors.accentOrange.withValues(alpha: 0.1),
-                                  labelStyle: const TextStyle(color: AppColors.accentOrange),
+                                  label: Text(
+                                    tag,
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                  backgroundColor: AppColors.accentOrange
+                                      .withValues(alpha: 0.1),
+                                  labelStyle: const TextStyle(
+                                    color: AppColors.accentOrange,
+                                  ),
                                   side: BorderSide.none,
                                   visualDensity: VisualDensity.compact,
                                 ),
                               );
                             }).toList(),
-                          )
+                          ),
                         ],
                       ),
                     );
@@ -102,7 +117,11 @@ class FaqTab extends ConsumerWidget {
             onPressed: () {
               // Suggestion feature (for Agent IA later)
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('L\'Agent IA fiscal sera bientôt disponible pour vous répondre !')),
+                const SnackBar(
+                  content: Text(
+                    'L\'Agent IA fiscal sera bientôt disponible pour vous répondre !',
+                  ),
+                ),
               );
             },
             icon: const Icon(Icons.smart_toy),

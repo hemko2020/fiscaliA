@@ -9,10 +9,12 @@ class EducationalCenterScreen extends ConsumerStatefulWidget {
   const EducationalCenterScreen({super.key});
 
   @override
-  ConsumerState<EducationalCenterScreen> createState() => _EducationalCenterScreenState();
+  ConsumerState<EducationalCenterScreen> createState() =>
+      _EducationalCenterScreenState();
 }
 
-class _EducationalCenterScreenState extends ConsumerState<EducationalCenterScreen>
+class _EducationalCenterScreenState
+    extends ConsumerState<EducationalCenterScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -49,11 +51,7 @@ class _EducationalCenterScreenState extends ConsumerState<EducationalCenterScree
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [
-          GuidesTab(),
-          FaqTab(),
-          GlossaryTab(),
-        ],
+        children: const [GuidesTab(), FaqTab(), GlossaryTab()],
       ),
     );
   }
