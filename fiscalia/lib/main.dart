@@ -13,6 +13,7 @@ import 'data/models/union_dues_credit_model.dart';
 import 'data/models/alimony_deduction_model.dart';
 import 'data/models/device_distribution_model.dart';
 import 'data/models/fiscal_calendar_model.dart';
+import 'data/models/notification_settings_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ void main() async {
   // Register adapters
   Hive.registerAdapter(FiscalCalendarModelAdapter());
   Hive.registerAdapter(FiscalEventTypeAdapter());
+  Hive.registerAdapter(NotificationSettingsModelAdapter());
 
   await Hive.openBox<FoyerFiscalModel>('foyerFiscal');
   await Hive.openBox<SimulationModel>('simulations');
@@ -34,6 +36,7 @@ void main() async {
   await Hive.openBox<AlimonyDeductionModel>('alimonyDeductions');
   await Hive.openBox<FiscalCalendarModel>('fiscalCalendar');
   await Hive.openBox<DeviceDistributionModel>('deviceDistribution');
+  await Hive.openBox<NotificationSettingsModel>('notificationSettings');
   await Hive.openBox('settings');
 
   runApp(const ProviderScope(child: FiscalIAApp()));
