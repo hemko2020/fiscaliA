@@ -6,6 +6,8 @@ import '../../../data/models/tax_document_model.dart';
 import '../../../data/models/parsed_document_data.dart';
 import '../../providers/document_parser_service.dart';
 import '../../providers/deduction_analyzer_service.dart';
+import '../../providers/ai_assistant_provider.dart';
+import '../ai_assistant/chat_screen.dart';
 
 class DocumentDetailScreen extends ConsumerStatefulWidget {
   final TaxDocumentModel document;
@@ -45,8 +47,25 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          ref
+              .read(aiAssistantProvider.notifier)
+              .sendMessage(
+                "Peux-tu analyser ce document fiscal ?",
+                contextData: widget.document.extractedText,
+              );
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const AiAssistantScreen()),
+          );
+        },
+        icon: const Icon(Icons.smart_toy),
+        label: const Text('Demander à l\'IA'),
+        backgroundColor: AppColors.accentOrange,
+        foregroundColor: Colors.white,
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16).copyWith(bottom: 80),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -5,9 +5,12 @@ import '../../data/models/foyer_fiscal_model.dart';
 final taxCalculatorProvider = Provider((ref) => TaxCalculator());
 
 class TaxCalculator {
-  Map<String, dynamic> calculerImpot(FoyerFiscalModel foyer) {
-    final parts = foyer.partsFiscales;
-    final revenuQuotiente = foyer.revenuNetImposable / parts;
+  /// Calcule l'impot brut progressif pour un revenu et un nombre de parts
+  /// donnes (application du bareme par tranches au quotient R/parts, puis
+  /// multiplication par le nombre de parts).
+  /// Retourne aussi le detail par tranche et le taux marginal.
+  Map<String, dynamic> _calculerProgressif(double revenu, double parts) {
+    final revenuQuotiente = revenu / parts;
 
     double impotBrut = 0;
     final detailsParTranche = <int, double>{};
@@ -37,32 +40,63 @@ class TaxCalculator {
 
     impotBrut *= parts;
 
-    // Apply family quotient ceiling (plafond du quotient familial)
-    final halfParts =
-        parts -
-        (foyer.situationFamiliale == SituationFamiliale.marie ||
-                foyer.situationFamiliale == SituationFamiliale.pacse
-            ? 2
-            : 1);
-    final plafondQuotientFamilial =
-        halfParts * TaxBrackets2026.familyQuotientCeiling;
+    return {
+      'impotBrut': impotBrut,
+      'detailsParTranche': detailsParTranche,
+      'tauxMarginal': tauxMarginal,
+    };
+  }
 
-    double impotApresPlafond = impotBrut;
-    double reductionQuotientFamilial = 0;
-    if (impotBrut > 0 && parts > 1) {
-      // The quotient familial reduction cannot exceed 1,807€ per half-part
-      reductionQuotientFamilial = (impotBrut - (revenuQuotiente * parts)).abs();
-      if (reductionQuotientFamilial > plafondQuotientFamilial) {
-        reductionQuotientFamilial = plafondQuotientFamilial;
-        impotApresPlafond = impotBrut - reductionQuotientFamilial;
-      }
-    }
-
-    double decote = 0;
+  Map<String, dynamic> calculerImpot(FoyerFiscalModel foyer) {
+    final parts = foyer.partsFiscales;
     final isCouple =
         foyer.situationFamiliale == SituationFamiliale.marie ||
         foyer.situationFamiliale == SituationFamiliale.pacse;
 
+    final progressif = _calculerProgressif(foyer.revenuNetImposable, parts);
+    final impotBrut = progressif['impotBrut'] as double;
+    final detailsParTranche =
+        progressif['detailsParTranche'] as Map<int, double>;
+    final tauxMarginal = progressif['tauxMarginal'] as double;
+
+    // Plafonnement du quotient familial (BOFiP BOI-IR-LIQ-10) :
+    // l'avantage procure par les demi-parts supplementaires est plafonne.
+    // 1. I_QF  = impot avec les parts reelles
+    // 2. I_ref = impot avec 1 part (celibataire) ou 2 parts (couple)
+    // 3. Si I_ref - I_QF > plafond, l'impot du est I_ref - plafond.
+    final partsReference = isCouple ? 2.0 : 1.0;
+    final demiPartsSupplementaires = (parts - partsReference) * 2;
+
+    double plafondQuotientFamilial = 0;
+    if (demiPartsSupplementaires > 0) {
+      if (foyer.parentIsole && !isCouple && foyer.nbEnfants > 0) {
+        // Parent isole : la part entiere du 1er enfant a un plafond
+        // specifique, les demi-parts suivantes le plafond classique.
+        plafondQuotientFamilial =
+            TaxBrackets2026.parentIsoleQuotientCeiling +
+            (demiPartsSupplementaires - 2) *
+                TaxBrackets2026.familyQuotientCeiling;
+      } else {
+        plafondQuotientFamilial =
+            demiPartsSupplementaires * TaxBrackets2026.familyQuotientCeiling;
+      }
+    }
+
+    double impotApresPlafond = impotBrut;
+    double reductionQuotientFamilial = 0;
+    if (impotBrut > 0 && demiPartsSupplementaires > 0) {
+      final impotReference = _calculerProgressif(
+        foyer.revenuNetImposable,
+        partsReference,
+      )['impotBrut'] as double;
+      final avantage = impotReference - impotBrut;
+      reductionQuotientFamilial = avantage > plafondQuotientFamilial
+          ? plafondQuotientFamilial
+          : avantage;
+      impotApresPlafond = impotReference - reductionQuotientFamilial;
+    }
+
+    double decote = 0;
     if (impotApresPlafond > 0) {
       final seuil = isCouple
           ? TaxBrackets2026.decoteCoupleThreshold
@@ -87,6 +121,7 @@ class TaxCalculator {
       'impotBrut': impotBrut,
       'decote': decote,
       'impotNet': impotNet,
+      'impotApresPlafond': impotApresPlafond,
       'tauxMarginal': tauxMarginal,
       'tauxMoyen': tauxMoyen,
       'parts': parts,
@@ -213,6 +248,6 @@ class TaxCalculator {
 
   double getTMI(FoyerFiscalModel foyer) {
     final res = calculerImpot(foyer);
-    return res['taux_marginal'] ?? 0.0;
+    return (res['tauxMarginal'] as num?)?.toDouble() ?? 0.0;
   }
 }
