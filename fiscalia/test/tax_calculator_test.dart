@@ -63,6 +63,17 @@ void main() {
       },
     );
 
+    test('getTMI should return marginal rate', () {
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.celibataire,
+        nbEnfants: 0,
+        revenuNetImposable: 42000,
+      );
+
+      // Regression test : la cle interne est 'tauxMarginal'
+      expect(calculator.getTMI(foyer), 0.30);
+    });
+
     test('should handle 0€ income correctly', () {
       final foyer = FoyerFiscalModel(
         situationFamiliale: SituationFamiliale.celibataire,
@@ -129,8 +140,128 @@ void main() {
         revenuNetImposable: 60000,
       );
 
-      // Base: 1 part + 1.5 (3 children × 0.5) = 2.5 parts
-      expect(foyer.partsFiscales, 2.5);
+      // CGI art. 194 : 1er et 2e enfant = 0,5 part chacun, 3e enfant = 1 part
+      // Base: 1 part + 0.5 + 0.5 + 1.0 = 3.0 parts
+      expect(foyer.partsFiscales, 3.0);
+    });
+
+    test('should calculate parts for married couple with 3 children', () {
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.marie,
+        nbEnfants: 3,
+        revenuNetImposable: 80000,
+      );
+
+      // Base: 2 parts + 0.5 + 0.5 + 1.0 = 4.0 parts
+      expect(foyer.partsFiscales, 4.0);
+    });
+
+    test('should compute full part for first child of single parent', () {
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.celibataire,
+        nbEnfants: 1,
+        revenuNetImposable: 50000,
+        parentIsole: true,
+      );
+
+      // CGI art. 195 / BOI-IR-LIQ-10-20 : parent isole (case T) :
+      // le 1er enfant donne droit a 1 part entiere
+      // Base: 1 part + 1 part = 2.0 parts
+      expect(foyer.partsFiscales, 2.0);
+    });
+
+    test('should compute parts for single parent with 3 children', () {
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.divorce,
+        nbEnfants: 3,
+        revenuNetImposable: 60000,
+        parentIsole: true,
+      );
+
+      // 1 part (base) + 1 part (1er enfant) + 0.5 (2e) + 1.0 (3e) = 3.5
+      expect(foyer.partsFiscales, 3.5);
+    });
+
+    test(
+      'should NOT cap family quotient when advantage is below ceiling',
+      () {
+        // Couple marie, 2 enfants (3 parts), 60 000 EUR
+        final foyer = FoyerFiscalModel(
+          situationFamiliale: SituationFamiliale.marie,
+          nbEnfants: 2,
+          revenuNetImposable: 60000,
+        );
+
+        final result = calculator.calculerImpot(foyer);
+
+        // I_QF : 20 000/part -> 924 EUR/part -> 2 772 EUR
+        expect(result['impotBrut'], closeTo(2772, 1));
+        // I_ref (2 parts) : 30 000/part -> 2 103.58 EUR/part -> 4 207.16 EUR
+        // Avantage = 4 207.16 - 2 772 = 1 435.16 < plafond (2 x 1 807)
+        expect(result['reductionQuotientFamilial'], closeTo(1435.16, 0.5));
+        // Pas de plafonnement : impot apres plafond = I_QF
+        expect(result['impotApresPlafond'], closeTo(2772, 1));
+      },
+    );
+
+    test('should cap family quotient when advantage exceeds ceiling', () {
+      // Couple marie, 2 enfants (3 parts), 150 000 EUR
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.marie,
+        nbEnfants: 2,
+        revenuNetImposable: 150000,
+      );
+
+      final result = calculator.calculerImpot(foyer);
+
+      // I_QF : 50 000/part -> 8 103.58 EUR/part -> 24 310.74 EUR
+      expect(result['impotBrut'], closeTo(24310.74, 1));
+      // Plafond = 2 demi-parts x 1 807 = 3 614 EUR
+      expect(result['plafondQuotientFamilial'], 3614);
+      // I_ref (2 parts) : 75 000/part -> 15 603.58 EUR/part -> 31 207.16 EUR
+      // Avantage = 6 896.42 > 3 614 -> plafonne
+      expect(result['reductionQuotientFamilial'], 3614);
+      // Impot apres plafond = I_ref - plafond = 31 207.16 - 3 614
+      expect(result['impotApresPlafond'], closeTo(27593.16, 1));
+    });
+
+    test('should cap family quotient for single with 1 child', () {
+      // Celibataire, 1 enfant (1.5 parts), 50 000 EUR
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.celibataire,
+        nbEnfants: 1,
+        revenuNetImposable: 50000,
+      );
+
+      final result = calculator.calculerImpot(foyer);
+
+      // Plafond = 1 demi-part x 1 807 = 1 807 EUR
+      expect(result['plafondQuotientFamilial'], 1807);
+      // I_ref (1 part) = 8 103.58 ; I_QF = 4 655.37
+      // Avantage = 3 448.21 > 1 807 -> plafonne
+      expect(result['reductionQuotientFamilial'], 1807);
+      // Impot apres plafond = 8 103.58 - 1 807 = 6 296.58
+      expect(result['impotApresPlafond'], closeTo(6296.58, 1));
+    });
+
+    test('should apply specific ceiling for single parent first child', () {
+      // Celibataire parent isole, 1 enfant (2 parts), 50 000 EUR
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.celibataire,
+        nbEnfants: 1,
+        revenuNetImposable: 50000,
+        parentIsole: true,
+      );
+
+      final result = calculator.calculerImpot(foyer);
+
+      // Plafond specifique parent isole : 4 262 EUR (part entiere 1er enfant)
+      expect(result['plafondQuotientFamilial'], 4262);
+      // I_ref (1 part) = 8 103.58 ; I_QF (2 parts) = 2 947.78
+      // Avantage = 5 155.80 > 4 262 -> plafonne
+      expect(result['reductionQuotientFamilial'], 4262);
+      // Impot apres plafond = 8 103.58 - 4 262 = 3 841.58
+      expect(result['impotApresPlafond'], closeTo(3841.58, 1));
     });
 
     test('should apply family quotient ceiling', () {
@@ -142,9 +273,9 @@ void main() {
 
       final result = calculator.calculerImpot(foyer);
 
-      // With 4 children = 2 half-parts, ceiling = 2 × 1,807 = 3,614€
-      // The reduction quotient familial should be capped
-      expect(result['plafondQuotientFamilial'], 3614);
+      // 4 enfants marie = 5 parts (0.5+0.5+1+1 = 3 parts supplementaires)
+      // soit 6 demi-parts : plafond = 6 x 1 807 = 10 842 EUR
+      expect(result['plafondQuotientFamilial'], 10842);
     });
   });
 

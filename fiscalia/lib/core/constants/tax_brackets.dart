@@ -20,6 +20,10 @@ class TaxBrackets2026 {
   ];
 
   static const double familyQuotientCeiling = 1807;
+
+  /// Plafond specifique pour la part entiere du 1er enfant d'un parent
+  /// isole (case T). Reference : BOFiP BOI-IR-LIQ-10-20.
+  static const double parentIsoleQuotientCeiling = 4262;
   static const double nicheCeilingGeneral = 10000;
   static const double nicheCeilingOverseas = 18000;
 

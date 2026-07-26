@@ -19,28 +19,43 @@ class FoyerFiscalModel {
   @HiveField(4)
   final List<RevenuModel>? autresRevenus;
 
+  /// Parent isole (case T de la declaration) : celibataire, divorce ou veuf
+  /// vivant seul avec au moins un enfant a charge.
+  /// Le 1er enfant donne alors droit a 1 part entiere (au lieu de 0,5).
+  /// Reference : CGI art. 195 / BOFiP BOI-IR-LIQ-10-20.
+  @HiveField(5)
+  final bool parentIsole;
+
   FoyerFiscalModel({
     required this.situationFamiliale,
     required this.nbEnfants,
     this.nbPartsSupplementaires = 0,
     required this.revenuNetImposable,
     this.autresRevenus,
+    this.parentIsole = false,
   });
 
+  /// Nombre de parts fiscales.
+  /// Regles (CGI art. 194-195) :
+  /// - couple (marie/pacse) : 2 parts ; autre situation : 1 part
+  /// - 1er et 2e enfant : 0,5 part chacun ; 3e enfant et suivants : 1 part
+  /// - parent isole : le 1er enfant compte pour 1 part entiere
   double get partsFiscales {
-    double baseParts;
-    switch (situationFamiliale) {
-      case SituationFamiliale.celibataire:
-      case SituationFamiliale.divorce:
-      case SituationFamiliale.veuf:
-        baseParts = 1;
-        break;
-      case SituationFamiliale.marie:
-      case SituationFamiliale.pacse:
-        baseParts = 2;
-        break;
+    final isCouple =
+        situationFamiliale == SituationFamiliale.marie ||
+        situationFamiliale == SituationFamiliale.pacse;
+    final double baseParts = isCouple ? 2 : 1;
+
+    double partsEnfants = 0;
+    for (int i = 1; i <= nbEnfants; i++) {
+      if (i == 1 && parentIsole && !isCouple) {
+        partsEnfants += 1; // part entiere pour le 1er enfant (parent isole)
+      } else if (i <= 2) {
+        partsEnfants += 0.5;
+      } else {
+        partsEnfants += 1; // 3e enfant et suivants
+      }
     }
-    final partsEnfants = nbEnfants * 0.5;
     return baseParts + partsEnfants + nbPartsSupplementaires;
   }
 
@@ -50,6 +65,7 @@ class FoyerFiscalModel {
     double? nbPartsSupplementaires,
     double? revenuNetImposable,
     List<RevenuModel>? autresRevenus,
+    bool? parentIsole,
   }) {
     return FoyerFiscalModel(
       situationFamiliale: situationFamiliale ?? this.situationFamiliale,
@@ -58,6 +74,7 @@ class FoyerFiscalModel {
           nbPartsSupplementaires ?? this.nbPartsSupplementaires,
       revenuNetImposable: revenuNetImposable ?? this.revenuNetImposable,
       autresRevenus: autresRevenus ?? this.autresRevenus,
+      parentIsole: parentIsole ?? this.parentIsole,
     );
   }
 }
