@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
+import 'presentation/providers/monitoring_providers.dart';
 import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/simulator_screen.dart';
 import 'presentation/screens/optimizer_screen.dart';
@@ -7,17 +9,20 @@ import 'presentation/screens/niches_screen.dart';
 import 'presentation/screens/more_screen.dart';
 import 'presentation/screens/ai_assistant/chat_screen.dart';
 
-class FiscalIAApp extends StatelessWidget {
+class FiscalIAApp extends ConsumerWidget {
   const FiscalIAApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analyticsObserver =
+        ref.watch(monitoringServiceProvider).observateurNavigation();
     return MaterialApp(
       title: 'FiscalIA',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
+      navigatorObservers: [?analyticsObserver],
       home: const MainNavigationScreen(),
     );
   }

@@ -1,10 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'app.dart';
+import 'core/services/monitoring_service.dart';
+import 'core/services/tax_remote_config_service.dart';
 import 'presentation/providers/ads_provider.dart';
+import 'presentation/providers/monitoring_providers.dart';
 import 'presentation/providers/subscription_provider.dart';
 import 'data/models/foyer_fiscal_model.dart';
 import 'data/models/simulation_model.dart';
@@ -24,14 +28,24 @@ import 'data/models/tax_document_model.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Firebase : Remote Config (baremes fiscaux), Crashlytics, Analytics.
+  // L'initialisation est tolerante : sans configuration Firebase valide,
+  // l'app fonctionne avec les baremes embarques et sans monitoring.
+  final monitoring = MonitoringService();
+  TaxRemoteConfigService taxConfigService = TaxRemoteConfigService();
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-  } catch (e) {
-    debugPrint(
-      'Firebase initialization failed (maybe flutterfire configure is needed): $e',
+    await monitoring.initialiser();
+    taxConfigService = TaxRemoteConfigService(
+      client: FirebaseRemoteConfigClient(FirebaseRemoteConfig.instance),
     );
+    await taxConfigService.initialiser();
+    // Recuperation des derniers baremes ; echec silencieux (fallback embarque).
+    await taxConfigService.actualiser();
+  } catch (e) {
+    debugPrint('Firebase non disponible, mode degrade active ($e)');
   }
 
   await Hive.initFlutter();
@@ -59,9 +73,13 @@ void main() async {
   await Hive.openBox<TaxDocumentModel>('taxDocuments');
   await Hive.openBox('settings');
 
+  final container = ProviderContainer(overrides: [
+    monitoringServiceProvider.overrideWithValue(monitoring),
+    taxRemoteConfigServiceProvider.overrideWithValue(taxConfigService),
+  ]);
+
   // Initialisation de la monetisation (AdMob + RevenueCat). Chaque service
   // degrade gracieusement si non configure ou indisponible.
-  final container = ProviderContainer();
   await container.read(adMobServiceProvider).initialiser();
   await container.read(subscriptionProvider.notifier).initialiser();
 
