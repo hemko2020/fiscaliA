@@ -35,6 +35,24 @@ class DemembrementService {
     return droits;
   }
 
+  /// Calcule les droits totaux en appliquant le bareme par part de
+  /// (parent x enfant), comme le fait l'administration : chaque part
+  /// beneficie de son propre abattement de 100 000 EUR et de sa propre
+  /// progression de tranches (Art. 779 et 777 CGI).
+  static double calculerDroitsParPart({
+    required double valeurTransmise,
+    required int nbParents,
+    required int nbEnfants,
+  }) {
+    if (valeurTransmise <= 0 || nbParents < 1 || nbEnfants < 1) return 0;
+    final nbParts = nbParents * nbEnfants;
+    final partParBeneficiaire = valeurTransmise / nbParts;
+    final assietteParPart =
+        partParBeneficiaire - AdvancedTaxConstants.abattementLigneDirecte;
+    if (assietteParPart <= 0) return 0;
+    return nbParts * calculerDroitsLigneDirecte(assietteParPart);
+  }
+
   DemembrementResult calculer(DemembrementModel input) {
     final ratio = AdvancedTaxConstants.usufruitRatioPourAge(
       input.ageUsufruitier,
@@ -48,13 +66,22 @@ class DemembrementService {
         input.nbParents *
         input.nbEnfants;
 
+    // Droits calcules par part (parent x enfant) : chaque beneficiaire a
+    // son propre abattement et sa propre progression de tranches.
+    final droitsNP = calculerDroitsParPart(
+      valeurTransmise: nuePropriete,
+      nbParents: input.nbParents,
+      nbEnfants: input.nbEnfants,
+    );
+    final droitsPP = calculerDroitsParPart(
+      valeurTransmise: input.valeurBien,
+      nbParents: input.nbParents,
+      nbEnfants: input.nbEnfants,
+    );
+
+    // Assiette taxable totale (apres abattements) a titre indicatif.
     final assietteNP = nuePropriete - abattementTotal;
     final assietteTaxableNP = assietteNP > 0 ? assietteNP : 0.0;
-    final droitsNP = calculerDroitsLigneDirecte(assietteTaxableNP);
-
-    final assiettePP = input.valeurBien - abattementTotal;
-    final assietteTaxablePP = assiettePP > 0 ? assiettePP : 0.0;
-    final droitsPP = calculerDroitsLigneDirecte(assietteTaxablePP);
 
     final explications = <String>[
       'A ${input.ageUsufruitier} ans, l\'usufruit est valorise a '

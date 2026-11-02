@@ -54,6 +54,25 @@ void main() {
       expect(result.abattementTotal, 400000);
     });
 
+    test('calcul par part : 2 parents x 2 enfants moins taxe qu\'en agrege',
+        () {
+      // NP = 60% x 800 000 = 480 000 ; par part : 120 000 - 100 000 = 20 000
+      final result = demembrement.calculer(
+        const DemembrementModel(
+          ageUsufruitier: 70,
+          valeurBien: 800000,
+          nbEnfants: 2,
+          nbParents: 2,
+        ),
+      );
+      final droitsParPart =
+          DemembrementService.calculerDroitsLigneDirecte(20000) * 4;
+      expect(result.droitsDonation, closeTo(droitsParPart, 0.01));
+      // En agrege (methode incorrecte) : 80 000 taxable = ~14 194 EUR
+      final agrege = DemembrementService.calculerDroitsLigneDirecte(80000);
+      expect(result.droitsDonation, lessThan(agrege));
+    });
+
     test('bareme progressif ligne directe', () {
       // 50 000 taxable : 8 072x5% + 4 037x10% + 3 823x15% + 34 068x20%
       final droits =

@@ -40,8 +40,9 @@ class SoficaGirardinResult {
   /// Reduction totale imputable sur l'impot de l'annee.
   final double reductionImputable;
 
-  /// Part non imputable cette annee (reduction > impot, reportee 5 ans
-  /// pour la SOFICA ; perdue pour le Girardin sans agreement retroactif).
+  /// Part non imputable cette annee (reduction > impot).
+  /// Attention : contrairement aux dons, les excedents SOFICA et Girardin
+  /// ne sont NI reportables NI remboursables - ils sont perdus.
   final double reductionNonImputable;
 
   /// Gain net Girardin (reduction - investissement).

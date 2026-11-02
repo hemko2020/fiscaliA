@@ -25,22 +25,24 @@ class PacteDutreilService {
         input.nbParents *
         input.nbEnfants;
 
-    // Sans Dutreil : droits sur la pleine valeur (apres abattements
-    // familiaux le cas echeant).
-    final assietteSans = _assiette(
-      input.valeurEntreprise,
-      input.enDonation ? abattementFamilial : abattementFamilial,
+    // Droits calcules par part (parent x enfant) : chaque beneficiaire a
+    // son propre abattement de 100 000 EUR et sa propre progression.
+    final droitsSans = DemembrementService.calculerDroitsParPart(
+      valeurTransmise: input.valeurEntreprise,
+      nbParents: input.nbParents,
+      nbEnfants: input.nbEnfants,
     );
-    final droitsSans =
-        DemembrementService.calculerDroitsLigneDirecte(assietteSans);
 
     // Avec Dutreil : abattement de 75% sur la valeur, puis droits sur
     // les 25% restants (les abattements personnels restent applicables).
     final valeurApresDutreil =
         input.valeurEntreprise * (1 - AdvancedTaxConstants.dutreilAbattement);
+    final droitsAvec = DemembrementService.calculerDroitsParPart(
+      valeurTransmise: valeurApresDutreil,
+      nbParents: input.nbParents,
+      nbEnfants: input.nbEnfants,
+    );
     final assietteAvec = _assiette(valeurApresDutreil, abattementFamilial);
-    final droitsAvec =
-        DemembrementService.calculerDroitsLigneDirecte(assietteAvec);
 
     const conditions = [
       'Engagement collectif de conservation des titres d\'au moins 2 ans '

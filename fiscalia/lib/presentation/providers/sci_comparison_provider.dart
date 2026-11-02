@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/constants/tax_brackets.dart';
 import '../../data/models/sci_comparison_model.dart';
 
 final sciComparisonServiceProvider = Provider(
@@ -64,8 +65,9 @@ class SciComparisonService {
 
     // Le deficit foncier s'impute sur le revenu global : economie a la TMI
     // (pas de prelevements sociaux sur le revenu global).
-    final deficitImputable = input.deficitFoncierAnnuel > 10700
-        ? 10700.0
+    const plafondDeficit = TaxBrackets2026.propertyDeficitCeiling;
+    final deficitImputable = input.deficitFoncierAnnuel > plafondDeficit
+        ? plafondDeficit
         : input.deficitFoncierAnnuel;
     final economieDeficit = deficitImputable * input.tmi;
 

@@ -40,9 +40,9 @@ class SoficaGirardinService {
     final gainNet = reductionGirardin - input.investissementGirardin;
 
     // --- Imputabilite ---
-    // Les deux reductions s'imputent sur l'impot de l'annee. La SOFICA
-    // est reportable 5 ans ; l'excedent Girardin est en pratique perdu
-    // (sauf cas particuliers), d'ou l'importance de calibrer.
+    // Les deux reductions s'imputent sur l'impot de l'annee. Contrairement
+    // aux dons, l'excedent (reduction > impot) n'est NI reportable NI
+    // remboursable pour la SOFICA comme pour le Girardin : il est perdu.
     final totale = reductionSofica + reductionGirardin;
     final imputable = totale > input.impotAvantReductions
         ? input.impotAvantReductions
@@ -52,8 +52,9 @@ class SoficaGirardinService {
     final avertissements = <String>[
       'Risque 4/5 : ces dispositifs relevent du plafond specifique de '
           '18 000 EUR (plafond global 10 000 EUR + 8 000 EUR).',
-      'Girardin : la reduction one-shot est perdue si elle depasse votre '
-          'impot - calibrez precisement l\'investissement.',
+      'L\'excedent de reduction au-dela de votre impot est PERDU (ni '
+          'reportable, ni remboursable, contrairement aux dons) : calibrez '
+          'precisement l\'investissement.',
       'Girardin : choisissez un operateur solide - en cas de defaillance, '
           'la reprise de la reduction est possible. Exigez l\'agrement '
           'prealable du ministere de l\'Economie.',
@@ -64,7 +65,7 @@ class SoficaGirardinService {
     if (nonImputable > 0) {
       avertissements.add(
         '${nonImputable.toStringAsFixed(0)} EUR de reductions depassent '
-        'votre impot : seule la part SOFICA est reportable 5 ans.',
+        'votre impot et seront definitivement perdus.',
       );
     }
 

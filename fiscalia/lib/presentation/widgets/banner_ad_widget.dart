@@ -21,8 +21,13 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   @override
   void initState() {
     super.initState();
+    // Ne charge aucune publicite pour les abonnes premium (FR41) : on
+    // evite la requete reseau et la collecte publicitaire associee.
+    if (ref.read(subscriptionProvider).estPremium) return;
     _banniere = ref.read(adMobServiceProvider).creerBanniere(
-          onChargee: () => setState(() => _chargee = true),
+          onChargee: () {
+            if (mounted) setState(() => _chargee = true);
+          },
         )..load();
   }
 
