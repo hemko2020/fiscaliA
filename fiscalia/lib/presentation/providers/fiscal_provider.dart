@@ -1,10 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/constants/tax_brackets.dart';
+import '../../core/services/tax_remote_config_service.dart';
 import '../../data/models/foyer_fiscal_model.dart';
+import 'monitoring_providers.dart';
 
-final taxCalculatorProvider = Provider((ref) => TaxCalculator());
+/// Moteur de calcul alimente par la configuration fiscale courante :
+/// barèmes distants (Remote Config) si disponibles, embarques sinon.
+final taxCalculatorProvider = Provider(
+  (ref) => TaxCalculator(config: ref.watch(taxConfigProvider)),
+);
 
 class TaxCalculator {
+  /// Configuration fiscale utilisee pour tous les calculs.
+  /// Par defaut : les barèmes embarques 2026.
+  final TaxConfig config;
+
+  TaxCalculator({this.config = const TaxConfig.embedded()});
   /// Calcule l'impot brut progressif pour un revenu et un nombre de parts
   /// donnes (application du bareme par tranches au quotient R/parts, puis
   /// multiplication par le nombre de parts).
@@ -16,8 +26,8 @@ class TaxCalculator {
     final detailsParTranche = <int, double>{};
     double tauxMarginal = 0;
 
-    for (int i = 0; i < TaxBrackets2026.ir2026.length; i++) {
-      final tranche = TaxBrackets2026.ir2026[i];
+    for (int i = 0; i < config.brackets.length; i++) {
+      final tranche = config.brackets[i];
       double montantDansTranche = 0;
 
       if (revenuQuotiente > tranche.minIncome) {
@@ -73,12 +83,12 @@ class TaxCalculator {
         // Parent isole : la part entiere du 1er enfant a un plafond
         // specifique, les demi-parts suivantes le plafond classique.
         plafondQuotientFamilial =
-            TaxBrackets2026.parentIsoleQuotientCeiling +
+            config.parentIsoleQuotientCeiling +
             (demiPartsSupplementaires - 2) *
-                TaxBrackets2026.familyQuotientCeiling;
+                config.familyQuotientCeiling;
       } else {
         plafondQuotientFamilial =
-            demiPartsSupplementaires * TaxBrackets2026.familyQuotientCeiling;
+            demiPartsSupplementaires * config.familyQuotientCeiling;
       }
     }
 
@@ -99,10 +109,10 @@ class TaxCalculator {
     double decote = 0;
     if (impotApresPlafond > 0) {
       final seuil = isCouple
-          ? TaxBrackets2026.decoteCoupleThreshold
-          : TaxBrackets2026.decoteSingleThreshold;
+          ? config.decoteCoupleThreshold
+          : config.decoteSingleThreshold;
       final decoteCalculee =
-          seuil - (impotApresPlafond * TaxBrackets2026.decoteMultiplier);
+          seuil - (impotApresPlafond * config.decoteMultiplier);
       if (decoteCalculee > 0) {
         decote = decoteCalculee;
       }
