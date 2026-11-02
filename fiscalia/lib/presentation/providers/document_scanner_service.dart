@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -14,6 +15,7 @@ final documentScannerServiceProvider = Provider<DocumentScannerService>((ref) {
 });
 
 class DocumentScannerService {
+  static const MethodChannel _ocrChannel = MethodChannel('fr.fiscalia/ocr');
   final ImagePicker _imagePicker = ImagePicker();
   final _uuid = const Uuid();
 
@@ -80,6 +82,26 @@ class DocumentScannerService {
   }
 
   Future<String> _extractTextFromImage(File file) async {
+    try {
+      if (Platform.isIOS) {
+        return await _extractTextFromImageOnIos(file);
+      }
+
+      return await _extractTextFromImageWithMlKit(file);
+    } catch (e) {
+      return "Erreur d'extraction du texte (OCR): $e";
+    }
+  }
+
+  Future<String> _extractTextFromImageOnIos(File file) async {
+    final recognizedText = await _ocrChannel.invokeMethod<String>(
+      'recognizeText',
+      {'filePath': file.path},
+    );
+    return recognizedText?.trim() ?? '';
+  }
+
+  Future<String> _extractTextFromImageWithMlKit(File file) async {
     try {
       final inputImage = InputImage.fromFile(file);
       final textRecognizer = TextRecognizer(

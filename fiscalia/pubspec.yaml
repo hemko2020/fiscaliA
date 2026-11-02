@@ -27,8 +27,13 @@ dependencies:
   uuid: ^4.5.3
   file_picker: ^11.0.2
   image_picker: ^1.2.2
-  google_mlkit_text_recognition: ^0.15.1
+  google_mlkit_text_recognition:
+    path: packages/google_mlkit_text_recognition
   syncfusion_flutter_pdf: ^33.2.4
+  firebase_core: ^4.7.0
+  cloud_functions: ^6.2.0
+  google_mobile_ads: ^9.2.0
+  purchases_flutter: ^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +41,10 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.4.14
   json_serializable: ^6.9.4
+
+dependency_overrides:
+  google_mlkit_commons:
+    path: packages/google_mlkit_commons
 
 flutter:
   uses-material-design: true
