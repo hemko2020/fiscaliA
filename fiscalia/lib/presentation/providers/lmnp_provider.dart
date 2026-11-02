@@ -1,9 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/services/advanced_tax_config.dart';
+import 'monitoring_providers.dart';
 import '../../data/models/lmnp_simulation_model.dart';
 
-final lmnpServiceProvider = Provider((ref) => LmnpSimulationService());
+final lmnpServiceProvider = Provider(
+  (ref) => LmnpSimulationService(config: ref.watch(advancedTaxConfigProvider)),
+);
 
 final lmnpSimulationProvider = StateProvider<LmnpSimulationResult?>(
   (ref) => null,
@@ -19,16 +22,22 @@ final lmnpSimulationProvider = StateProvider<LmnpSimulationResult?>(
 ///   sans limite de duree sur les benefices ulterieurs.
 /// - Le revenu taxable est soumis a la TMI + 17.2% de prelevements sociaux.
 class LmnpSimulationService {
+  /// Configuration des dispositifs avances (distante si disponible,
+  /// embarquee 2026 sinon).
+  final AdvancedTaxConfig config;
+
+  LmnpSimulationService({this.config = const AdvancedTaxConfig.embedded()});
+
   LmnpSimulationResult simuler(LmnpSimulationModel input) {
-    final tauxGlobal = input.tmi + AdvancedTaxConstants.prelevementsSociaux;
+    final tauxGlobal = input.tmi + config.prelevementsSociaux;
 
     // Amortissement annuel theorique.
     final baseBatiment =
-        input.prixAcquisition * (1 - AdvancedTaxConstants.lmnpLandShare);
+        input.prixAcquisition * (1 - config.lmnpLandShare);
     final amortBatimentAnnuel =
-        baseBatiment / AdvancedTaxConstants.lmnpBuildingAmortizationYears;
+        baseBatiment / config.lmnpBuildingAmortizationYears;
     final amortMobilierAnnuel =
-        input.valeurMobilier / AdvancedTaxConstants.lmnpFurnitureAmortizationYears;
+        input.valeurMobilier / config.lmnpFurnitureAmortizationYears;
 
     final projection = <LmnpComparaisonAnnuelle>[];
     var amortissementsReportes = 0.0;
@@ -38,14 +47,14 @@ class LmnpSimulationService {
     for (var annee = 1; annee <= input.dureeAnnees; annee++) {
       // --- Micro-BIC : abattement forfaitaire de 50% ---
       final baseMicro =
-          input.loyersAnnuels * (1 - AdvancedTaxConstants.lmnpMicroBicAbattement);
+          input.loyersAnnuels * (1 - config.lmnpMicroBicAbattement);
       final impotMicro = baseMicro * tauxGlobal;
       impotTotalMicro += impotMicro;
 
       // --- Reel : charges + amortissements ---
       // Le mobilier n'est amortissable que pendant sa duree de vie.
       final amortMobilier =
-          annee <= AdvancedTaxConstants.lmnpFurnitureAmortizationYears
+          annee <= config.lmnpFurnitureAmortizationYears
               ? amortMobilierAnnuel
               : 0.0;
       final chargesTotales =
@@ -111,10 +120,10 @@ class LmnpSimulationService {
         '(taux effectif : ${(tauxFiscalite * 100).toStringAsFixed(1)}%).',
       );
     }
-    if (input.loyersAnnuels > AdvancedTaxConstants.lmnpMicroBicCeiling) {
+    if (input.loyersAnnuels > config.lmnpMicroBicCeiling) {
       recommandations.add(
         'Vos recettes depassent le plafond du micro-BIC '
-        '(${AdvancedTaxConstants.lmnpMicroBicCeiling.toStringAsFixed(0)} EUR) '
+        '(${config.lmnpMicroBicCeiling.toStringAsFixed(0)} EUR) '
         ': le regime reel est obligatoire.',
       );
     }

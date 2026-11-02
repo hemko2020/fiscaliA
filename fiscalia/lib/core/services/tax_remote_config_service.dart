@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 import '../constants/tax_brackets.dart';
+import 'advanced_tax_config.dart';
 
 /// Configuration fiscale complete pouvant etre mise a jour a distance
 /// (Story 10.3 : mise a jour des baremes sans release applicative).
@@ -195,14 +196,22 @@ class FirebaseRemoteConfigClient implements RemoteConfigClient {
 class TaxRemoteConfigService {
   static const String configKey = 'tax_config_json';
 
+  /// Cle Remote Config pour les parametres des dispositifs avances (Epic 8).
+  static const String advancedConfigKey = 'advanced_tax_config_json';
+
   final RemoteConfigClient? _client;
   TaxConfig _current = TaxConfig.embedded();
+  AdvancedTaxConfig _advancedCurrent = const AdvancedTaxConfig.embedded();
 
   /// [client] peut etre null (mode hors-ligne / tests) : le service
   /// retourne alors toujours la configuration embarquee.
   TaxRemoteConfigService({RemoteConfigClient? client}) : _client = client;
 
   TaxConfig get current => _current;
+
+  /// Configuration des dispositifs avances (Epic 8) : distante si
+  /// disponible, embarquee sinon.
+  AdvancedTaxConfig get advancedCurrent => _advancedCurrent;
 
   /// Initialise le client avec les valeurs par defaut embarquees.
   /// A appeler au demarrage de l'app, avant tout calcul fiscal.
@@ -213,26 +222,54 @@ class TaxRemoteConfigService {
       fetchTimeout: const Duration(minutes: 1),
       minimumFetchInterval: const Duration(hours: 1),
     );
-    await client.setDefaults({configKey: jsonEncode(_current.toJson())});
+    await client.setDefaults({
+      configKey: jsonEncode(_current.toJson()),
+      advancedConfigKey: jsonEncode(_advancedCurrent.toJson()),
+    });
   }
 
   /// Recupere la configuration distante et l'active.
   /// Retourne true si une mise a jour distante a ete appliquee.
+  /// Chaque cle est traitee independamment : l'echec de l'une ne
+  /// remet pas l'autre au fallback.
   Future<bool> actualiser() async {
     final client = _client;
     if (client == null) return false;
+    bool misAJour = false;
     try {
       await client.fetchAndActivate();
-      final raw = client.getString(configKey);
-      if (raw.isEmpty) return false;
-      final decoded = jsonDecode(raw);
-      if (decoded is! Map<String, dynamic>) return false;
-      _current = TaxConfig.fromJson(decoded);
-      return true;
     } catch (_) {
-      // Fallback silencieux vers les baremes embarques (critere d'acceptation)
-      _current = TaxConfig.embedded();
+      _current = const TaxConfig.embedded();
+      _advancedCurrent = const AdvancedTaxConfig.embedded();
       return false;
     }
+
+    final raw = client.getString(configKey);
+    if (raw.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(raw);
+        if (decoded is Map<String, dynamic>) {
+          _current = TaxConfig.fromJson(decoded);
+          misAJour = true;
+        }
+      } catch (_) {
+        _current = const TaxConfig.embedded();
+      }
+    }
+
+    final rawAdvanced = client.getString(advancedConfigKey);
+    if (rawAdvanced.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(rawAdvanced);
+        if (decoded is Map<String, dynamic>) {
+          _advancedCurrent = AdvancedTaxConfig.fromJson(decoded);
+          misAJour = true;
+        }
+      } catch (_) {
+        _advancedCurrent = const AdvancedTaxConfig.embedded();
+      }
+    }
+
+    return misAJour;
   }
 }

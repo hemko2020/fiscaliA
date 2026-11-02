@@ -1,0 +1,84 @@
+{
+  "version": "2026.1",
+  "source": "Loi de finances 2026 - baremes et plafonds embarques",
+  "annee": 2026,
+  "impotRevenu": {
+    "bareme": [
+      {"min": 0, "max": 11600, "taux": 0},
+      {"min": 11601, "max": 29579, "taux": 0.11},
+      {"min": 29580, "max": 84577, "taux": 0.30},
+      {"min": 84578, "max": 181917, "taux": 0.41},
+      {"min": 181918, "max": 0, "taux": 0.45}
+    ],
+    "quotientFamilial": {
+      "plafondDemiPart": 1807,
+      "plafondParentIsolePremierePart": 4262
+    },
+    "decote": {"celibataire": 1927, "couple": 3191, "multiplicateur": 0.75},
+    "deductionForfaitaire10Pourcent": {"taux": 0.10, "plafond": 14556}
+  },
+  "nichesFiscales": {
+    "plafondGeneral": 10000,
+    "plafondOutreMerSofica": 18000
+  },
+  "per": {
+    "plafondAnnuel": 37094,
+    "plancher": 4637,
+    "anneesReport": 3
+  },
+  "lmnp": {
+    "microBicAbattement": 0.50,
+    "microBicPlafond": 77700,
+    "partTerrain": 0.15,
+    "amortissementBatimentAns": 30,
+    "amortissementMobilierAns": 7
+  },
+  "dmtg": {
+    "abattementLigneDirecte": 100000,
+    "rappelFiscalAns": 15,
+    "baremeLigneDirecte": [
+      {"seuil": 8072, "taux": 0.05},
+      {"seuil": 12109, "taux": 0.10},
+      {"seuil": 15932, "taux": 0.15},
+      {"seuil": 552324, "taux": 0.20},
+      {"seuil": 902838, "taux": 0.30},
+      {"seuil": 1805677, "taux": 0.40},
+      {"seuil": 0, "taux": 0.45}
+    ],
+    "dutreilExoneration": 0.75
+  },
+  "ifi": {
+    "seuilImposition": 1300000,
+    "seuilCalcul": 800000,
+    "bareme": [
+      {"seuil": 800000, "taux": 0},
+      {"seuil": 1300000, "taux": 0.005},
+      {"seuil": 2570000, "taux": 0.007},
+      {"seuil": 5000000, "taux": 0.01},
+      {"seuil": 10000000, "taux": 0.0125},
+      {"seuil": 0, "taux": 0.015}
+    ],
+    "decote": {"base": 17500, "taux": 0.0125, "plafond": 1400000},
+    "dons": {"tauxReduction": 0.75, "plafond": 50000}
+  },
+  "soficaGirardin": {
+    "soficaTauxStandard": 0.30,
+    "soficaTauxMajore": 0.48,
+    "soficaPlafondInvestissement": 18000,
+    "girardinRendementTypique": 1.10
+  },
+  "prelevementsSociaux": 0.172,
+  "impotSocietes": {
+    "tauxNormal": 0.25,
+    "tauxReduitPME": 0.15,
+    "plafondTauxReduit": 42500
+  },
+  "pfuDividendes": 0.30,
+  "divers": {
+    "donation75Plafond": 1000,
+    "gardeEnfantPlafondParEnfant": 3500,
+    "emploiDomicilePlafond": 12000,
+    "scolarite": {"college": 61, "lycee": 153, "superieur": 183},
+    "pensionAlimentairePlafond": 6674
+  }
+}

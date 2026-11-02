@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/services/advanced_tax_config.dart';
+import 'monitoring_providers.dart';
 import '../../data/models/per_optimization_model.dart';
 
 final perOptimizationServiceProvider = Provider(
-  (ref) => PerOptimizationService(),
+  (ref) => PerOptimizationService(config: ref.watch(advancedTaxConfigProvider)),
 );
 
 final perOptimizationProvider = StateProvider<PerOptimizationResult?>(
@@ -19,11 +20,17 @@ final perOptimizationProvider = StateProvider<PerOptimizationResult?>(
 /// - Les plafonds non utilises sont reportables 3 ans.
 /// - Les conjoints peuvent mutualiser leurs plafonds (case 6QR).
 class PerOptimizationService {
+  /// Configuration des dispositifs avances (distante si disponible,
+  /// embarquee 2026 sinon).
+  final AdvancedTaxConfig config;
+
+  PerOptimizationService({this.config = const AdvancedTaxConfig.embedded()});
+
   PerOptimizationResult optimiser(PerOptimizationModel input) {
     final plafondAnnuel1 = PerOptimizationModel.plafondAnnuel(
       input.revenuDeclarant1,
-      AdvancedTaxConstants.perAnnualCeiling,
-      AdvancedTaxConstants.perMinDeduction,
+      config.perAnnualCeiling,
+      config.perMinDeduction,
     );
     final reports1 = input.reportsDeclarant1.fold<double>(
       0,
@@ -35,8 +42,8 @@ class PerOptimizationService {
     if (input.estEnCouple) {
       final plafondAnnuel2 = PerOptimizationModel.plafondAnnuel(
         input.revenuDeclarant2,
-        AdvancedTaxConstants.perAnnualCeiling,
-        AdvancedTaxConstants.perMinDeduction,
+        config.perAnnualCeiling,
+        config.perMinDeduction,
       );
       final reports2 = input.reportsDeclarant2.fold<double>(
         0,

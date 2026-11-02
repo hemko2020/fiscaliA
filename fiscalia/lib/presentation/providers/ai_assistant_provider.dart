@@ -1,6 +1,15 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/services/fiscal_knowledge_service.dart';
+
+/// Base de connaissance fiscale locale (RAG embarque), chargee une fois.
+final fiscalKnowledgeProvider = FutureProvider<FiscalKnowledgeService>((ref) async {
+  final service = FiscalKnowledgeService();
+  await service.charger();
+  return service;
+});
+
 class ChatMessage {
   final String text;
   final bool isUser;
@@ -38,7 +47,12 @@ class ChatState {
 }
 
 class AiAssistantNotifier extends StateNotifier<ChatState> {
-  AiAssistantNotifier() : super(ChatState()) {
+  /// Base de connaissance locale : les textes applicables a la question
+  /// sont recuperes (retrieval) puis injectes dans le contexte envoye a
+  /// l'agent (augmented generation).
+  final FiscalKnowledgeService? knowledgeService;
+
+  AiAssistantNotifier({this.knowledgeService}) : super(ChatState()) {
     // Initial welcome message
     state = state.copyWith(
       messages: [
@@ -66,9 +80,19 @@ class AiAssistantNotifier extends StateNotifier<ChatState> {
       final functions = FirebaseFunctions.instanceFor(region: 'europe-west1'); // Example region
       final callable = functions.httpsCallable('interrogerAgentFiscal');
       
+      // RAG : enrichissement du contexte avec les textes legaux locaux
+      // applicables a la question (CGI, BOFiP, jurisprudence).
+      var contexteComplet = contextData ?? '';
+      final retrieval = knowledgeService?.formatContexte(text);
+      if (retrieval != null && retrieval.isNotEmpty) {
+        contexteComplet = contexteComplet.isEmpty
+            ? retrieval
+            : '$contexteComplet\n\n$retrieval';
+      }
+
       final response = await callable.call(<String, dynamic>{
         'question': text,
-        'contextData': contextData,
+        'contextData': contexteComplet,
       });
 
       final aiText = response.data['reponse'] as String? ?? "Désolé, je n'ai pas pu générer de réponse.";
@@ -88,5 +112,7 @@ class AiAssistantNotifier extends StateNotifier<ChatState> {
 }
 
 final aiAssistantProvider = StateNotifierProvider<AiAssistantNotifier, ChatState>((ref) {
-  return AiAssistantNotifier();
+  return AiAssistantNotifier(
+    knowledgeService: ref.watch(fiscalKnowledgeProvider).valueOrNull,
+  );
 });
