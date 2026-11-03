@@ -1,1 +1,2 @@
-include: ../google_ml_kit/analysis_options.yaml
+# Package vendore : l'include d'origine (../google_ml_kit) n'existe pas
+# dans ce depot. On se contente des regles par defaut.

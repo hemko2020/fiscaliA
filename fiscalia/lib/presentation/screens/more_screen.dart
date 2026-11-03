@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
+import '../providers/subscription_provider.dart';
+import 'advanced_devices_screen.dart';
+import 'education/educational_center_screen.dart';
+import 'fiscal_calendar_screen.dart';
+import 'paywall_screen.dart';
 
 class MoreScreen extends ConsumerWidget {
   const MoreScreen({super.key});
@@ -17,17 +22,45 @@ class MoreScreen extends ConsumerWidget {
             children: [
               _buildMenuItem(
                 context,
+                icon: Icons.workspace_premium,
+                title: 'Dispositifs premium',
+                subtitle: 'PER, LMNP, SCI, démembrement, Dutreil, IFI...',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdvancedDevicesScreen(),
+                    ),
+                  );
+                },
+              ),
+              _buildMenuItem(
+                context,
                 icon: Icons.calendar_today,
                 title: 'Calendrier fiscal',
                 subtitle: 'Dates importantes et échéances',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FiscalCalendarScreen(),
+                    ),
+                  );
+                },
               ),
               _buildMenuItem(
                 context,
                 icon: Icons.school,
                 title: 'Centre éducatif',
                 subtitle: 'Fiches explicatives et FAQ',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EducationalCenterScreen(),
+                    ),
+                  );
+                },
               ),
               _buildMenuItem(
                 context,
@@ -53,8 +86,8 @@ class MoreScreen extends ConsumerWidget {
                 context,
                 icon: Icons.workspace_premium,
                 title: 'Abonnement',
-                subtitle: 'FiscalIA Pro - Actif',
-                onTap: () {},
+                subtitle: _sousTitreAbonnement(ref),
+                onTap: () => PaywallScreen.ouvrir(context),
               ),
             ],
           ),
@@ -156,6 +189,15 @@ class MoreScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  String _sousTitreAbonnement(WidgetRef ref) {
+    final niveau = ref.watch(subscriptionProvider).niveau;
+    return switch (niveau) {
+      NiveauAbonnement.expert => 'FiscalIA Expert - Actif',
+      NiveauAbonnement.pro => 'FiscalIA Pro - Actif',
+      NiveauAbonnement.gratuit => 'Gratuit - Passer premium',
+    };
   }
 
   Widget _buildSection(

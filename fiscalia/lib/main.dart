@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'app.dart';
+import 'presentation/providers/ads_provider.dart';
+import 'presentation/providers/subscription_provider.dart';
 import 'data/models/foyer_fiscal_model.dart';
 import 'data/models/simulation_model.dart';
 import 'data/models/home_employment_credit_model.dart';
@@ -19,6 +23,16 @@ import 'data/models/tax_document_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    debugPrint(
+      'Firebase initialization failed (maybe flutterfire configure is needed): $e',
+    );
+  }
 
   await Hive.initFlutter();
 
@@ -45,5 +59,16 @@ void main() async {
   await Hive.openBox<TaxDocumentModel>('taxDocuments');
   await Hive.openBox('settings');
 
-  runApp(const ProviderScope(child: FiscalIAApp()));
+  // Initialisation de la monetisation (AdMob + RevenueCat). Chaque service
+  // degrade gracieusement si non configure ou indisponible.
+  final container = ProviderContainer();
+  await container.read(adMobServiceProvider).initialiser();
+  await container.read(subscriptionProvider.notifier).initialiser();
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const FiscalIAApp(),
+    ),
+  );
 }

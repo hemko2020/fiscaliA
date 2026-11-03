@@ -156,6 +156,140 @@ class LoopholeAgent extends FiscalAgent<FiscalProfile, List<AgentOpportunity>> {
             'Valider l\'horizon patrimonial',
           ],
         );
+      case 'garde_enfants':
+        return _EligibiliteResult(
+          estEligible: profile.aEnfants,
+          score: profile.aEnfants ? 0.80 : 0,
+          justification:
+              'Le foyer a des enfants : le credit de 50% sur les frais de garde hors domicile est a verifier.',
+          conditionsRestantes: const [
+            'Confirmer que les enfants ont moins de 6 ans',
+            'Conserver les attestations de garde',
+          ],
+        );
+      case 'option_mariage_pacs':
+        return _EligibiliteResult(
+          estEligible: profile.estEnCouple,
+          score: profile.estEnCouple ? 0.40 : 0,
+          justification:
+              'L\'annee du mariage ou PACS, l\'option de declaration separee peut etre avantageuse.',
+          conditionsRestantes: const [
+            'Verifier l\'annee de l\'evenement',
+            'Comparer declaration commune et separee',
+          ],
+        );
+      case 'lmnp':
+        return _EligibiliteResult(
+          estEligible: profile.aRevenusFonciers || profile.estPrimoAccedantPotentiel,
+          score: profile.aRevenusFonciers ? 0.85 : 0.55,
+          justification:
+              'L\'amortissement LMNP neutralise la fiscalite des loyers meubles au regime reel.',
+          conditionsRestantes: const [
+            'Verifier la nature meublee de la location',
+            'Chiffrer la part terrain (non amortissable)',
+          ],
+        );
+      case 'denormandie':
+      case 'locavantages':
+        return _EligibiliteResult(
+          estEligible: profile.estPrimoAccedantPotentiel || profile.aRevenusFonciers,
+          score: 0.55,
+          justification:
+              'Le profil patrimonial permet d\'envisager un investissement locatif avec reduction d\'impot.',
+          conditionsRestantes: const [
+            'Verifier l\'eligibilite de la commune',
+            'Chiffrer les travaux',
+          ],
+        );
+      case 'malraux':
+      case 'monuments_historiques':
+        return _EligibiliteResult(
+          estEligible: profile.tauxMarginalImposition >= 0.41,
+          score: 0.60,
+          justification:
+              'Dispositifs hors plafond adaptes aux foyers tres imposes avec capacite de travaux.',
+          conditionsRestantes: const [
+            'Verifier le classement du bien',
+            'Budget travaux significatif',
+            'Validation par un professionnel du patrimoine',
+          ],
+        );
+      case 'foret_gfi':
+        return _EligibiliteResult(
+          estEligible: profile.tauxMarginalImposition >= 0.30,
+          score: 0.40,
+          justification:
+              'L\'investissement forestier combine reduction et avantages successoraux.',
+          conditionsRestantes: const ['Horizon 15 ans minimum'],
+        );
+      case 'sofica':
+        return _EligibiliteResult(
+          estEligible: profile.tauxMarginalImposition >= 0.41,
+          score: 0.50,
+          justification:
+              'La reduction SOFICA (30-48%) cible les foyers fortement imposes.',
+          conditionsRestantes: const [
+            'Blocage 5 ans',
+            'Verifier le plafond specifique de 18 000 EUR',
+          ],
+        );
+      case 'sci_ir_is':
+        return _EligibiliteResult(
+          estEligible: profile.aRevenusFonciers,
+          score: profile.aRevenusFonciers ? 0.65 : 0,
+          justification:
+              'Des revenus fonciers sont presents : l\'arbitrage IR/IS via SCI doit etre simule.',
+          conditionsRestantes: const [
+            'Projeter la fiscalite sur 10 ans',
+            'Integrer la sortie (plus-value IS)',
+          ],
+        );
+      case 'demembrement':
+        return _EligibiliteResult(
+          estEligible: profile.revenuFiscalReference > 50000 || profile.aRevenusFonciers,
+          score: 0.62,
+          justification:
+              'Le profil patrimonial justifie une anticipation successorale par demembrement.',
+          conditionsRestantes: const [
+            'Bilan patrimonial complet',
+            'Accompagnement notarial',
+          ],
+        );
+      case 'pacte_dutreil':
+        return _EligibiliteResult(
+          estEligible: profile.aRevenusExceptionnels,
+          score: 0.58,
+          justification:
+              'La transmission d\'entreprise peut beneficier de l\'abattement de 75%.',
+          conditionsRestantes: const [
+            'Verifier l\'activite operationnelle',
+            'Monter l\'engagement collectif avant transmission',
+          ],
+        );
+      case 'dons_ifi':
+        return _EligibiliteResult(
+          estEligible: profile.revenuFiscalReference > 150000,
+          score: 0.45,
+          justification:
+              'Si le foyer est assujetti a l\'IFI, les dons IFI (75%) priment sur les dons IR.',
+          conditionsRestantes: const ['Confirmer l\'assujettissement IFI'],
+        );
+      case 'assurance_vie':
+        return const _EligibiliteResult(
+          estEligible: true,
+          score: 0.60,
+          justification:
+              'L\'assurance-vie optimise la capitalisation et la transmission (152 500 EUR par beneficiaire).',
+          conditionsRestantes: ['Choisir des supports adaptes au profil'],
+        );
+      case 'pea':
+        return const _EligibiliteResult(
+          estEligible: true,
+          score: 0.55,
+          justification:
+              'Le PEA exonere les plus-values d\'impot apres 5 ans.',
+          conditionsRestantes: ['Horizon 5 ans', 'Univers actions europeennes'],
+        );
       default:
         return const _EligibiliteResult(
           estEligible: false,

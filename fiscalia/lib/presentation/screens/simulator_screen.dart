@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/foyer_fiscal_model.dart';
+import '../providers/ads_provider.dart';
 import '../providers/fiscal_provider.dart';
+import '../providers/subscription_provider.dart';
+import '../widgets/banner_ad_widget.dart';
 
 class SimulatorScreen extends ConsumerStatefulWidget {
   const SimulatorScreen({super.key});
@@ -74,6 +77,12 @@ class _SimulatorScreenState extends ConsumerState<SimulatorScreen> {
       _expensesComparison =
           result['expensesComparison'] as Map<String, dynamic>?;
     });
+
+    // Interstitiel toutes les 3 simulations pour les utilisateurs
+    // gratuits uniquement (Story 9.1 / FR41).
+    if (!ref.read(subscriptionProvider).estPremium) {
+      ref.read(adMobServiceProvider).notifierSimulationTerminee();
+    }
   }
 
   void _nextStep() {
@@ -663,6 +672,9 @@ class _SimulatorScreenState extends ConsumerState<SimulatorScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Banniere AdMob - invisible pour les abonnes premium (FR41).
+        const Center(child: BannerAdWidget()),
+        const SizedBox(height: 12),
         Text(
           'Resultats de votre simulation',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
