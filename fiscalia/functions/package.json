@@ -1,0 +1,28 @@
+{
+  "name": "fiscalia-functions",
+  "version": "1.0.0",
+  "description": "FiscalIA Cloud Functions with Genkit",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions",
+    "seed:rag": "ts-node src/scripts/seed_rag.ts"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "@genkit-ai/ai": "^0.5.17",
+    "@genkit-ai/core": "^0.5.0",
+    "@genkit-ai/firebase": "^0.5.17",
+    "@genkit-ai/vertexai": "^0.5.17",
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^4.8.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  }
+}

@@ -4,6 +4,18 @@
 *.pyc
 *.swp
 .DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
 
 # Flutter/Dart specific
 .dart_tool/

@@ -5,6 +5,7 @@ import 'presentation/screens/simulator_screen.dart';
 import 'presentation/screens/optimizer_screen.dart';
 import 'presentation/screens/niches_screen.dart';
 import 'presentation/screens/more_screen.dart';
+import 'presentation/screens/ai_assistant/chat_screen.dart';
 
 class FiscalIAApp extends StatelessWidget {
   const FiscalIAApp({super.key});
@@ -44,6 +45,17 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: _screens),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const AiAssistantScreen(),
+            ),
+          );
+        },
+        tooltip: 'Copilote Fiscal',
+        child: const Icon(Icons.smart_toy),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
