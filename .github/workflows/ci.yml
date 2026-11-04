@@ -78,6 +78,9 @@ jobs:
 
   build-ios-simulator:
     name: Build iOS (simulateur)
+    # macOS coute 10x les minutes CI : on reserve ce job aux push sur
+    # develop/main, pas aux PR (analyze + tests + Android suffisent).
+    if: github.event_name == 'push'
     needs: analyze-and-test
     runs-on: macos-latest
     defaults:
