@@ -16,7 +16,10 @@ class PaywallScreen extends ConsumerWidget {
   const PaywallScreen({super.key, this.fonctionnalite});
 
   /// Ouvre le paywall et retourne true si l'utilisateur est devenu premium.
-  static Future<bool> ouvrir(BuildContext context, {String? fonctionnalite}) async {
+  static Future<bool> ouvrir(
+    BuildContext context, {
+    String? fonctionnalite,
+  }) async {
     final resultat = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         fullscreenDialog: true,
@@ -178,8 +181,8 @@ class PaywallScreen extends ConsumerWidget {
                 Text(
                   titre,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 if (misEnAvant)
                   const Chip(
@@ -195,9 +198,9 @@ class PaywallScreen extends ConsumerWidget {
                   ? package.storeProduct.priceString
                   : '$prixMensuel ou $prixAnnuel',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.primaryBlue,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: AppColors.primaryBlue,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             ...avantages.map(
@@ -258,10 +261,10 @@ class PaywallScreen extends ConsumerWidget {
   ) {
     final periodeDeclaration =
         DateTime.now().month >= 4 && DateTime.now().month <= 6;
-    final package = _trouverPackage(
-      abonnement.offres,
-      const ['fiscalia_expert_lifetime', 'fiscalia_pro_lifetime'],
-    );
+    final package = _trouverPackage(abonnement.offres, const [
+      'fiscalia_expert_lifetime',
+      'fiscalia_pro_lifetime',
+    ]);
 
     return Card(
       color: AppColors.primaryBlue.withValues(alpha: 0.06),
@@ -277,8 +280,8 @@ class PaywallScreen extends ConsumerWidget {
                 Text(
                   'Acces a vie',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -294,9 +297,9 @@ class PaywallScreen extends ConsumerWidget {
                 'Periode de declaration : offre a vie disponible jusqu\'au '
                 '30 juin.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.accentRed,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: AppColors.accentRed,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
             if (package != null) ...[

@@ -180,7 +180,8 @@ class LoopholeAgent extends FiscalAgent<FiscalProfile, List<AgentOpportunity>> {
         );
       case 'lmnp':
         return _EligibiliteResult(
-          estEligible: profile.aRevenusFonciers || profile.estPrimoAccedantPotentiel,
+          estEligible:
+              profile.aRevenusFonciers || profile.estPrimoAccedantPotentiel,
           score: profile.aRevenusFonciers ? 0.85 : 0.55,
           justification:
               'L\'amortissement LMNP neutralise la fiscalite des loyers meubles au regime reel.',
@@ -192,7 +193,8 @@ class LoopholeAgent extends FiscalAgent<FiscalProfile, List<AgentOpportunity>> {
       case 'denormandie':
       case 'locavantages':
         return _EligibiliteResult(
-          estEligible: profile.estPrimoAccedantPotentiel || profile.aRevenusFonciers,
+          estEligible:
+              profile.estPrimoAccedantPotentiel || profile.aRevenusFonciers,
           score: 0.55,
           justification:
               'Le profil patrimonial permet d\'envisager un investissement locatif avec reduction d\'impot.',
@@ -246,7 +248,8 @@ class LoopholeAgent extends FiscalAgent<FiscalProfile, List<AgentOpportunity>> {
         );
       case 'demembrement':
         return _EligibiliteResult(
-          estEligible: profile.revenuFiscalReference > 50000 || profile.aRevenusFonciers,
+          estEligible:
+              profile.revenuFiscalReference > 50000 || profile.aRevenusFonciers,
           score: 0.62,
           justification:
               'Le profil patrimonial justifie une anticipation successorale par demembrement.',
@@ -286,8 +289,7 @@ class LoopholeAgent extends FiscalAgent<FiscalProfile, List<AgentOpportunity>> {
         return const _EligibiliteResult(
           estEligible: true,
           score: 0.55,
-          justification:
-              'Le PEA exonere les plus-values d\'impot apres 5 ans.',
+          justification: 'Le PEA exonere les plus-values d\'impot apres 5 ans.',
           conditionsRestantes: ['Horizon 5 ans', 'Univers actions europeennes'],
         );
       default:

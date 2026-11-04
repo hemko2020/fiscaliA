@@ -25,8 +25,9 @@ class PremiumFormWidgets {
         ),
         validator: (value) {
           if (value == null || value.trim().isEmpty) return null;
-          final nombre =
-              double.tryParse(value.replaceAll(' ', '').replaceAll(',', '.'));
+          final nombre = double.tryParse(
+            value.replaceAll(' ', '').replaceAll(',', '.'),
+          );
           if (nombre == null || nombre < 0) {
             return 'Montant invalide';
           }
@@ -58,17 +59,14 @@ class PremiumFormWidgets {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
           ),
           Text(
             valeur,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: gras ? FontWeight.bold : FontWeight.normal,
-                  color: couleur,
-                ),
+              fontWeight: gras ? FontWeight.bold : FontWeight.normal,
+              color: couleur,
+            ),
           ),
         ],
       ),
@@ -91,9 +89,9 @@ class PremiumFormWidgets {
             Text(
               titre,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryBlue,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryBlue,
+              ),
             ),
             const Divider(height: 20),
             ...enfants,
@@ -163,8 +161,8 @@ class PremiumFormWidgets {
     final couleur = score <= 2
         ? AppColors.riskLow
         : score == 3
-            ? AppColors.riskMedium
-            : AppColors.riskHigh;
+        ? AppColors.riskMedium
+        : AppColors.riskHigh;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -174,9 +172,9 @@ class PremiumFormWidgets {
       child: Text(
         'Risque $score/5',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: couleur,
-              fontWeight: FontWeight.bold,
-            ),
+          color: couleur,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

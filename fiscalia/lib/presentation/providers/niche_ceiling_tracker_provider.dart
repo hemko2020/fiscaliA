@@ -25,14 +25,12 @@ final nicheAlertProvider = Provider<NicheAlert>((ref) {
 final nicheSuggestionTmiProvider = StateProvider<double>((ref) => 0.30);
 
 /// Suggestions de dispositifs hors plafond, classees par impact (4.4).
-final suggestionsHorsPlafondProvider = Provider<List<SuggestionHorsPlafond>>(
-  (ref) {
-    final tmi = ref.watch(nicheSuggestionTmiProvider);
-    return ref
-        .watch(nicheAlertServiceProvider)
-        .suggererHorsPlafond(tmi: tmi);
-  },
-);
+final suggestionsHorsPlafondProvider = Provider<List<SuggestionHorsPlafond>>((
+  ref,
+) {
+  final tmi = ref.watch(nicheSuggestionTmiProvider);
+  return ref.watch(nicheAlertServiceProvider).suggererHorsPlafond(tmi: tmi);
+});
 
 class NicheCeilingTrackerNotifier
     extends StateNotifier<NicheCeilingTrackerModel> {

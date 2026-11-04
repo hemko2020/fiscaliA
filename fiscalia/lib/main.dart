@@ -73,10 +73,12 @@ void main() async {
   await Hive.openBox<TaxDocumentModel>('taxDocuments');
   await Hive.openBox('settings');
 
-  final container = ProviderContainer(overrides: [
-    monitoringServiceProvider.overrideWithValue(monitoring),
-    taxRemoteConfigServiceProvider.overrideWithValue(taxConfigService),
-  ]);
+  final container = ProviderContainer(
+    overrides: [
+      monitoringServiceProvider.overrideWithValue(monitoring),
+      taxRemoteConfigServiceProvider.overrideWithValue(taxConfigService),
+    ],
+  );
 
   // Initialisation de la monetisation (AdMob + RevenueCat). Chaque service
   // degrade gracieusement si non configure ou indisponible.
@@ -84,9 +86,6 @@ void main() async {
   await container.read(subscriptionProvider.notifier).initialiser();
 
   runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const FiscalIAApp(),
-    ),
+    UncontrolledProviderScope(container: container, child: const FiscalIAApp()),
   );
 }

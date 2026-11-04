@@ -34,7 +34,9 @@ class _IfiCalculatorScreenState extends ConsumerState<IfiCalculatorScreen> {
   void _calculer() {
     if (!_formKey.currentState!.validate()) return;
     final parse = PremiumFormWidgets.parseMontant;
-    final resultat = ref.read(ifiServiceProvider).calculer(
+    final resultat = ref
+        .read(ifiServiceProvider)
+        .calculer(
           IfiModel(
             patrimoineImmobilierBrut: parse(_patrimoineController.text),
             dettesDeductibles: parse(_dettesController.text),
@@ -84,8 +86,10 @@ class _IfiCalculatorScreenState extends ConsumerState<IfiCalculatorScreen> {
                       padding: EdgeInsets.all(16),
                       child: Row(
                         children: [
-                          Icon(Icons.check_circle,
-                              color: AppColors.accentGreen),
+                          Icon(
+                            Icons.check_circle,
+                            color: AppColors.accentGreen,
+                          ),
                           SizedBox(width: 12),
                           Expanded(
                             child: Text(
@@ -113,8 +117,8 @@ class _IfiCalculatorScreenState extends ConsumerState<IfiCalculatorScreen> {
                             (t) => PremiumFormWidgets.ligneResultat(
                               context,
                               'Tranche ${(t.taux * 100).toStringAsFixed(2)}% '
-                              '(${_fmt.format(t.borneBasse)} - '
-                              '${_fmt.format(t.borneHaute)} EUR)',
+                                  '(${_fmt.format(t.borneBasse)} - '
+                                  '${_fmt.format(t.borneHaute)} EUR)',
                               '${_fmt.format(t.montantTaxe)} EUR',
                             ),
                           ),

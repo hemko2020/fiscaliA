@@ -68,11 +68,11 @@ class PerOptimizationService {
     // Le report le plus ancien (N-3) expire au 31/12 s'il n'est pas utilise.
     final reportsExpirants =
         (input.reportsDeclarant1.isNotEmpty
-                ? input.reportsDeclarant1.last
-                : 0.0) +
-            (input.estEnCouple && input.reportsDeclarant2.isNotEmpty
-                ? input.reportsDeclarant2.last
-                : 0.0);
+            ? input.reportsDeclarant1.last
+            : 0.0) +
+        (input.estEnCouple && input.reportsDeclarant2.isNotEmpty
+            ? input.reportsDeclarant2.last
+            : 0.0);
 
     final recommandations = <String>[];
     if (input.estEnCouple) {

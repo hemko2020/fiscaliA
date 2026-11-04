@@ -119,8 +119,8 @@ class NicheAlertService {
     // illustre avec un versement de 10 000 EUR.
     final deductionPer = revenuFiscalReference > 0
         ? (revenuFiscalReference * 0.10 > TaxBrackets2026.perAnnualCeiling
-            ? TaxBrackets2026.perAnnualCeiling
-            : revenuFiscalReference * 0.10)
+              ? TaxBrackets2026.perAnnualCeiling
+              : revenuFiscalReference * 0.10)
         : 10000.0;
 
     final suggestions = <SuggestionHorsPlafond>[
@@ -169,9 +169,7 @@ class NicheAlertService {
     ];
 
     // Classement par impact decroissant (Story 4.4).
-    suggestions.sort(
-      (a, b) => b.economieEstimee.compareTo(a.economieEstimee),
-    );
+    suggestions.sort((a, b) => b.economieEstimee.compareTo(a.economieEstimee));
     return suggestions;
   }
 }

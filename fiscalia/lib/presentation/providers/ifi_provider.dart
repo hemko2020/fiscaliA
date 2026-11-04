@@ -56,11 +56,8 @@ class IfiService {
     // formule 17 500 - 1.25% x P, on retient la formule.
     var decote = 0.0;
     var ifiApresDecote = ifiBrut;
-    if (assujetti &&
-        net <= config.ifiDecotePlafond &&
-        ifiBrut > 0) {
-      final ifiDecote = config.ifiDecoteBase -
-          config.ifiDecoteTaux * net;
+    if (assujetti && net <= config.ifiDecotePlafond && ifiBrut > 0) {
+      final ifiDecote = config.ifiDecoteBase - config.ifiDecoteTaux * net;
       if (ifiDecote < ifiBrut) {
         decote = ifiBrut - ifiDecote;
         ifiApresDecote = ifiDecote;
@@ -69,12 +66,14 @@ class IfiService {
 
     // Reduction dons IFI : 75% plafonnee a 50 000 EUR, non restituable
     // (ne peut pas generer de credit).
-    final reductionDons = input.donsIfi * config.ifiDonReductionTaux >
+    final reductionDons =
+        input.donsIfi * config.ifiDonReductionTaux >
             config.ifiDonReductionPlafond
         ? config.ifiDonReductionPlafond
         : input.donsIfi * config.ifiDonReductionTaux;
-    final reductionAppliquee =
-        reductionDons > ifiApresDecote ? ifiApresDecote : reductionDons;
+    final reductionAppliquee = reductionDons > ifiApresDecote
+        ? ifiApresDecote
+        : reductionDons;
 
     final ifiFinal = ifiApresDecote - reductionAppliquee;
 
@@ -113,8 +112,7 @@ class IfiService {
       'bis A CGI). Plus efficace que le don IR si vous etes assujetti.',
     );
     if (input.ageUsufruitier > 0) {
-      final ratio =
-          config.usufruitRatioPourAge(input.ageUsufruitier);
+      final ratio = config.usufruitRatioPourAge(input.ageUsufruitier);
       strategies.add(
         'Demembrement : donner la nue-propriete reduit l\'assiette IFI. '
         'Attention : l\'usufruitier doit declarer le bien en pleine '

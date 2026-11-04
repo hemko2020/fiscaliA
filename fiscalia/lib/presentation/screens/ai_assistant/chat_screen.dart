@@ -40,7 +40,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
   @override
   Widget build(BuildContext context) {
     final chatState = ref.watch(aiAssistantProvider);
-    
+
     // Automatically scroll to bottom when a new message arrives
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom();
@@ -60,7 +60,7 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
                   title: const Text('À propos'),
                   content: const Text(
                     "Ce copilote utilise l'IA pour répondre à vos questions fiscales et s'appuie sur la réglementation française en vigueur. "
-                    "Vos documents scannés sont analysés localement, et seules les données pertinentes nécessaires à la question sont traitées de manière sécurisée."
+                    "Vos documents scannés sont analysés localement, et seules les données pertinentes nécessaires à la question sont traitées de manière sécurisée.",
                   ),
                   actions: [
                     TextButton(
@@ -114,7 +114,9 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: isUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isUser) ...[
@@ -126,16 +128,23 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
           ],
           Flexible(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
               decoration: BoxDecoration(
-                color: isUser ? Theme.of(context).colorScheme.primary : Colors.grey.shade200,
+                color: isUser
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(16.0).copyWith(
                   bottomRight: isUser ? const Radius.circular(0) : null,
                   bottomLeft: !isUser ? const Radius.circular(0) : null,
                 ),
               ),
               child: Column(
-                crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                crossAxisAlignment: isUser
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
                 children: [
                   Text(
                     message.text,
@@ -188,7 +197,10 @@ class _AiAssistantScreenState extends ConsumerState<AiAssistantScreen> {
                   ),
                   filled: true,
                   fillColor: Colors.grey.shade100,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 14.0,
+                  ),
                 ),
               ),
             ),

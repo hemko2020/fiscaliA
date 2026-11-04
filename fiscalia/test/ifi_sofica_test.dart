@@ -110,10 +110,7 @@ void main() {
       );
       expect(result.reductionImputable, 8000);
       expect(result.reductionNonImputable, greaterThan(0));
-      expect(
-        result.avertissements.any((a) => a.contains('depassent')),
-        isTrue,
-      );
+      expect(result.avertissements.any((a) => a.contains('depassent')), isTrue);
     });
   });
 }

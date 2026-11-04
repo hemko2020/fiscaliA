@@ -9,9 +9,7 @@ final pacteDutreilServiceProvider = Provider(
   (ref) => PacteDutreilService(config: ref.watch(advancedTaxConfigProvider)),
 );
 
-final pacteDutreilProvider = StateProvider<PacteDutreilResult?>(
-  (ref) => null,
-);
+final pacteDutreilProvider = StateProvider<PacteDutreilResult?>((ref) => null);
 
 /// Service de calcul du Pacte Dutreil (Story 8.5).
 ///
@@ -30,9 +28,8 @@ class PacteDutreilService {
   PacteDutreilService({this.config = const AdvancedTaxConfig.embedded()});
 
   PacteDutreilResult calculer(PacteDutreilModel input) {
-    final abattementFamilial = config.abattementLigneDirecte *
-        input.nbParents *
-        input.nbEnfants;
+    final abattementFamilial =
+        config.abattementLigneDirecte * input.nbParents * input.nbEnfants;
 
     // Droits calcules par part (parent x enfant) : chaque beneficiaire a
     // son propre abattement de 100 000 EUR et sa propre progression.

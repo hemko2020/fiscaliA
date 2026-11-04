@@ -11,9 +11,10 @@ class FakeRemoteConfigClient implements RemoteConfigClient {
   bool defaultsSet = false;
 
   @override
-  Future<void> setConfigSettings(
-      {required Duration fetchTimeout,
-      required Duration minimumFetchInterval}) async {}
+  Future<void> setConfigSettings({
+    required Duration fetchTimeout,
+    required Duration minimumFetchInterval,
+  }) async {}
 
   @override
   Future<void> setDefaults(Map<String, dynamic> defaults) async {
@@ -59,8 +60,7 @@ void main() {
     });
 
     test('fromJson refuse des baremes vides', () {
-      expect(() => TaxConfig.fromJson({'brackets': []}),
-          throwsFormatException);
+      expect(() => TaxConfig.fromJson({'brackets': []}), throwsFormatException);
     });
 
     test('toJson/fromJson est un aller-retour exact', () {

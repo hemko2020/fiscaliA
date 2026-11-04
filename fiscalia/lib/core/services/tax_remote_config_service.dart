@@ -48,25 +48,24 @@ class TaxConfig {
 
   /// Configuration embarquee (fallback) : valeurs 2026 compilees dans l'app.
   const TaxConfig.embedded()
-      : brackets = TaxBrackets2026.ir2026,
-        familyQuotientCeiling = TaxBrackets2026.familyQuotientCeiling,
-        parentIsoleQuotientCeiling = TaxBrackets2026.parentIsoleQuotientCeiling,
-        nicheCeilingGeneral = TaxBrackets2026.nicheCeilingGeneral,
-        nicheCeilingOverseas = TaxBrackets2026.nicheCeilingOverseas,
-        decoteSingleThreshold = TaxBrackets2026.decoteSingleThreshold,
-        decoteCoupleThreshold = TaxBrackets2026.decoteCoupleThreshold,
-        perAnnualCeiling = TaxBrackets2026.perAnnualCeiling,
-        homeEmploymentCeiling = TaxBrackets2026.homeEmploymentCeiling,
-        childCareCeilingPerChild = TaxBrackets2026.childCareCeilingPerChild,
-        donation75Ceiling = TaxBrackets2026.donation75Ceiling,
-        propertyDeficitCeiling = TaxBrackets2026.propertyDeficitCeiling,
-        decoteMultiplier = TaxBrackets2026.decoteMultiplier,
-        homeEmploymentExtraPerChild =
-            TaxBrackets2026.homeEmploymentExtraPerChild,
-        homeEmploymentMaxFirstYear = TaxBrackets2026.homeEmploymentMaxFirstYear,
-        homeEmploymentMaxWithMajorations =
-            TaxBrackets2026.homeEmploymentMaxWithMajorations,
-        taxYear = 2026;
+    : brackets = TaxBrackets2026.ir2026,
+      familyQuotientCeiling = TaxBrackets2026.familyQuotientCeiling,
+      parentIsoleQuotientCeiling = TaxBrackets2026.parentIsoleQuotientCeiling,
+      nicheCeilingGeneral = TaxBrackets2026.nicheCeilingGeneral,
+      nicheCeilingOverseas = TaxBrackets2026.nicheCeilingOverseas,
+      decoteSingleThreshold = TaxBrackets2026.decoteSingleThreshold,
+      decoteCoupleThreshold = TaxBrackets2026.decoteCoupleThreshold,
+      perAnnualCeiling = TaxBrackets2026.perAnnualCeiling,
+      homeEmploymentCeiling = TaxBrackets2026.homeEmploymentCeiling,
+      childCareCeilingPerChild = TaxBrackets2026.childCareCeilingPerChild,
+      donation75Ceiling = TaxBrackets2026.donation75Ceiling,
+      propertyDeficitCeiling = TaxBrackets2026.propertyDeficitCeiling,
+      decoteMultiplier = TaxBrackets2026.decoteMultiplier,
+      homeEmploymentExtraPerChild = TaxBrackets2026.homeEmploymentExtraPerChild,
+      homeEmploymentMaxFirstYear = TaxBrackets2026.homeEmploymentMaxFirstYear,
+      homeEmploymentMaxWithMajorations =
+          TaxBrackets2026.homeEmploymentMaxWithMajorations,
+      taxYear = 2026;
 
   factory TaxConfig.fromJson(Map<String, dynamic> json) {
     final rawBrackets = json['brackets'] as List<dynamic>?;
@@ -90,74 +89,106 @@ class TaxConfig {
 
     return TaxConfig(
       brackets: brackets,
-      familyQuotientCeiling:
-          readDouble('familyQuotientCeiling', embedded.familyQuotientCeiling),
+      familyQuotientCeiling: readDouble(
+        'familyQuotientCeiling',
+        embedded.familyQuotientCeiling,
+      ),
       parentIsoleQuotientCeiling: readDouble(
-          'parentIsoleQuotientCeiling', embedded.parentIsoleQuotientCeiling),
-      nicheCeilingGeneral:
-          readDouble('nicheCeilingGeneral', embedded.nicheCeilingGeneral),
-      nicheCeilingOverseas:
-          readDouble('nicheCeilingOverseas', embedded.nicheCeilingOverseas),
-      decoteSingleThreshold:
-          readDouble('decoteSingleThreshold', embedded.decoteSingleThreshold),
-      decoteCoupleThreshold:
-          readDouble('decoteCoupleThreshold', embedded.decoteCoupleThreshold),
-      perAnnualCeiling:
-          readDouble('perAnnualCeiling', embedded.perAnnualCeiling),
-      homeEmploymentCeiling:
-          readDouble('homeEmploymentCeiling', embedded.homeEmploymentCeiling),
+        'parentIsoleQuotientCeiling',
+        embedded.parentIsoleQuotientCeiling,
+      ),
+      nicheCeilingGeneral: readDouble(
+        'nicheCeilingGeneral',
+        embedded.nicheCeilingGeneral,
+      ),
+      nicheCeilingOverseas: readDouble(
+        'nicheCeilingOverseas',
+        embedded.nicheCeilingOverseas,
+      ),
+      decoteSingleThreshold: readDouble(
+        'decoteSingleThreshold',
+        embedded.decoteSingleThreshold,
+      ),
+      decoteCoupleThreshold: readDouble(
+        'decoteCoupleThreshold',
+        embedded.decoteCoupleThreshold,
+      ),
+      perAnnualCeiling: readDouble(
+        'perAnnualCeiling',
+        embedded.perAnnualCeiling,
+      ),
+      homeEmploymentCeiling: readDouble(
+        'homeEmploymentCeiling',
+        embedded.homeEmploymentCeiling,
+      ),
       childCareCeilingPerChild: readDouble(
-          'childCareCeilingPerChild', embedded.childCareCeilingPerChild),
-      donation75Ceiling:
-          readDouble('donation75Ceiling', embedded.donation75Ceiling),
-      propertyDeficitCeiling:
-          readDouble('propertyDeficitCeiling', embedded.propertyDeficitCeiling),
-      decoteMultiplier:
-          readDouble('decoteMultiplier', embedded.decoteMultiplier),
+        'childCareCeilingPerChild',
+        embedded.childCareCeilingPerChild,
+      ),
+      donation75Ceiling: readDouble(
+        'donation75Ceiling',
+        embedded.donation75Ceiling,
+      ),
+      propertyDeficitCeiling: readDouble(
+        'propertyDeficitCeiling',
+        embedded.propertyDeficitCeiling,
+      ),
+      decoteMultiplier: readDouble(
+        'decoteMultiplier',
+        embedded.decoteMultiplier,
+      ),
       homeEmploymentExtraPerChild: readDouble(
-          'homeEmploymentExtraPerChild', embedded.homeEmploymentExtraPerChild),
+        'homeEmploymentExtraPerChild',
+        embedded.homeEmploymentExtraPerChild,
+      ),
       homeEmploymentMaxFirstYear: readDouble(
-          'homeEmploymentMaxFirstYear', embedded.homeEmploymentMaxFirstYear),
+        'homeEmploymentMaxFirstYear',
+        embedded.homeEmploymentMaxFirstYear,
+      ),
       homeEmploymentMaxWithMajorations: readDouble(
-          'homeEmploymentMaxWithMajorations',
-          embedded.homeEmploymentMaxWithMajorations),
+        'homeEmploymentMaxWithMajorations',
+        embedded.homeEmploymentMaxWithMajorations,
+      ),
       taxYear: (json['taxYear'] as num?)?.toInt() ?? embedded.taxYear,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'taxYear': taxYear,
-        'brackets': brackets
-            .map((b) => {
-                  'minIncome': b.minIncome,
-                  'maxIncome':
-                      b.maxIncome.isInfinite ? 0 : b.maxIncome,
-                  'rate': b.rate,
-                })
-            .toList(),
-        'familyQuotientCeiling': familyQuotientCeiling,
-        'parentIsoleQuotientCeiling': parentIsoleQuotientCeiling,
-        'nicheCeilingGeneral': nicheCeilingGeneral,
-        'nicheCeilingOverseas': nicheCeilingOverseas,
-        'decoteSingleThreshold': decoteSingleThreshold,
-        'decoteCoupleThreshold': decoteCoupleThreshold,
-        'perAnnualCeiling': perAnnualCeiling,
-        'homeEmploymentCeiling': homeEmploymentCeiling,
-        'childCareCeilingPerChild': childCareCeilingPerChild,
-        'donation75Ceiling': donation75Ceiling,
-        'propertyDeficitCeiling': propertyDeficitCeiling,
-        'decoteMultiplier': decoteMultiplier,
-        'homeEmploymentExtraPerChild': homeEmploymentExtraPerChild,
-        'homeEmploymentMaxFirstYear': homeEmploymentMaxFirstYear,
-        'homeEmploymentMaxWithMajorations': homeEmploymentMaxWithMajorations,
-      };
+    'taxYear': taxYear,
+    'brackets': brackets
+        .map(
+          (b) => {
+            'minIncome': b.minIncome,
+            'maxIncome': b.maxIncome.isInfinite ? 0 : b.maxIncome,
+            'rate': b.rate,
+          },
+        )
+        .toList(),
+    'familyQuotientCeiling': familyQuotientCeiling,
+    'parentIsoleQuotientCeiling': parentIsoleQuotientCeiling,
+    'nicheCeilingGeneral': nicheCeilingGeneral,
+    'nicheCeilingOverseas': nicheCeilingOverseas,
+    'decoteSingleThreshold': decoteSingleThreshold,
+    'decoteCoupleThreshold': decoteCoupleThreshold,
+    'perAnnualCeiling': perAnnualCeiling,
+    'homeEmploymentCeiling': homeEmploymentCeiling,
+    'childCareCeilingPerChild': childCareCeilingPerChild,
+    'donation75Ceiling': donation75Ceiling,
+    'propertyDeficitCeiling': propertyDeficitCeiling,
+    'decoteMultiplier': decoteMultiplier,
+    'homeEmploymentExtraPerChild': homeEmploymentExtraPerChild,
+    'homeEmploymentMaxFirstYear': homeEmploymentMaxFirstYear,
+    'homeEmploymentMaxWithMajorations': homeEmploymentMaxWithMajorations,
+  };
 }
 
 /// Abstraction du client Remote Config pour rendre le service testable
 /// sans Firebase.
 abstract class RemoteConfigClient {
-  Future<void> setConfigSettings(
-      {required Duration fetchTimeout, required Duration minimumFetchInterval});
+  Future<void> setConfigSettings({
+    required Duration fetchTimeout,
+    required Duration minimumFetchInterval,
+  });
   Future<void> setDefaults(Map<String, dynamic> defaults);
   Future<bool> fetchAndActivate();
   String getString(String key);
@@ -168,13 +199,15 @@ class FirebaseRemoteConfigClient implements RemoteConfigClient {
   FirebaseRemoteConfigClient(this._instance);
 
   @override
-  Future<void> setConfigSettings(
-          {required Duration fetchTimeout,
-          required Duration minimumFetchInterval}) =>
-      _instance.setConfigSettings(RemoteConfigSettings(
-        fetchTimeout: fetchTimeout,
-        minimumFetchInterval: minimumFetchInterval,
-      ));
+  Future<void> setConfigSettings({
+    required Duration fetchTimeout,
+    required Duration minimumFetchInterval,
+  }) => _instance.setConfigSettings(
+    RemoteConfigSettings(
+      fetchTimeout: fetchTimeout,
+      minimumFetchInterval: minimumFetchInterval,
+    ),
+  );
 
   @override
   Future<void> setDefaults(Map<String, dynamic> defaults) =>

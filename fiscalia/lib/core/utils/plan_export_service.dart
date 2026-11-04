@@ -42,19 +42,17 @@ class PlanExportService {
   /// Genere le PDF puis ouvre la feuille de partage systeme.
   Future<void> exporterEtPartager(AgentAnalysisResult analyse) async {
     final chemin = await genererPlanPdf(analyse);
-    await Share.shareXFiles(
-      [XFile(chemin)],
-      subject: 'Plan d\'optimisation fiscale - FiscalIA',
-    );
+    await Share.shareXFiles([
+      XFile(chemin),
+    ], subject: 'Plan d\'optimisation fiscale - FiscalIA');
   }
 
   pw.Page _pageSynthese(AgentAnalysisResult analyse) {
     final profil = analyse.profile;
     final economieTotale = analyse.scenarios.fold<double>(
       0,
-      (somme, s) => somme > s.economieTotaleEstimee
-          ? somme
-          : s.economieTotaleEstimee,
+      (somme, s) =>
+          somme > s.economieTotaleEstimee ? somme : s.economieTotaleEstimee,
     );
 
     return pw.Page(
@@ -106,8 +104,10 @@ class PlanExportService {
           pw.SizedBox(height: 8),
           pw.TableHelper.fromTextArray(
             headers: ['Dispositif', 'Economie estimee', 'Base legale'],
-            headerStyle:
-                pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9),
+            headerStyle: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+              fontSize: 9,
+            ),
             cellStyle: const pw.TextStyle(fontSize: 9),
             data: analyse.opportunites
                 .map(
@@ -235,28 +235,28 @@ class PlanExportService {
   }
 
   pw.Widget _titreSection(String titre) => pw.Padding(
-        padding: const pw.EdgeInsets.only(bottom: 6),
-        child: pw.Text(
-          titre,
-          style: pw.TextStyle(
-            fontSize: 14,
-            fontWeight: pw.FontWeight.bold,
-            color: PdfColors.blue900,
-          ),
-        ),
-      );
+    padding: const pw.EdgeInsets.only(bottom: 6),
+    child: pw.Text(
+      titre,
+      style: pw.TextStyle(
+        fontSize: 14,
+        fontWeight: pw.FontWeight.bold,
+        color: PdfColors.blue900,
+      ),
+    ),
+  );
 
   pw.Widget _ligne(String label, String valeur) => pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(vertical: 2),
-        child: pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-          children: [
-            pw.Text(label, style: const pw.TextStyle(fontSize: 10)),
-            pw.Text(
-              valeur,
-              style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold),
-            ),
-          ],
+    padding: const pw.EdgeInsets.symmetric(vertical: 2),
+    child: pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        pw.Text(label, style: const pw.TextStyle(fontSize: 10)),
+        pw.Text(
+          valeur,
+          style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold),
         ),
-      );
+      ],
+    ),
+  );
 }

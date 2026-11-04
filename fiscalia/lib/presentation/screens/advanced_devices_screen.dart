@@ -147,9 +147,9 @@ class AdvancedDevicesScreen extends ConsumerWidget {
       child: Text(
         titre,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.textSecondary,
-            ),
+          fontWeight: FontWeight.bold,
+          color: AppColors.textSecondary,
+        ),
       ),
     );
   }

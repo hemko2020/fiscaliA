@@ -30,8 +30,8 @@ class SoficaGirardinService {
 
   SoficaGirardinResult calculer(SoficaGirardinModel input) {
     // --- SOFICA ---
-    final baseSofica = input.investissementSofica >
-            config.soficaPlafondInvestissement
+    final baseSofica =
+        input.investissementSofica > config.soficaPlafondInvestissement
         ? config.soficaPlafondInvestissement
         : input.investissementSofica;
     final tauxSofica = input.soficaTauxMajore

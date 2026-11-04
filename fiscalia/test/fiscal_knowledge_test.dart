@@ -49,25 +49,29 @@ void main() {
   });
 
   group('Recherche (retrieval)', () {
-    test('retrouve le plafond des niches pour une question en langage naturel',
-        () {
-      final resultats =
-          service.rechercher('Quel est le plafond des niches fiscales ?');
-      expect(resultats, isNotEmpty);
-      expect(resultats.first.document.reference, contains('200-0 A'));
-    });
+    test(
+      'retrouve le plafond des niches pour une question en langage naturel',
+      () {
+        final resultats = service.rechercher(
+          'Quel est le plafond des niches fiscales ?',
+        );
+        expect(resultats, isNotEmpty);
+        expect(resultats.first.document.reference, contains('200-0 A'));
+      },
+    );
 
     test('retrouve le PER pour une question sur la retraite', () {
-      final resultats = service
-          .rechercher('Comment deduire mes versements retraite PER ?');
+      final resultats = service.rechercher(
+        'Comment deduire mes versements retraite PER ?',
+      );
       expect(resultats, isNotEmpty);
-      expect(resultats.first.document.reference,
-          contains('163 quatervicies'));
+      expect(resultats.first.document.reference, contains('163 quatervicies'));
     });
 
     test('retrouve la jurisprudence abus de droit', () {
-      final resultats =
-          service.rechercher('risque abus de droit montage fictif');
+      final resultats = service.rechercher(
+        'risque abus de droit montage fictif',
+      );
       expect(resultats, isNotEmpty);
       expect(resultats.first.document.source, contains('Jurisprudence'));
     });
@@ -75,8 +79,10 @@ void main() {
     test('les resultats sont tries par score decroissant', () {
       final resultats = service.rechercher('ifi dons reduction');
       for (var i = 0; i + 1 < resultats.length; i++) {
-        expect(resultats[i].score,
-            greaterThanOrEqualTo(resultats[i + 1].score));
+        expect(
+          resultats[i].score,
+          greaterThanOrEqualTo(resultats[i + 1].score),
+        );
       }
     });
 

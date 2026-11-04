@@ -32,8 +32,7 @@ class LmnpSimulationService {
     final tauxGlobal = input.tmi + config.prelevementsSociaux;
 
     // Amortissement annuel theorique.
-    final baseBatiment =
-        input.prixAcquisition * (1 - config.lmnpLandShare);
+    final baseBatiment = input.prixAcquisition * (1 - config.lmnpLandShare);
     final amortBatimentAnnuel =
         baseBatiment / config.lmnpBuildingAmortizationYears;
     final amortMobilierAnnuel =
@@ -53,10 +52,9 @@ class LmnpSimulationService {
 
       // --- Reel : charges + amortissements ---
       // Le mobilier n'est amortissable que pendant sa duree de vie.
-      final amortMobilier =
-          annee <= config.lmnpFurnitureAmortizationYears
-              ? amortMobilierAnnuel
-              : 0.0;
+      final amortMobilier = annee <= config.lmnpFurnitureAmortizationYears
+          ? amortMobilierAnnuel
+          : 0.0;
       final chargesTotales =
           input.chargesAnnuelles + amortBatimentAnnuel + amortMobilier;
       final resultatAvantPlafonnement = input.loyersAnnuels - chargesTotales;
@@ -77,10 +75,12 @@ class LmnpSimulationService {
         amortissementsReportes += excedent;
         final amortAdmis = amortBatimentAnnuel + amortMobilier - excedent;
         // On affecte le plafonnement d'abord au batiment (duree la plus longue).
-        amortUtiliseBatiment =
-            amortAdmis >= amortMobilier ? amortAdmis - amortMobilier : 0.0;
-        amortUtiliseMobilier =
-            amortAdmis >= amortMobilier ? amortMobilier : amortAdmis;
+        amortUtiliseBatiment = amortAdmis >= amortMobilier
+            ? amortAdmis - amortMobilier
+            : 0.0;
+        amortUtiliseMobilier = amortAdmis >= amortMobilier
+            ? amortMobilier
+            : amortAdmis;
       }
 
       final impotReel = baseReel * tauxGlobal;
@@ -104,7 +104,9 @@ class LmnpSimulationService {
 
     final economieTotale = impotTotalMicro - impotTotalReel;
     final loyersTotaux = input.loyersAnnuels * input.dureeAnnees;
-    final tauxFiscalite = loyersTotaux > 0 ? impotTotalReel / loyersTotaux : 0.0;
+    final tauxFiscalite = loyersTotaux > 0
+        ? impotTotalReel / loyersTotaux
+        : 0.0;
 
     final recommandations = <String>[];
     if (economieTotale > 0) {

@@ -34,7 +34,11 @@ class PerOptimizationModel {
   bool get estEnCouple => revenuDeclarant2 > 0;
 
   /// Plafond de deduction annuel : 10% du revenu, borne au plafond legal.
-  static double plafondAnnuel(double revenu, double plafondLegal, double plancher) {
+  static double plafondAnnuel(
+    double revenu,
+    double plafondLegal,
+    double plancher,
+  ) {
     final calcul = revenu * 0.10;
     if (calcul > plafondLegal) return plafondLegal;
     if (calcul < plancher) return plancher;

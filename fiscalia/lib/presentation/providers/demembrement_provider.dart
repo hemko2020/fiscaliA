@@ -8,9 +8,7 @@ final demembrementServiceProvider = Provider(
   (ref) => DemembrementService(config: ref.watch(advancedTaxConfigProvider)),
 );
 
-final demembrementProvider = StateProvider<DemembrementResult?>(
-  (ref) => null,
-);
+final demembrementProvider = StateProvider<DemembrementResult?>((ref) => null);
 
 /// Service de calcul du demembrement de propriete (Story 8.4).
 ///
@@ -37,8 +35,7 @@ class DemembrementService {
     var seuilPrecedent = 0.0;
     for (final (seuil, taux) in config.baremeLigneDirecte) {
       if (assietteTaxable <= seuilPrecedent) break;
-      final trancheHaute =
-          assietteTaxable < seuil ? assietteTaxable : seuil;
+      final trancheHaute = assietteTaxable < seuil ? assietteTaxable : seuil;
       droits += (trancheHaute - seuilPrecedent) * taux;
       seuilPrecedent = seuil;
     }
@@ -58,25 +55,21 @@ class DemembrementService {
     if (valeurTransmise <= 0 || nbParents < 1 || nbEnfants < 1) return 0;
     final nbParts = nbParents * nbEnfants;
     final partParBeneficiaire = valeurTransmise / nbParts;
-    final assietteParPart =
-        partParBeneficiaire - config.abattementLigneDirecte;
+    final assietteParPart = partParBeneficiaire - config.abattementLigneDirecte;
     if (assietteParPart <= 0) return 0;
     return nbParts *
         calculerDroitsLigneDirecte(assietteParPart, config: config);
   }
 
   DemembrementResult calculer(DemembrementModel input) {
-    final ratio = config.usufruitRatioPourAge(
-      input.ageUsufruitier,
-    );
+    final ratio = config.usufruitRatioPourAge(input.ageUsufruitier);
     final usufruit = input.valeurBien * ratio;
     final nuePropriete = input.valeurBien - usufruit;
 
     // Chaque parent dispose d'un abattement de 100 000 EUR par enfant,
     // renouvelable tous les 15 ans (Art. 779 CGI).
-    final abattementTotal = config.abattementLigneDirecte *
-        input.nbParents *
-        input.nbEnfants;
+    final abattementTotal =
+        config.abattementLigneDirecte * input.nbParents * input.nbEnfants;
 
     // Droits calcules par part (parent x enfant) : chaque beneficiaire a
     // son propre abattement et sa propre progression de tranches.

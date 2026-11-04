@@ -12,8 +12,9 @@ void main() {
     });
 
     test('couvre les 3 categories basique / avance / expert', () {
-      final categories =
-          DispositifsFiscauxCatalog.dispositifs.map((d) => d.categorie).toSet();
+      final categories = DispositifsFiscauxCatalog.dispositifs
+          .map((d) => d.categorie)
+          .toSet();
       expect(categories, containsAll(CategorieDispositif.values));
     });
 
@@ -26,8 +27,9 @@ void main() {
     });
 
     test('les identifiants sont uniques', () {
-      final ids =
-          DispositifsFiscauxCatalog.dispositifs.map((d) => d.id).toList();
+      final ids = DispositifsFiscauxCatalog.dispositifs
+          .map((d) => d.id)
+          .toList();
       expect(ids.toSet().length, ids.length);
     });
 

@@ -6,10 +6,7 @@ void main() {
   const service = NicheAlertService();
 
   NicheCeilingTrackerModel trackerAvec(double utilise) {
-    return NicheCeilingTrackerModel(
-      totalCeiling: 10000,
-      usedCeiling: utilise,
-    );
+    return NicheCeilingTrackerModel(totalCeiling: 10000, usedCeiling: utilise);
   }
 
   group('NicheAlertService - alertes plafond (Story 4.3)', () {
@@ -49,10 +46,7 @@ void main() {
         alerte.recommandations.any((r) => r.contains('fort impact')),
         isTrue,
       );
-      expect(
-        alerte.recommandations.any((r) => r.contains('PER')),
-        isTrue,
-      );
+      expect(alerte.recommandations.any((r) => r.contains('PER')), isTrue);
     });
 
     test('plafond outre-mer 18 000 EUR respecte', () {
@@ -66,13 +60,17 @@ void main() {
   });
 
   group('NicheAlertService - suggestions hors plafond (Story 4.4)', () {
-    test('propose PER, deficit foncier, Malraux et monuments historiques',
-        () {
+    test('propose PER, deficit foncier, Malraux et monuments historiques', () {
       final suggestions = service.suggererHorsPlafond(tmi: 0.30);
       final ids = suggestions.map((s) => s.id);
       expect(
         ids,
-        containsAll(['per', 'deficit_foncier', 'malraux', 'monuments_historiques']),
+        containsAll([
+          'per',
+          'deficit_foncier',
+          'malraux',
+          'monuments_historiques',
+        ]),
       );
     });
 

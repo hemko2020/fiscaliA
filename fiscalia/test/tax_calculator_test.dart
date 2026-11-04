@@ -182,27 +182,24 @@ void main() {
       expect(foyer.partsFiscales, 3.5);
     });
 
-    test(
-      'should NOT cap family quotient when advantage is below ceiling',
-      () {
-        // Couple marie, 2 enfants (3 parts), 60 000 EUR
-        final foyer = FoyerFiscalModel(
-          situationFamiliale: SituationFamiliale.marie,
-          nbEnfants: 2,
-          revenuNetImposable: 60000,
-        );
+    test('should NOT cap family quotient when advantage is below ceiling', () {
+      // Couple marie, 2 enfants (3 parts), 60 000 EUR
+      final foyer = FoyerFiscalModel(
+        situationFamiliale: SituationFamiliale.marie,
+        nbEnfants: 2,
+        revenuNetImposable: 60000,
+      );
 
-        final result = calculator.calculerImpot(foyer);
+      final result = calculator.calculerImpot(foyer);
 
-        // I_QF : 20 000/part -> 924 EUR/part -> 2 772 EUR
-        expect(result['impotBrut'], closeTo(2772, 1));
-        // I_ref (2 parts) : 30 000/part -> 2 103.58 EUR/part -> 4 207.16 EUR
-        // Avantage = 4 207.16 - 2 772 = 1 435.16 < plafond (2 x 1 807)
-        expect(result['reductionQuotientFamilial'], closeTo(1435.16, 0.5));
-        // Pas de plafonnement : impot apres plafond = I_QF
-        expect(result['impotApresPlafond'], closeTo(2772, 1));
-      },
-    );
+      // I_QF : 20 000/part -> 924 EUR/part -> 2 772 EUR
+      expect(result['impotBrut'], closeTo(2772, 1));
+      // I_ref (2 parts) : 30 000/part -> 2 103.58 EUR/part -> 4 207.16 EUR
+      // Avantage = 4 207.16 - 2 772 = 1 435.16 < plafond (2 x 1 807)
+      expect(result['reductionQuotientFamilial'], closeTo(1435.16, 0.5));
+      // Pas de plafonnement : impot apres plafond = I_QF
+      expect(result['impotApresPlafond'], closeTo(2772, 1));
+    });
 
     test('should cap family quotient when advantage exceeds ceiling', () {
       // Couple marie, 2 enfants (3 parts), 150 000 EUR
