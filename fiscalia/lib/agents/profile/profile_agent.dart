@@ -1,10 +1,14 @@
-import '../../core/constants/tax_brackets.dart';
+import '../../core/services/tax_remote_config_service.dart';
 import '../../data/models/foyer_fiscal_model.dart';
 import '../fiscal_agent.dart';
 import '../models/agent_models.dart';
 
 class ProfileAgent extends FiscalAgent<FoyerFiscalModel, FiscalProfile> {
-  const ProfileAgent();
+  /// Configuration fiscale pour le calcul du TMI (distante si disponible,
+  /// embarquee sinon).
+  final TaxConfig config;
+
+  const ProfileAgent({this.config = const TaxConfig.embedded()});
 
   @override
   String get id => 'profile';
@@ -88,7 +92,7 @@ class ProfileAgent extends FiscalAgent<FoyerFiscalModel, FiscalProfile> {
   double _calculerTmi(FoyerFiscalModel foyer) {
     final revenuQuotient = foyer.revenuNetImposable / foyer.partsFiscales;
     double tmi = 0;
-    for (final tranche in TaxBrackets2026.ir2026) {
+    for (final tranche in config.brackets) {
       if (revenuQuotient > tranche.minIncome) {
         tmi = tranche.rate;
       }

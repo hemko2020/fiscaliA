@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/constants/tax_brackets.dart';
+import '../../core/services/tax_remote_config_service.dart';
 import '../../data/models/home_employment_credit_model.dart';
+import 'monitoring_providers.dart';
 
 final homeEmploymentCreditServiceProvider = Provider(
-  (ref) => HomeEmploymentCreditService(),
+  (ref) => HomeEmploymentCreditService(config: ref.watch(taxConfigProvider)),
 );
 
 final homeEmploymentCreditProvider = StateProvider<HomeEmploymentCreditModel?>(
@@ -11,19 +12,24 @@ final homeEmploymentCreditProvider = StateProvider<HomeEmploymentCreditModel?>(
 );
 
 class HomeEmploymentCreditService {
+  /// Configuration fiscale (distante si disponible, embarquee sinon).
+  final TaxConfig config;
+
+  HomeEmploymentCreditService({this.config = const TaxConfig.embedded()});
+
   double calculateCeiling({
     required int numberOfChildren,
     required int numberOfElderly,
     required bool isFirstYear,
   }) {
-    double base = TaxBrackets2026.homeEmploymentCeiling;
-    base += numberOfChildren * TaxBrackets2026.homeEmploymentExtraPerChild;
-    base += numberOfElderly * TaxBrackets2026.homeEmploymentExtraPerChild;
+    double base = config.homeEmploymentCeiling;
+    base += numberOfChildren * config.homeEmploymentExtraPerChild;
+    base += numberOfElderly * config.homeEmploymentExtraPerChild;
 
     if (isFirstYear) {
-      return base.clamp(0, TaxBrackets2026.homeEmploymentMaxWithMajorations);
+      return base.clamp(0, config.homeEmploymentMaxWithMajorations);
     }
-    return base.clamp(0, TaxBrackets2026.homeEmploymentMaxFirstYear);
+    return base.clamp(0, config.homeEmploymentMaxFirstYear);
   }
 
   double calculateCredit({

@@ -19,6 +19,10 @@ class TaxConfig {
   final double childCareCeilingPerChild;
   final double donation75Ceiling;
   final double propertyDeficitCeiling;
+  final double decoteMultiplier;
+  final double homeEmploymentExtraPerChild;
+  final double homeEmploymentMaxFirstYear;
+  final double homeEmploymentMaxWithMajorations;
   final int taxYear;
 
   const TaxConfig({
@@ -34,25 +38,34 @@ class TaxConfig {
     required this.childCareCeilingPerChild,
     required this.donation75Ceiling,
     required this.propertyDeficitCeiling,
+    required this.decoteMultiplier,
+    required this.homeEmploymentExtraPerChild,
+    required this.homeEmploymentMaxFirstYear,
+    required this.homeEmploymentMaxWithMajorations,
     required this.taxYear,
   });
 
   /// Configuration embarquee (fallback) : valeurs 2026 compilees dans l'app.
-  factory TaxConfig.embedded() => const TaxConfig(
-        brackets: TaxBrackets2026.ir2026,
-        familyQuotientCeiling: TaxBrackets2026.familyQuotientCeiling,
-        parentIsoleQuotientCeiling: TaxBrackets2026.parentIsoleQuotientCeiling,
-        nicheCeilingGeneral: TaxBrackets2026.nicheCeilingGeneral,
-        nicheCeilingOverseas: TaxBrackets2026.nicheCeilingOverseas,
-        decoteSingleThreshold: TaxBrackets2026.decoteSingleThreshold,
-        decoteCoupleThreshold: TaxBrackets2026.decoteCoupleThreshold,
-        perAnnualCeiling: TaxBrackets2026.perAnnualCeiling,
-        homeEmploymentCeiling: TaxBrackets2026.homeEmploymentCeiling,
-        childCareCeilingPerChild: TaxBrackets2026.childCareCeilingPerChild,
-        donation75Ceiling: TaxBrackets2026.donation75Ceiling,
-        propertyDeficitCeiling: TaxBrackets2026.propertyDeficitCeiling,
-        taxYear: 2026,
-      );
+  const TaxConfig.embedded()
+      : brackets = TaxBrackets2026.ir2026,
+        familyQuotientCeiling = TaxBrackets2026.familyQuotientCeiling,
+        parentIsoleQuotientCeiling = TaxBrackets2026.parentIsoleQuotientCeiling,
+        nicheCeilingGeneral = TaxBrackets2026.nicheCeilingGeneral,
+        nicheCeilingOverseas = TaxBrackets2026.nicheCeilingOverseas,
+        decoteSingleThreshold = TaxBrackets2026.decoteSingleThreshold,
+        decoteCoupleThreshold = TaxBrackets2026.decoteCoupleThreshold,
+        perAnnualCeiling = TaxBrackets2026.perAnnualCeiling,
+        homeEmploymentCeiling = TaxBrackets2026.homeEmploymentCeiling,
+        childCareCeilingPerChild = TaxBrackets2026.childCareCeilingPerChild,
+        donation75Ceiling = TaxBrackets2026.donation75Ceiling,
+        propertyDeficitCeiling = TaxBrackets2026.propertyDeficitCeiling,
+        decoteMultiplier = TaxBrackets2026.decoteMultiplier,
+        homeEmploymentExtraPerChild =
+            TaxBrackets2026.homeEmploymentExtraPerChild,
+        homeEmploymentMaxFirstYear = TaxBrackets2026.homeEmploymentMaxFirstYear,
+        homeEmploymentMaxWithMajorations =
+            TaxBrackets2026.homeEmploymentMaxWithMajorations,
+        taxYear = 2026;
 
   factory TaxConfig.fromJson(Map<String, dynamic> json) {
     final rawBrackets = json['brackets'] as List<dynamic>?;
@@ -98,6 +111,15 @@ class TaxConfig {
           readDouble('donation75Ceiling', embedded.donation75Ceiling),
       propertyDeficitCeiling:
           readDouble('propertyDeficitCeiling', embedded.propertyDeficitCeiling),
+      decoteMultiplier:
+          readDouble('decoteMultiplier', embedded.decoteMultiplier),
+      homeEmploymentExtraPerChild: readDouble(
+          'homeEmploymentExtraPerChild', embedded.homeEmploymentExtraPerChild),
+      homeEmploymentMaxFirstYear: readDouble(
+          'homeEmploymentMaxFirstYear', embedded.homeEmploymentMaxFirstYear),
+      homeEmploymentMaxWithMajorations: readDouble(
+          'homeEmploymentMaxWithMajorations',
+          embedded.homeEmploymentMaxWithMajorations),
       taxYear: (json['taxYear'] as num?)?.toInt() ?? embedded.taxYear,
     );
   }
@@ -123,6 +145,10 @@ class TaxConfig {
         'childCareCeilingPerChild': childCareCeilingPerChild,
         'donation75Ceiling': donation75Ceiling,
         'propertyDeficitCeiling': propertyDeficitCeiling,
+        'decoteMultiplier': decoteMultiplier,
+        'homeEmploymentExtraPerChild': homeEmploymentExtraPerChild,
+        'homeEmploymentMaxFirstYear': homeEmploymentMaxFirstYear,
+        'homeEmploymentMaxWithMajorations': homeEmploymentMaxWithMajorations,
       };
 }
 
