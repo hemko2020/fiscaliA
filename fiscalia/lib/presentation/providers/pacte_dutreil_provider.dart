@@ -1,10 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/services/advanced_tax_config.dart';
+import 'monitoring_providers.dart';
 import '../../data/models/pacte_dutreil_model.dart';
 import 'demembrement_provider.dart';
 
-final pacteDutreilServiceProvider = Provider((ref) => PacteDutreilService());
+final pacteDutreilServiceProvider = Provider(
+  (ref) => PacteDutreilService(config: ref.watch(advancedTaxConfigProvider)),
+);
 
 final pacteDutreilProvider = StateProvider<PacteDutreilResult?>(
   (ref) => null,
@@ -20,8 +23,14 @@ final pacteDutreilProvider = StateProvider<PacteDutreilResult?>(
 /// - detention d'au moins 10% des droits financiers et 17% des droits de
 ///   vote (cas general), activite operationnelle de la societe.
 class PacteDutreilService {
+  /// Configuration des dispositifs avances (distante si disponible,
+  /// embarquee 2026 sinon).
+  final AdvancedTaxConfig config;
+
+  PacteDutreilService({this.config = const AdvancedTaxConfig.embedded()});
+
   PacteDutreilResult calculer(PacteDutreilModel input) {
-    final abattementFamilial = AdvancedTaxConstants.abattementLigneDirecte *
+    final abattementFamilial = config.abattementLigneDirecte *
         input.nbParents *
         input.nbEnfants;
 
@@ -31,16 +40,18 @@ class PacteDutreilService {
       valeurTransmise: input.valeurEntreprise,
       nbParents: input.nbParents,
       nbEnfants: input.nbEnfants,
+      config: config,
     );
 
     // Avec Dutreil : abattement de 75% sur la valeur, puis droits sur
     // les 25% restants (les abattements personnels restent applicables).
     final valeurApresDutreil =
-        input.valeurEntreprise * (1 - AdvancedTaxConstants.dutreilAbattement);
+        input.valeurEntreprise * (1 - config.dutreilAbattement);
     final droitsAvec = DemembrementService.calculerDroitsParPart(
       valeurTransmise: valeurApresDutreil,
       nbParents: input.nbParents,
       nbEnfants: input.nbEnfants,
+      config: config,
     );
     final assietteAvec = _assiette(valeurApresDutreil, abattementFamilial);
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/constants/tax_brackets.dart';
+import '../providers/monitoring_providers.dart';
 import 'niche_ceiling_tracker_screen.dart';
 
 class NichesScreen extends ConsumerStatefulWidget {
@@ -14,10 +14,11 @@ class NichesScreen extends ConsumerStatefulWidget {
 class _NichesScreenState extends ConsumerState<NichesScreen> {
   final double _usedNiche = 2500;
 
-  double get _remainingNiche =>
-      TaxBrackets2026.nicheCeilingGeneral - _usedNiche;
-  double get _percentageUsed =>
-      (_usedNiche / TaxBrackets2026.nicheCeilingGeneral) * 100;
+  /// Plafond issu de la configuration fiscale courante (Remote Config).
+  double get _plafond => ref.read(taxConfigProvider).nicheCeilingGeneral;
+
+  double get _remainingNiche => _plafond - _usedNiche;
+  double get _percentageUsed => (_usedNiche / _plafond) * 100;
 
   @override
   Widget build(BuildContext context) {
