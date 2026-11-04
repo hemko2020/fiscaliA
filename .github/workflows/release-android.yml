@@ -1,0 +1,97 @@
+name: Release Android
+
+# Story 10.1 : build release signe + app bundle pour le Play Console.
+# Secrets requis (Settings > Secrets and variables > Actions) :
+#   ANDROID_KEYSTORE_BASE64   keystore encode en base64 (base64 -i release.jks)
+#   ANDROID_KEYSTORE_PASSWORD mot de passe du keystore
+#   ANDROID_KEY_PASSWORD      mot de passe de la cle
+#   ANDROID_KEY_ALIAS         alias de la cle
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    name: Build release signe
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./fiscalia
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Decode release keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/release.jks
+
+      - name: Create key.properties
+        run: |
+          cat > android/key.properties <<EOF
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          storeFile=release.jks
+          EOF
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Build app bundle (Play Console)
+        run: flutter build appbundle --release
+
+      - name: Clean signing material
+        if: always()
+        run: rm -f android/release.jks android/key.properties
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: fiscalia/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload app bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-aab
+          path: fiscalia/build/app/outputs/bundle/release/app-release.aab
+
+  deploy-play-console:
+    name: Deploiement internal testing
+    needs: build-release
+    # Deploiement uniquement sur tag v* ; necessite le secret
+    # PLAY_STORE_SERVICE_ACCOUNT_JSON (compte de service Google Play).
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-aab
+          path: aab
+
+      - name: Upload vers Play Console (internal track)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+          packageName: com.fiscalia.fiscalia
+          releaseFiles: aab/app-release.aab
+          track: internal
+          status: completed

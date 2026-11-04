@@ -1,2 +1,2 @@
-# Package vendore : l'include d'origine (../google_ml_kit) n'existe pas
-# dans ce depot. On se contente des regles par defaut.
+# Package vendore : pas de fichier analysis_options parent disponible.
+# Ce fichier vide evite le warning include_file_not_found.

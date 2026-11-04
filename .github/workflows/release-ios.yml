@@ -1,0 +1,116 @@
+name: Release iOS
+
+# Story 10.2 : build IPA signe + upload TestFlight via App Store Connect API.
+# Secrets requis (Settings > Secrets and variables > Actions) :
+#   IOS_CERTIFICAT_P12_BASE64  certificat de distribution .p12 en base64
+#   IOS_CERTIFICAT_PASSWORD    mot de passe du .p12
+#   IOS_PROFIL_PROVISIONNEMENT_BASE64  profil App Store .mobileprovision en base64
+#   APP_STORE_CONNECT_KEY_ID          identifiant de la cle API App Store Connect
+#   APP_STORE_CONNECT_ISSUER_ID       issuer ID App Store Connect
+#   APP_STORE_CONNECT_API_KEY_BASE64  contenu du .p8 en base64
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    name: Build IPA signe
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./fiscalia
+    env:
+      KEYCHAIN_NAME: build.keychain
+      KEYCHAIN_PASSWORD: ci-keychain-password
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Install certificat de distribution
+        run: |
+          echo "${{ secrets.IOS_CERTIFICAT_P12_BASE64 }}" | base64 --decode > cert.p12
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_NAME"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
+          security import cert.p12 -k "$KEYCHAIN_NAME" \
+            -P "${{ secrets.IOS_CERTIFICAT_PASSWORD }}" \
+            -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
+          security list-keychains -d user -s "$KEYCHAIN_NAME" login.keychain
+
+      - name: Install profil de provisionnement
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.IOS_PROFIL_PROVISIONNEMENT_BASE64 }}" | base64 --decode \
+            > ~/Library/MobileDevice/Provisioning\ Profiles/fiscalia.mobileprovision
+
+      - name: Export options plist
+        run: |
+          cat > ios/ExportOptions.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>provisioningProfiles</key>
+            <dict><key>com.fiscalia.fiscalia</key><string>fiscalia</string></dict>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Build IPA
+        run: flutter build ipa --release --export-options-plist ios/ExportOptions.plist
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ipa
+          path: fiscalia/build/ios/ipa/*.ipa
+
+      - name: Clean signing material
+        if: always()
+        run: |
+          rm -f cert.p12 ios/ExportOptions.plist
+          security delete-keychain "$KEYCHAIN_NAME" || true
+
+  deploy-testflight:
+    name: Upload TestFlight
+    needs: build-release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-ipa
+          path: ipa
+
+      - name: Cle API App Store Connect
+        run: |
+          mkdir -p ~/private_keys
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}" | base64 --decode \
+            > ~/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_KEY_ID }}.p8
+
+      - name: Upload vers App Store Connect
+        run: |
+          xcrun altool --upload-app --type ios \
+            --file ipa/*.ipa \
+            --apiKey "${{ secrets.APP_STORE_CONNECT_KEY_ID }}" \
+            --apiIssuer "${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}"
