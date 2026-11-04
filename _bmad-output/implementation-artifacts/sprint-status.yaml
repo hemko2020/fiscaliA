@@ -2,7 +2,7 @@
 # FiscalIA - suivi d'implementation
 
 generated: 2026-03-28
-last_updated: 2026-11-02
+last_updated: 2026-11-04
 project: FiscalIA
 project_key: FISC
 tracking_system: file-system
@@ -28,7 +28,7 @@ development_status:
   3-6-alimony-tax-deduction: done
   epic-3-retrospective: optional
 
-  epic-4: in-progress
+  epic-4: done
   4-1-niche-ceiling-tracker: done
   4-2-device-distribution-visualization: done
   4-3-ceiling-alert-system: done
@@ -63,21 +63,28 @@ development_status:
   9-4-lifetime-purchase: done
   epic-9-retrospective: optional
 
-  # Epic 10 - Restant
-  epic-10: backlog
-  10-1-android-release-pipeline: backlog
-  10-2-ios-release-pipeline: backlog
-  10-3-remote-config-tax-updates: backlog
-  10-4-crash-reporting-analytics: backlog
+  # Epic 10 - CI/CD & deploiement (implemente 2026-11-02/03)
+  # Attention : les 11 secrets GitHub (keystore, certificats, cles API
+  # stores) doivent etre configures avant le premier tag v*.
+  epic-10: done
+  10-1-android-release-pipeline: done
+  10-2-ios-release-pipeline: done
+  10-3-remote-config-tax-updates: done
+  10-4-crash-reporting-analytics: done
+
+  # Extensions post-epics (PR #20, #21, #22)
+  remote-config-moteur-calcul: done
+  epic8-remote-config: done
+  rag-copilote-knowledge-base: done
 
 notes:
-  tests: "276/276 au vert (flutter test, 2026-11-02)"
+  tests: "318/318 au vert (flutter test, 2026-11-04)"
   catalogue: "26 leviers fiscaux (FR35 >= 25)"
+  rag: "36 documents (18 CGI, 10 BOFiP, 8 jurisprudence) - resumes a faire valider par un fiscaliste avant production"
   reste-a-faire:
-    - "4.3 Alertes plafond niches (seuil 90%, depassement)"
-    - "4.4 Suggestions hors-plafond dans l'ecran tracker"
-    - "Epic 10 : Remote Config, Crashlytics, pipelines release stores"
+    - "Configurer les 11 secrets GitHub (keystore Android, certificats iOS, cles API stores) avant le premier tag v*"
     - "Remplacer cles AdMob/RevenueCat test par les cles production"
     - "App Check : passer enforceAppCheck a true sur la Cloud Function"
+    - "Valider les resumes de textes legaux de la base de connaissance (fiscaliste)"
     - "FR28 : videos educatives"
     - "Couche domain/ (clean architecture) a completer ou assumer"
