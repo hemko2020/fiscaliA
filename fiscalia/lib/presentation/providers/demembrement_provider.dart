@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/services/advanced_tax_config.dart';
+import 'monitoring_providers.dart';
 import '../../data/models/demembrement_model.dart';
 
 final demembrementServiceProvider = Provider(
-  (ref) => DemembrementService(),
+  (ref) => DemembrementService(config: ref.watch(advancedTaxConfigProvider)),
 );
 
 final demembrementProvider = StateProvider<DemembrementResult?>(
@@ -19,13 +20,22 @@ final demembrementProvider = StateProvider<DemembrementResult?>(
 /// et au deces de l'usufruitier le nu-proprietaire recupere la pleine
 /// propriete sans aucun droit supplementaire (Art. 1133 CGI).
 class DemembrementService {
+  /// Configuration des dispositifs avances (distante si disponible,
+  /// embarquee 2026 sinon).
+  final AdvancedTaxConfig config;
+
+  DemembrementService({this.config = const AdvancedTaxConfig.embedded()});
+
   /// Calcule les droits selon le bareme progressif en ligne directe
   /// (Art. 777 CGI), par tranches successives.
-  static double calculerDroitsLigneDirecte(double assietteTaxable) {
+  static double calculerDroitsLigneDirecte(
+    double assietteTaxable, {
+    AdvancedTaxConfig config = const AdvancedTaxConfig.embedded(),
+  }) {
     if (assietteTaxable <= 0) return 0;
     var droits = 0.0;
     var seuilPrecedent = 0.0;
-    for (final (seuil, taux) in AdvancedTaxConstants.baremeLigneDirecte) {
+    for (final (seuil, taux) in config.baremeLigneDirecte) {
       if (assietteTaxable <= seuilPrecedent) break;
       final trancheHaute =
           assietteTaxable < seuil ? assietteTaxable : seuil;
@@ -43,18 +53,20 @@ class DemembrementService {
     required double valeurTransmise,
     required int nbParents,
     required int nbEnfants,
+    AdvancedTaxConfig config = const AdvancedTaxConfig.embedded(),
   }) {
     if (valeurTransmise <= 0 || nbParents < 1 || nbEnfants < 1) return 0;
     final nbParts = nbParents * nbEnfants;
     final partParBeneficiaire = valeurTransmise / nbParts;
     final assietteParPart =
-        partParBeneficiaire - AdvancedTaxConstants.abattementLigneDirecte;
+        partParBeneficiaire - config.abattementLigneDirecte;
     if (assietteParPart <= 0) return 0;
-    return nbParts * calculerDroitsLigneDirecte(assietteParPart);
+    return nbParts *
+        calculerDroitsLigneDirecte(assietteParPart, config: config);
   }
 
   DemembrementResult calculer(DemembrementModel input) {
-    final ratio = AdvancedTaxConstants.usufruitRatioPourAge(
+    final ratio = config.usufruitRatioPourAge(
       input.ageUsufruitier,
     );
     final usufruit = input.valeurBien * ratio;
@@ -62,7 +74,7 @@ class DemembrementService {
 
     // Chaque parent dispose d'un abattement de 100 000 EUR par enfant,
     // renouvelable tous les 15 ans (Art. 779 CGI).
-    final abattementTotal = AdvancedTaxConstants.abattementLigneDirecte *
+    final abattementTotal = config.abattementLigneDirecte *
         input.nbParents *
         input.nbEnfants;
 

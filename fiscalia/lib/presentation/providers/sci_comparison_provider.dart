@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/services/advanced_tax_config.dart';
+import 'monitoring_providers.dart';
 import '../../core/constants/tax_brackets.dart';
 import '../../data/models/sci_comparison_model.dart';
 
 final sciComparisonServiceProvider = Provider(
-  (ref) => SciComparisonService(),
+  (ref) => SciComparisonService(config: ref.watch(advancedTaxConfigProvider)),
 );
 
 final sciComparisonProvider = StateProvider<SciComparisonResult?>(
@@ -22,6 +23,12 @@ final sciComparisonProvider = StateProvider<SciComparisonResult?>(
 ///   jusqu'a 42 500 EUR puis 25%, puis PFU de 30% sur les dividendes
 ///   distribues. Option en principe definitive.
 class SciComparisonService {
+  /// Configuration des dispositifs avances (distante si disponible,
+  /// embarquee 2026 sinon).
+  final AdvancedTaxConfig config;
+
+  SciComparisonService({this.config = const AdvancedTaxConfig.embedded()});
+
   SciComparisonResult comparer(SciComparisonModel input) {
     final ir = _calculerRegimeIR(input);
     final is_ = _calculerRegimeIS(input);
@@ -61,7 +68,7 @@ class SciComparisonService {
     final revenuFoncierNet = input.loyersAnnuels - input.chargesAnnuelles;
     final baseImposable = revenuFoncierNet > 0 ? revenuFoncierNet : 0.0;
     final impot = baseImposable *
-        (input.tmi + AdvancedTaxConstants.prelevementsSociaux);
+        (input.tmi + config.prelevementsSociaux);
 
     // Le deficit foncier s'impute sur le revenu global : economie a la TMI
     // (pas de prelevements sociaux sur le revenu global).
@@ -90,17 +97,17 @@ class SciComparisonService {
     final baseImposable = resultat > 0 ? resultat : 0.0;
 
     // Bareme IS PME : 15% jusqu'a 42 500 EUR, 25% au-dela (Art. 219 CGI).
-    final tranche15 = baseImposable > AdvancedTaxConstants.isReducedRateCeiling
-        ? AdvancedTaxConstants.isReducedRateCeiling
+    final tranche15 = baseImposable > config.isReducedRateCeiling
+        ? config.isReducedRateCeiling
         : baseImposable;
     final tranche25 = baseImposable - tranche15;
-    final impotIS = tranche15 * AdvancedTaxConstants.isReducedRate +
-        tranche25 * AdvancedTaxConstants.isNormalRate;
+    final impotIS = tranche15 * config.isReducedRate +
+        tranche25 * config.isNormalRate;
 
     // PFU 30% sur la part distribuee du resultat apres IS.
     final resultatApresIS = baseImposable - impotIS;
     final dividendes = resultatApresIS * input.tauxDistribution;
-    final fiscaliteDistribution = dividendes * AdvancedTaxConstants.pfuDividendes;
+    final fiscaliteDistribution = dividendes * config.pfuDividendes;
 
     return SciRegimeResult(
       resultat: resultat,

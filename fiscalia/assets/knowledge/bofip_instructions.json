@@ -1,0 +1,76 @@
+{
+  "version": "2026.1",
+  "source": "Bulletin officiel des finances publiques (BOFiP-Impots)",
+  "documents": [
+    {
+      "id": "bofip-ir-liq-10-20",
+      "reference": "BOI-IR-LIQ-10-20",
+      "titre": "Plafonnement des effets du quotient familial",
+      "texte": "L'avantage fiscal procure par chaque demi-part supplementaire est plafonne a 1 807 EUR en 2026. Pour les parents isoles (case T), la part entiere du premier enfant est plafonnee a 4 262 EUR.",
+      "mots_cles": ["quotient familial", "plafonnement", "demi-part", "parent isole", "1807", "4262", "case t"]
+    },
+    {
+      "id": "bofip-ir-liq-20-20",
+      "reference": "BOI-IR-LIQ-20-20",
+      "titre": "Decote de l'impot sur le revenu",
+      "texte": "La decote s'applique aux contribuables dont l'impot brut est inferieur a 1 927 EUR (celibataire) ou 3 191 EUR (couple). Son montant est egal a la difference entre le seuil et 75% de l'impot brut.",
+      "mots_cles": ["decote", "1927", "3191", "faible imposition", "75%"]
+    },
+    {
+      "id": "bofip-ir-base-20-30",
+      "reference": "BOI-IR-BASE-20-30",
+      "titre": "Deduction forfaitaire de 10% ou frais reels",
+      "texte": "Les salaires beneficient d'une deduction forfaitaire de 10% (plafonnee a 14 556 EUR en 2026) sauf option pour la deduction des frais reels si celle-ci est plus favorable.",
+      "mots_cles": ["frais reels", "deduction", "10%", "salaire", "14556", "option"]
+    },
+    {
+      "id": "bofip-ir-rICI-20-30",
+      "reference": "BOI-IR-RICI-20-30",
+      "titre": "Plafonnement global des avantages fiscaux - Modalites",
+      "texte": "Le plafond global de 10 000 EUR s'applique au total des reductions et credits d'impot. Le plafond majore de 18 000 EUR vise les investissements outre-mer et les souscriptions SOFICA, sans cumul des deux plafonds.",
+      "mots_cles": ["plafonnement", "niches", "10000", "18000", "cumul", "modalites"]
+    },
+    {
+      "id": "bofip-bic-champ-40",
+      "reference": "BOI-BIC-CHAMP-40",
+      "titre": "Location meublee non professionnelle - Champ d'application",
+      "texte": "L'activite de location meublee est non professionnelle lorsque les recettes annuelles sont inferieures a 23 000 EUR ou n'excedent pas les autres revenus professionnels du foyer. Elle releve alors des BIC avec micro-BIC (abattement 50%) ou regime reel.",
+      "mots_cles": ["lmnp", "location meublee", "23000", "bic", "micro-bic", "professionnel"]
+    },
+    {
+      "id": "bofip-ir-rICI-100",
+      "reference": "BOI-IR-RICI-100",
+      "titre": "Credit d'impot services a la personne",
+      "texte": "Le credit d'impot de 50% pour emploi a domicile couvre les services a la personne. Avance immediate possible via Cesu+ ou Urssaf. La limite de 12 000 EUR est majoree de 1 500 EUR par personne a charge.",
+      "mots_cles": ["services a la personne", "cesu", "avance immediate", "emploi domicile", "50%"]
+    },
+    {
+      "id": "bofip-ENR-DMTG-10-50",
+      "reference": "BOI-ENR-DMTG-10-50",
+      "titre": "Pacte Dutreil - Conditions de l'exoneration",
+      "texte": "L'exoneration Dutreil de 75% exige un engagement collectif de conservation d'au moins 2 ans (parts de societe) puis un engagement individuel de 4 ans par chaque beneficiaire, et une activite industrielle, commerciale, artisanale, agricole ou liberale.",
+      "mots_cles": ["dutreil", "engagement", "conservation", "2 ans", "4 ans", "transmission"]
+    },
+    {
+      "id": "bofip-PAT-IFI-20-20",
+      "reference": "BOI-PAT-IFI-20-20",
+      "titre": "IFI - Assiette et actifs exoneres",
+      "texte": "L'assiette IFI comprend les biens et droits immobiliers detenus directement ou via des societes (quote-part immobiliere). Sont exoneres les biens professionnels, les bois et forets (75%), et les biens ruraux loues long terme (75%).",
+      "mots_cles": ["ifi", "assiette", "exoneration", "bien professionnel", "foret", "sci"]
+    },
+    {
+      "id": "bofip-ir-rICI-250",
+      "reference": "BOI-IR-RICI-250",
+      "titre": "SOFICA - Modalites de la reduction",
+      "texte": "La reduction SOFICA de 30% (48% si investissement >= 10% dans des PME de production) est subordonnee a la conservation des parts pendant au moins 5 ans et a l'agrement de la societe par le ministere de la Culture.",
+      "mots_cles": ["sofica", "conservation", "5 ans", "agrement", "48%", "30%"]
+    },
+    {
+      "id": "bofip-IR-DOMIC-10",
+      "reference": "BOI-IR-DOMIC-10",
+      "titre": "Girardin industriel - Conditions",
+      "texte": "La reduction Girardin industrielle exige un investissement productif neuf en outre-mer, exploite pendant au moins 5 ans. En one-shot avec retrocession, l'avantage typique represente environ 110% de l'apport.",
+      "mots_cles": ["girardin", "outre-mer", "5 ans", "one-shot", "retrocession", "productif"]
+    }
+  ]
+}

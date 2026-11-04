@@ -1,0 +1,132 @@
+{
+  "version": "2026.1",
+  "source": "Code general des impots (CGI)",
+  "documents": [
+    {
+      "id": "cgi-200-0-a",
+      "reference": "Art. 200-0 A CGI",
+      "titre": "Plafonnement global des niches fiscales",
+      "texte": "Le total des avantages fiscaux (reductions et credits d'impot) susceptibles d'etre imputes sur l'impot sur le revenu est limite a 10 000 EUR par an et par foyer fiscal. Ce plafond est porte a 18 000 EUR lorsque le foyer beneficie d'avantages outre-mer (Girardin) ou SOFICA, dans la limite de ces seuls dispositifs.",
+      "mots_cles": ["plafond", "niches fiscales", "10000", "18000", "plafonnement global", "outre-mer", "sofica"]
+    },
+    {
+      "id": "cgi-163-quatervicies",
+      "reference": "Art. 163 quatervicies CGI",
+      "titre": "PER - Plan d'epargne retraite : deductibilite des versements",
+      "texte": "Les versements volontaires sur un plan d'epargne retraite (PER) sont deductibles du revenu net global dans la limite de 10% des revenus professionnels de l'annee precedente, plafonnes a 8 PASS (37 094 EUR en 2026), avec un plancher de 10% du PASS (4 637 EUR). Les plafonds non utilises sont reportables sur les 3 annees suivantes et mutualisables entre conjoints.",
+      "mots_cles": ["per", "retraite", "deduction", "plafond", "report", "mutualisation", "epargne"]
+    },
+    {
+      "id": "cgi-156-1-1",
+      "reference": "Art. 156, I-1° CGI",
+      "titre": "Deficit foncier imputable sur le revenu global",
+      "texte": "Le deficit foncier resultant des charges deductibles autres que les interets d'emprunt est imputable sur le revenu global dans la limite de 10 700 EUR par an. La fraction excedentaire est reportable sur les revenus fonciers des 10 annees suivantes.",
+      "mots_cles": ["deficit foncier", "10700", "travaux", "foncier", "report", "imputation"]
+    },
+    {
+      "id": "cgi-82-10",
+      "reference": "Art. 82 CGI",
+      "titre": "Pension alimentaire deductible",
+      "texte": "Les pensions alimentaires versees a un enfant majeur dans le besoin sont deductibles du revenu imposable dans la limite d'un plafond annuel par enfant (6 674 EUR en 2026), ou sans limite de plafond forfaitaire si l'enfant est heberge sous le toit du parent (evaluation forfaitaire logement-nourriture).",
+      "mots_cles": ["pension alimentaire", "deduction", "enfant majeur", "6674"]
+    },
+    {
+      "id": "cgi-200-sexies",
+      "reference": "Art. 200 sexies CGI",
+      "titre": "Reduction d'impot pour dons aux organismes d'interet general",
+      "texte": "Les dons verses aux organismes d'aide aux personnes en difficulte ouvrent droit a une reduction d'impot de 75% dans la limite de 1 000 EUR ; les dons aux autres organismes d'interet general donnent droit a 66% dans la limite de 20% du revenu imposable. L'exedent est reportable 5 ans.",
+      "mots_cles": ["dons", "reduction", "75%", "66%", "organisme", "1000", "report"]
+    },
+    {
+      "id": "cgi-199-quaterdecies",
+      "reference": "Art. 199 quaterdecies CGI",
+      "titre": "Credit d'impot emploi a domicile",
+      "texte": "Les depenses d'emploi d'un salarie a domicile ouvrent droit a un credit d'impot de 50% dans la limite de 12 000 EUR par an, majoree de 1 500 EUR par enfant ou personne a charge (plafond 15 000 EUR, porte a 18 000 EUR avec majorations, 20 000 EUR en cas de handicap).",
+      "mots_cles": ["emploi a domicile", "credit d'impot", "50%", "12000", "1500", "menage", "garde"]
+    },
+    {
+      "id": "cgi-199-quater-b",
+      "reference": "Art. 199 quater B CGI",
+      "titre": "Credit d'impot frais de garde des jeunes enfants",
+      "texte": "Les frais de garde des enfants de moins de 6 ans hors domicile (creche, assistante maternelle) ouvrent droit a un credit d'impot de 50% dans la limite de 3 500 EUR par enfant (1 750 EUR en garde alternee).",
+      "mots_cles": ["garde enfant", "creche", "assistante maternelle", "3500", "credit d'impot"]
+    },
+    {
+      "id": "cgi-199-unvicies",
+      "reference": "Art. 199 unvicies CGI",
+      "titre": "SOFICA - Reduction pour financement du cinema et de l'audiovisuel",
+      "texte": "Les souscriptions au capital des SOFICA ouvrent droit a une reduction d'impot de 30%, portee a 48% si la societe investit au moins 10% dans des PME de production, dans la limite de 18 000 EUR d'investissement annuel et 25% du revenu net global. Plafond de niches specifique : 18 000 EUR.",
+      "mots_cles": ["sofica", "cinema", "audiovisuel", "30%", "48%", "18000"]
+    },
+    {
+      "id": "cgi-199-undecies-b",
+      "reference": "Art. 199 undecies B CGI",
+      "titre": "Girardin industriel - Investissement outre-mer",
+      "texte": "Les investissements productifs neufs dans les departements d'outre-mer (Girardin industriel) ouvrent droit a une reduction d'impot superieure a l'investissement (rendement typique 110% en one-shot), comptabilisee dans le plafond specifique de 18 000 EUR des niches fiscales.",
+      "mots_cles": ["girardin", "outre-mer", "industriel", "one-shot", "18000", "dom"]
+    },
+    {
+      "id": "cgi-669",
+      "reference": "Art. 669 CGI",
+      "titre": "Bareme de valuation de l'usufruit (demembrement)",
+      "texte": "Pour les transmissions, la valeur de l'usufruit est determinee selon l'age de l'usufruitier : 90% avant 21 ans, 80% avant 31, 70% avant 41, 60% avant 51, 50% avant 61, 40% avant 71, 30% avant 81, 20% avant 91, 10% au-dela. La nue-propriete vaut le complement.",
+      "mots_cles": ["demembrement", "usufruit", "nue-propriete", "669", "donation", "age"]
+    },
+    {
+      "id": "cgi-777-779",
+      "reference": "Art. 777 et 779 CGI",
+      "titre": "DMTG - Abattement et bareme en ligne directe",
+      "texte": "Chaque parent peut transmettre 100 000 EUR par enfant en franchise de droits tous les 15 ans (rappel fiscal). Au-dela, le bareme progressif s'applique par part : 5% jusqu'a 8 072 EUR, 10% jusqu'a 12 109, 15% jusqu'a 15 932, 20% jusqu'a 552 324, 30% jusqu'a 902 838, 40% jusqu'a 1 805 677, 45% au-dela.",
+      "mots_cles": ["donation", "heritage", "abattement", "100000", "15 ans", "dmtg", "succession"]
+    },
+    {
+      "id": "cgi-787-b",
+      "reference": "Art. 787 B et 787 C CGI",
+      "titre": "Pacte Dutreil - Exoneration partielle transmission d'entreprise",
+      "texte": "La transmission d'une entreprise ou de parts de societe sous engagement collectif de conservation (2 ans) et engagement individuel (4 ans) beneficie d'une exoneration de 75% de la valeur transmise pour le calcul des droits de mutation.",
+      "mots_cles": ["dutreil", "entreprise", "transmission", "75%", "pacte", "exoneration"]
+    },
+    {
+      "id": "cgi-964-983",
+      "reference": "Art. 964 a 983 CGI",
+      "titre": "IFI - Impot sur la fortune immobiliere",
+      "texte": "L'IFI est du lorsque le patrimoine immobilier net taxable excede 1 300 000 EUR ; le bareme s'applique a partir de 800 000 EUR : 0.5% jusqu'a 1.3M, 0.7% jusqu'a 2.57M, 1% jusqu'a 5M, 1.25% jusqu'a 10M, 1.5% au-dela. Decote pour patrimoine entre 1.3M et 1.4M (17 500 EUR - 1.25% x patrimoine).",
+      "mots_cles": ["ifi", "fortune", "immobilier", "1300000", "800000", "bareme", "decote"]
+    },
+    {
+      "id": "cgi-885-0-v-bis-a",
+      "reference": "Art. 885-0 V bis A CGI",
+      "titre": "Reduction IFI pour dons",
+      "texte": "Les dons en pleine propriete a certains organismes d'interet general sont deductibles de l'IFI a hauteur de 75% du montant verse, dans la limite de 50 000 EUR par an.",
+      "mots_cles": ["ifi", "dons", "reduction", "75%", "50000"]
+    },
+    {
+      "id": "cgi-219",
+      "reference": "Art. 219 CGI",
+      "titre": "Impot sur les societes - Taux",
+      "texte": "L'impot sur les societes est de 25%. Les PME (CA < 10M EUR, capital detenu 75% par des personnes physiques) beneficient d'un taux reduit de 15% sur les 42 500 premiers euros de benefice.",
+      "mots_cles": ["is", "societes", "taux", "25%", "15%", "pme", "42500", "sci"]
+    },
+    {
+      "id": "cgi-50-0-72",
+      "reference": "Art. 50-0 et 72 CGI",
+      "titre": "LMNP - Micro-BIC et regime reel",
+      "texte": "La location meublee non professionnelle releve des BIC. Sous 77 700 EUR de recettes, le micro-BIC applique un abattement de 50%. Au reel, les charges et l'amortissement (hors terrain, evalue a ~15% du prix) sont deductibles, permettant souvent de neutraliser l'imposition.",
+      "mots_cles": ["lmnp", "meuble", "micro-bic", "abattement", "amortissement", "77700", "bic"]
+    },
+    {
+      "id": "cgi-82-alim",
+      "reference": "Art. 83 CGI",
+      "titre": "Cotisations syndicales - Credit d'impot",
+      "texte": "Les cotisations syndicales des salaries ouvrent droit a un credit d'impot de 66% du montant verse, utilise ou rembourse l'annee suivante.",
+      "mots_cles": ["cotisation", "syndicale", "syndicat", "66%", "credit d'impot"]
+    },
+    {
+      "id": "cgi-199-quater",
+      "reference": "Art. 199 quater CGI",
+      "titre": "Reduction frais de scolarite des enfants",
+      "texte": "Les frais de scolarite des enfants a charge ouvrent droit a une reduction d'impot de 61 EUR (college), 153 EUR (lycee) ou 183 EUR (enseignement superieur) par enfant.",
+      "mots_cles": ["scolarite", "college", "lycee", "superieur", "61", "153", "183", "enfant"]
+    }
+  ]
+}

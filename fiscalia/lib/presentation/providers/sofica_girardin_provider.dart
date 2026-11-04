@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/services/advanced_tax_config.dart';
+import 'monitoring_providers.dart';
 import '../../data/models/sofica_girardin_model.dart';
 
 final soficaGirardinServiceProvider = Provider(
-  (ref) => SoficaGirardinService(),
+  (ref) => SoficaGirardinService(config: ref.watch(advancedTaxConfigProvider)),
 );
 
 final soficaGirardinProvider = StateProvider<SoficaGirardinResult?>(
@@ -21,15 +22,21 @@ final soficaGirardinProvider = StateProvider<SoficaGirardinResult?>(
 ///   superieure a l'investissement (typiquement 110% avec agreement),
 ///   imputee integralement en une fois. Entre dans le plafond de 18 000 EUR.
 class SoficaGirardinService {
+  /// Configuration des dispositifs avances (distante si disponible,
+  /// embarquee 2026 sinon).
+  final AdvancedTaxConfig config;
+
+  SoficaGirardinService({this.config = const AdvancedTaxConfig.embedded()});
+
   SoficaGirardinResult calculer(SoficaGirardinModel input) {
     // --- SOFICA ---
     final baseSofica = input.investissementSofica >
-            AdvancedTaxConstants.soficaPlafondInvestissement
-        ? AdvancedTaxConstants.soficaPlafondInvestissement
+            config.soficaPlafondInvestissement
+        ? config.soficaPlafondInvestissement
         : input.investissementSofica;
     final tauxSofica = input.soficaTauxMajore
-        ? AdvancedTaxConstants.soficaTauxMajore
-        : AdvancedTaxConstants.soficaTauxStandard;
+        ? config.soficaTauxMajore
+        : config.soficaTauxStandard;
     final reductionSofica = baseSofica * tauxSofica;
 
     // --- Girardin industriel ---

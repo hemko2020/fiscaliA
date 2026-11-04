@@ -1,9 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/advanced_tax_constants.dart';
+import '../../core/services/advanced_tax_config.dart';
+import 'monitoring_providers.dart';
 import '../../data/models/ifi_model.dart';
 
-final ifiServiceProvider = Provider((ref) => IfiService());
+final ifiServiceProvider = Provider(
+  (ref) => IfiService(config: ref.watch(advancedTaxConfigProvider)),
+);
 
 final ifiProvider = StateProvider<IfiResult?>((ref) => null);
 
@@ -17,16 +20,22 @@ final ifiProvider = StateProvider<IfiResult?>((ref) => null);
 /// - Reduction de 75% pour les dons IFI, plafonnee a 50 000 EUR
 ///   (Art. 885-0 V bis A CGI).
 class IfiService {
+  /// Configuration des dispositifs avances (distante si disponible,
+  /// embarquee 2026 sinon).
+  final AdvancedTaxConfig config;
+
+  IfiService({this.config = const AdvancedTaxConfig.embedded()});
+
   IfiResult calculer(IfiModel input) {
     final net = input.patrimoineNetTaxable;
-    final assujetti = net > AdvancedTaxConstants.ifiSeuilImposition;
+    final assujetti = net > config.ifiSeuilImposition;
 
     final tranches = <IfiTranche>[];
     var ifiBrut = 0.0;
 
     if (assujetti) {
       var borneBasse = 0.0;
-      for (final (borneHaute, taux) in AdvancedTaxConstants.baremeIFI) {
+      for (final (borneHaute, taux) in config.baremeIFI) {
         if (net <= borneBasse) break;
         final haut = net < borneHaute ? net : borneHaute;
         final montant = (haut - borneBasse) * taux;
@@ -48,10 +57,10 @@ class IfiService {
     var decote = 0.0;
     var ifiApresDecote = ifiBrut;
     if (assujetti &&
-        net <= AdvancedTaxConstants.ifiDecotePlafond &&
+        net <= config.ifiDecotePlafond &&
         ifiBrut > 0) {
-      final ifiDecote = AdvancedTaxConstants.ifiDecoteBase -
-          AdvancedTaxConstants.ifiDecoteTaux * net;
+      final ifiDecote = config.ifiDecoteBase -
+          config.ifiDecoteTaux * net;
       if (ifiDecote < ifiBrut) {
         decote = ifiBrut - ifiDecote;
         ifiApresDecote = ifiDecote;
@@ -60,10 +69,10 @@ class IfiService {
 
     // Reduction dons IFI : 75% plafonnee a 50 000 EUR, non restituable
     // (ne peut pas generer de credit).
-    final reductionDons = input.donsIfi * AdvancedTaxConstants.ifiDonReductionTaux >
-            AdvancedTaxConstants.ifiDonReductionPlafond
-        ? AdvancedTaxConstants.ifiDonReductionPlafond
-        : input.donsIfi * AdvancedTaxConstants.ifiDonReductionTaux;
+    final reductionDons = input.donsIfi * config.ifiDonReductionTaux >
+            config.ifiDonReductionPlafond
+        ? config.ifiDonReductionPlafond
+        : input.donsIfi * config.ifiDonReductionTaux;
     final reductionAppliquee =
         reductionDons > ifiApresDecote ? ifiApresDecote : reductionDons;
 
@@ -105,7 +114,7 @@ class IfiService {
     );
     if (input.ageUsufruitier > 0) {
       final ratio =
-          AdvancedTaxConstants.usufruitRatioPourAge(input.ageUsufruitier);
+          config.usufruitRatioPourAge(input.ageUsufruitier);
       strategies.add(
         'Demembrement : donner la nue-propriete reduit l\'assiette IFI. '
         'Attention : l\'usufruitier doit declarer le bien en pleine '

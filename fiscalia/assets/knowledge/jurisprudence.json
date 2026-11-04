@@ -1,0 +1,62 @@
+{
+  "version": "2026.1",
+  "source": "Jurisprudence Conseil d'Etat et Cour de cassation",
+  "documents": [
+    {
+      "id": "ce-1986-greenpeace",
+      "reference": "CE, Sect., 27 juin 1986, n 43631",
+      "titre": "Abus de droit - acte fictif ou motif exclusivement fiscal",
+      "texte": "L'abus de droit (Art. L.64 LPF) sanctionne les montages fictifs et ceux inspires d'un motif exclusivement fiscal contrecarrant le but des textes. Toute optimisation doit repondre a une logique economique ou patrimoniale reelle.",
+      "mots_cles": ["abus de droit", "l.64", "fictif", "motif fiscal", "montage", "conformite"]
+    },
+    {
+      "id": "ce-2008-janfin",
+      "reference": "CE, 29 sept. 2008, n 295840, Sté Janfin",
+      "titre": "Abus de droit elargi au motif principalement fiscal",
+      "texte": "Pour les avantages dont l'octroi est subordonne a une condition d'usage, l'abus de droit peut etre caracterise par un motif principalement fiscal. Vigilance accrue sur les dispositifs de deduction (PER, deficits).",
+      "mots_cles": ["abus de droit", "principalement fiscal", "janfin", "l.64", "optimisation"]
+    },
+    {
+      "id": "ce-2015-verdannet",
+      "reference": "CE, 22 avr. 2015, n 374469, Verdannet",
+      "titre": "Deficit foncier - deduction des interets d'emprunt",
+      "texte": "Les interets d'emprunt ne sont deductibles que des revenus fonciers, jamais du revenu global, y compris en cas de vente du bien ou d'echeance du pret. Seules les autres charges generent le deficit imputable a hauteur de 10 700 EUR.",
+      "mots_cles": ["deficit foncier", "interets", "emprunt", "10700", "revenu foncier"]
+    },
+    {
+      "id": "ce-2013-trois-ans",
+      "reference": "CE, 27 mai 2013, n 355091",
+      "titre": "LMNP - activite exercee a titre professionnel",
+      "texte": "Le caractere professionnel de la location meublee s'apprecie globalement : recettes superieures a 23 000 EUR ET superieures aux autres revenus du foyer. Le depassement des deux conditions cumulatives entraine le reclassement en LMP.",
+      "mots_cles": ["lmnp", "lmp", "23000", "professionnel", "recettes", "conditions cumulatives"]
+    },
+    {
+      "id": "cass-2017-donation-demembrement",
+      "reference": "Cass. 1re civ., 5 juill. 2017, n 16-20.011",
+      "titre": "Demembrement - usufruit successif",
+      "texte": "En cas de donation de nue-propriete avec usufruit successif (donateur puis survivant), la reserve d'usufruit successif est valide et ne constitue pas une donation deguisee au profit du conjoint.",
+      "mots_cles": ["demembrement", "usufruit successif", "donation", "conjoint", "nue-propriete"]
+    },
+    {
+      "id": "ce-2019-dutreil-holding",
+      "reference": "CE, 10 avr. 2019, n 423956",
+      "titre": "Pacte Dutreil - holding animatrice",
+      "texte": "Les parts d'une holding animatrice (qui participe activement a la gestion de ses filiales operationnelles) sont eligibles au regime Dutreil d'exoneration de 75% des droits de transmission.",
+      "mots_cles": ["dutreil", "holding animatrice", "transmission", "75%", "societe"]
+    },
+    {
+      "id": "ce-2018-ifi-societe",
+      "reference": "CE, 18 juill. 2018, n 415871",
+      "titre": "IFI - quote-part immobiliere des societes",
+      "texte": "Pour les participations dans des societes, seule la fraction de la valeur des parts representant les actifs immobiliers est retenue dans l'assiette IFI, sous reserve des exonerations (biens professionnels, participations < 10%).",
+      "mots_cles": ["ifi", "quote-part", "societe", "parts", "assiette", "10%"]
+    },
+    {
+      "id": "ce-2020-pension-alimentaire",
+      "reference": "CE, 9 nov. 2020, n 437719",
+      "titre": "Pension alimentaire - justification de la deduction",
+      "texte": "La deduction d'une pension alimentaire versee a un enfant majeur est subordonnee a la preuve du versement effectif et du besoin du beneficiaire ; le forfait hebergement est utilisable en l'absence de justificatifs de depenses.",
+      "mots_cles": ["pension alimentaire", "enfant majeur", "preuve", "justificatif", "deduction"]
+    }
+  ]
+}
