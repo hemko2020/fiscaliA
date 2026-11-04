@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/niche_ceiling_tracker_model.dart';
+import '../providers/niche_alert_service.dart';
 import '../providers/niche_ceiling_tracker_provider.dart';
 
 class NicheCeilingTrackerScreen extends ConsumerWidget {
@@ -31,8 +32,12 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildCeilingOverview(context, tracker),
+            const SizedBox(height: 16),
+            _buildAlertBanner(context, ref),
             const SizedBox(height: 24),
             _buildCreditBreakdown(context, tracker),
+            const SizedBox(height: 24),
+            _buildSuggestionsHorsPlafond(context, ref),
             const SizedBox(height: 24),
             _buildCreditList(context, tracker, notifier),
           ],
@@ -201,6 +206,216 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Banniere d'alerte plafond (Story 4.3) : avertissement jaune a 90%,
+  /// alerte rouge en cas de depassement avec le montant perdu.
+  Widget _buildAlertBanner(BuildContext context, WidgetRef ref) {
+    final alerte = ref.watch(nicheAlertProvider);
+    if (alerte.niveau == NicheAlertLevel.ok) {
+      return const SizedBox.shrink();
+    }
+
+    final estDepasse = alerte.niveau == NicheAlertLevel.depasse;
+    final couleur = estDepasse ? AppColors.accentRed : AppColors.accentOrange;
+    final icone = estDepasse ? Icons.error : Icons.warning_amber;
+
+    return Card(
+      color: couleur.withValues(alpha: 0.1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: couleur, width: 1.5),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icone, color: couleur),
+                const SizedBox(width: 8),
+                Text(
+                  alerte.titre,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: couleur,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(alerte.message, style: Theme.of(context).textTheme.bodyMedium),
+            if (alerte.recommandations.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              ...alerte.recommandations.map(
+                (reco) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.arrow_right, size: 18, color: couleur),
+                      Expanded(
+                        child: Text(
+                          reco,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Suggestions de dispositifs hors plafond, classees par impact avec
+  /// score de risque (Story 4.4).
+  Widget _buildSuggestionsHorsPlafond(BuildContext context, WidgetRef ref) {
+    final suggestions = ref.watch(suggestionsHorsPlafondProvider);
+    final tmi = ref.watch(nicheSuggestionTmiProvider);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Optimiser au-dela du plafond',
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Ces dispositifs sont HORS plafond des niches fiscales : '
+              'ils restent pleinement efficaces meme a 100% d\'utilisation.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Text(
+                  'Votre TMI : ${(tmi * 100).toStringAsFixed(0)}%',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Expanded(
+                  child: Slider(
+                    value: tmi,
+                    min: 0,
+                    max: 0.45,
+                    divisions: 4,
+                    label: '${(tmi * 100).toStringAsFixed(0)}%',
+                    onChanged: (v) => ref
+                        .read(nicheSuggestionTmiProvider.notifier)
+                        .state = v,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(),
+            ...suggestions.map((s) => _buildSuggestionItem(context, s)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSuggestionItem(
+    BuildContext context,
+    SuggestionHorsPlafond suggestion,
+  ) {
+    final couleurRisque = suggestion.risqueScore <= 2
+        ? AppColors.riskLow
+        : suggestion.risqueScore == 3
+            ? AppColors.riskMedium
+            : AppColors.riskHigh;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        suggestion.nom,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: couleurRisque.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        'Risque ${suggestion.risqueScore}/5',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: couleurRisque,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  suggestion.description,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  suggestion.baseLegale,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                        fontSize: 10,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${suggestion.economieEstimee.toStringAsFixed(0)} €',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: AppColors.accentGreen,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Text(
+                'd\'économie',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textSecondary,
+                      fontSize: 10,
+                    ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
