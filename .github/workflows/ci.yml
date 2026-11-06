@@ -102,5 +102,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Update CocoaPods specs
+        run: cd ios && pod repo update
+
       - name: Build iOS (no codesign)
         run: flutter build ios --simulator --no-codesign
