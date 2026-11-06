@@ -102,8 +102,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Update CocoaPods specs
-        run: cd ios && pod repo update
+      - name: Resolve pods
+        # Le Podfile.lock commite peut epingler des versions perimees
+        # (ex. Firebase) : on le supprime et on re-resoud tout.
+        run: cd ios && rm -f Podfile.lock && pod install --repo-update
 
       - name: Build iOS (no codesign)
         run: flutter build ios --simulator --no-codesign
