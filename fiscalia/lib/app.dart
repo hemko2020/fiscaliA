@@ -14,8 +14,9 @@ class FiscalIAApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analyticsObserver =
-        ref.watch(monitoringServiceProvider).observateurNavigation();
+    final analyticsObserver = ref
+        .watch(monitoringServiceProvider)
+        .observateurNavigation();
     return MaterialApp(
       title: 'FiscalIA',
       debugShowCheckedModeBanner: false,
@@ -53,9 +54,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AiAssistantScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const AiAssistantScreen()),
           );
         },
         tooltip: 'Copilote Fiscal',

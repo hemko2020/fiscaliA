@@ -59,11 +59,9 @@ void main() {
           tauxDistribution: 1.0,
         ),
       );
-      final apresIS = result.regimeIS.resultat - result.regimeIS.impotSurResultat;
-      expect(
-        result.regimeIS.fiscaliteDistribution,
-        closeTo(apresIS * 0.30, 1),
-      );
+      final apresIS =
+          result.regimeIS.resultat - result.regimeIS.impotSurResultat;
+      expect(result.regimeIS.fiscaliteDistribution, closeTo(apresIS * 0.30, 1));
     });
 
     test('sans distribution, l\'IS gagne si TMI elevee', () {

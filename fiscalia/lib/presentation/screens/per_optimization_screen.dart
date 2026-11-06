@@ -40,7 +40,9 @@ class _PerOptimizationScreenState extends ConsumerState<PerOptimizationScreen> {
   void _calculer() {
     if (!_formKey.currentState!.validate()) return;
     final parse = PremiumFormWidgets.parseMontant;
-    final resultat = ref.read(perOptimizationServiceProvider).optimiser(
+    final resultat = ref
+        .read(perOptimizationServiceProvider)
+        .optimiser(
           PerOptimizationModel(
             revenuDeclarant1: parse(_revenu1Controller.text),
             revenuDeclarant2: parse(_revenu2Controller.text),

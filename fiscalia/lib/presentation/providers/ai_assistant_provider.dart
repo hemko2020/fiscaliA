@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/fiscal_knowledge_service.dart';
 
 /// Base de connaissance fiscale locale (RAG embarque), chargee une fois.
-final fiscalKnowledgeProvider = FutureProvider<FiscalKnowledgeService>((ref) async {
+final fiscalKnowledgeProvider = FutureProvider<FiscalKnowledgeService>((
+  ref,
+) async {
   final service = FiscalKnowledgeService();
   await service.charger();
   return service;
@@ -15,11 +17,8 @@ class ChatMessage {
   final bool isUser;
   final DateTime timestamp;
 
-  ChatMessage({
-    required this.text,
-    required this.isUser,
-    DateTime? timestamp,
-  }) : timestamp = timestamp ?? DateTime.now();
+  ChatMessage({required this.text, required this.isUser, DateTime? timestamp})
+    : timestamp = timestamp ?? DateTime.now();
 }
 
 class ChatState {
@@ -27,11 +26,7 @@ class ChatState {
   final bool isLoading;
   final String? error;
 
-  ChatState({
-    this.messages = const [],
-    this.isLoading = false,
-    this.error,
-  });
+  ChatState({this.messages = const [], this.isLoading = false, this.error});
 
   ChatState copyWith({
     List<ChatMessage>? messages,
@@ -57,9 +52,10 @@ class AiAssistantNotifier extends StateNotifier<ChatState> {
     state = state.copyWith(
       messages: [
         ChatMessage(
-          text: "Bonjour ! Je suis votre Copilote Fiscal. Comment puis-je vous aider avec vos impôts aujourd'hui ?",
+          text:
+              "Bonjour ! Je suis votre Copilote Fiscal. Comment puis-je vous aider avec vos impôts aujourd'hui ?",
           isUser: false,
-        )
+        ),
       ],
     );
   }
@@ -77,9 +73,11 @@ class AiAssistantNotifier extends StateNotifier<ChatState> {
 
     try {
       // Call Firebase Cloud Function
-      final functions = FirebaseFunctions.instanceFor(region: 'europe-west1'); // Example region
+      final functions = FirebaseFunctions.instanceFor(
+        region: 'europe-west1',
+      ); // Example region
       final callable = functions.httpsCallable('interrogerAgentFiscal');
-      
+
       // RAG : enrichissement du contexte avec les textes legaux locaux
       // applicables a la question (CGI, BOFiP, jurisprudence).
       var contexteComplet = contextData ?? '';
@@ -95,8 +93,10 @@ class AiAssistantNotifier extends StateNotifier<ChatState> {
         'contextData': contexteComplet,
       });
 
-      final aiText = response.data['reponse'] as String? ?? "Désolé, je n'ai pas pu générer de réponse.";
-      
+      final aiText =
+          response.data['reponse'] as String? ??
+          "Désolé, je n'ai pas pu générer de réponse.";
+
       final aiMessage = ChatMessage(text: aiText, isUser: false);
       state = state.copyWith(
         messages: [...state.messages, aiMessage],
@@ -111,8 +111,9 @@ class AiAssistantNotifier extends StateNotifier<ChatState> {
   }
 }
 
-final aiAssistantProvider = StateNotifierProvider<AiAssistantNotifier, ChatState>((ref) {
-  return AiAssistantNotifier(
-    knowledgeService: ref.watch(fiscalKnowledgeProvider).valueOrNull,
-  );
-});
+final aiAssistantProvider =
+    StateNotifierProvider<AiAssistantNotifier, ChatState>((ref) {
+      return AiAssistantNotifier(
+        knowledgeService: ref.watch(fiscalKnowledgeProvider).valueOrNull,
+      );
+    });

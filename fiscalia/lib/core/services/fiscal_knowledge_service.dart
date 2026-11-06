@@ -28,8 +28,7 @@ class DocumentFiscal {
         reference: json['reference'] as String,
         titre: json['titre'] as String,
         texte: json['texte'] as String,
-        motsCles:
-            (json['mots_cles'] as List<dynamic>).cast<String>(),
+        motsCles: (json['mots_cles'] as List<dynamic>).cast<String>(),
       );
 }
 
@@ -55,13 +54,73 @@ class FiscalKnowledgeService {
   ];
 
   static const Set<String> _motsVides = {
-    'le', 'la', 'les', 'un', 'une', 'des', 'de', 'du', 'et', 'ou', 'a',
-    'au', 'aux', 'en', 'dans', 'sur', 'pour', 'par', 'avec', 'sans',
-    'est', 'sont', 'que', 'qui', 'quoi', 'dont', 'ce', 'cet', 'cette',
-    'il', 'elle', 'on', 'nous', 'vous', 'je', 'tu', 'se', 'sa', 'son',
-    'ses', 'leur', 'leurs', 'mon', 'ma', 'mes', 'ton', 'ta', 'tes',
-    'd', 'l', 's', 'qu', 'ne', 'pas', 'plus', 'peut', 'etre', 'avoir',
-    'fait', 'si', 'y', 'tout', 'tous', 'toute', 'entre', 'sous', 'chez',
+    'le',
+    'la',
+    'les',
+    'un',
+    'une',
+    'des',
+    'de',
+    'du',
+    'et',
+    'ou',
+    'a',
+    'au',
+    'aux',
+    'en',
+    'dans',
+    'sur',
+    'pour',
+    'par',
+    'avec',
+    'sans',
+    'est',
+    'sont',
+    'que',
+    'qui',
+    'quoi',
+    'dont',
+    'ce',
+    'cet',
+    'cette',
+    'il',
+    'elle',
+    'on',
+    'nous',
+    'vous',
+    'je',
+    'tu',
+    'se',
+    'sa',
+    'son',
+    'ses',
+    'leur',
+    'leurs',
+    'mon',
+    'ma',
+    'mes',
+    'ton',
+    'ta',
+    'tes',
+    'd',
+    'l',
+    's',
+    'qu',
+    'ne',
+    'pas',
+    'plus',
+    'peut',
+    'etre',
+    'avoir',
+    'fait',
+    'si',
+    'y',
+    'tout',
+    'tous',
+    'toute',
+    'entre',
+    'sous',
+    'chez',
   };
 
   final List<DocumentFiscal> _documents = [];
@@ -85,9 +144,11 @@ class FiscalKnowledgeService {
   void chargerDepuisJson(String contenuJson) {
     final decoded = jsonDecode(contenuJson) as Map<String, dynamic>;
     final source = decoded['source'] as String? ?? 'inconnue';
-    final docs = (decoded['documents'] as List<dynamic>?)
-            ?.map((d) =>
-                DocumentFiscal.fromJson(source, d as Map<String, dynamic>))
+    final docs =
+        (decoded['documents'] as List<dynamic>?)
+            ?.map(
+              (d) => DocumentFiscal.fromJson(source, d as Map<String, dynamic>),
+            )
             .toList() ??
         [];
     _documents.addAll(docs);
@@ -97,12 +158,29 @@ class FiscalKnowledgeService {
   /// Normalise un texte : minuscules, sans accents, sans ponctuation.
   static String normaliser(String texte) {
     const accents = {
-      'à': 'a', 'â': 'a', 'ä': 'a', 'á': 'a', 'ã': 'a',
-      'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
-      'î': 'i', 'ï': 'i', 'í': 'i',
-      'ô': 'o', 'ö': 'o', 'ó': 'o',
-      'ù': 'u', 'û': 'u', 'ü': 'u', 'ú': 'u',
-      'ç': 'c', 'ñ': 'n', 'œ': 'oe', 'æ': 'ae',
+      'à': 'a',
+      'â': 'a',
+      'ä': 'a',
+      'á': 'a',
+      'ã': 'a',
+      'é': 'e',
+      'è': 'e',
+      'ê': 'e',
+      'ë': 'e',
+      'î': 'i',
+      'ï': 'i',
+      'í': 'i',
+      'ô': 'o',
+      'ö': 'o',
+      'ó': 'o',
+      'ù': 'u',
+      'û': 'u',
+      'ü': 'u',
+      'ú': 'u',
+      'ç': 'c',
+      'ñ': 'n',
+      'œ': 'oe',
+      'æ': 'ae',
     };
     var t = texte.toLowerCase();
     accents.forEach((k, v) => t = t.replaceAll(k, v));
@@ -149,7 +227,8 @@ class FiscalKnowledgeService {
     final buffer = StringBuffer('Textes applicables (base locale) :\n');
     for (final r in resultats) {
       buffer.writeln(
-          '- [${r.document.reference}] ${r.document.titre} : ${r.document.texte}');
+        '- [${r.document.reference}] ${r.document.titre} : ${r.document.texte}',
+      );
     }
     return buffer.toString();
   }

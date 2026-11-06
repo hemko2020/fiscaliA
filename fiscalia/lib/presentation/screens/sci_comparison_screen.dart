@@ -38,7 +38,9 @@ class _SciComparisonScreenState extends ConsumerState<SciComparisonScreen> {
   void _calculer() {
     if (!_formKey.currentState!.validate()) return;
     final parse = PremiumFormWidgets.parseMontant;
-    final resultat = ref.read(sciComparisonServiceProvider).comparer(
+    final resultat = ref
+        .read(sciComparisonServiceProvider)
+        .comparer(
           SciComparisonModel(
             loyersAnnuels: parse(_loyersController.text),
             chargesAnnuelles: parse(_chargesController.text),
@@ -120,17 +122,17 @@ class _SciComparisonScreenState extends ConsumerState<SciComparisonScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        const Icon(Icons.emoji_events,
-                            color: AppColors.accentGreen),
+                        const Icon(
+                          Icons.emoji_events,
+                          color: AppColors.accentGreen,
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Regime recommande : ${resultat.regimeRecommande} '
                             '(${_fmt.format(resultat.avantageAnnuel)} EUR/an '
                             'd\'avantage)',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
+                            style: Theme.of(context).textTheme.titleSmall
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),

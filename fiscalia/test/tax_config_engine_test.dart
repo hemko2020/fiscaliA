@@ -9,10 +9,10 @@ import 'package:fiscalia/presentation/providers/home_employment_credit_provider.
 /// (connexion Remote Config -> moteur, suite de la story 10.3).
 void main() {
   FoyerFiscalModel foyerCelibataire(double revenu) => FoyerFiscalModel(
-        situationFamiliale: SituationFamiliale.celibataire,
-        nbEnfants: 0,
-        revenuNetImposable: revenu,
-      );
+    situationFamiliale: SituationFamiliale.celibataire,
+    nbEnfants: 0,
+    revenuNetImposable: revenu,
+  );
 
   group('TaxCalculator avec configuration injectee', () {
     test('par defaut, utilise les baremes embarques 2026', () {

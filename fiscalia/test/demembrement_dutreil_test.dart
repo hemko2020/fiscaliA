@@ -54,31 +54,35 @@ void main() {
       expect(result.abattementTotal, 400000);
     });
 
-    test('calcul par part : 2 parents x 2 enfants moins taxe qu\'en agrege',
-        () {
-      // NP = 60% x 800 000 = 480 000 ; par part : 120 000 - 100 000 = 20 000
-      final result = demembrement.calculer(
-        const DemembrementModel(
-          ageUsufruitier: 70,
-          valeurBien: 800000,
-          nbEnfants: 2,
-          nbParents: 2,
-        ),
-      );
-      final droitsParPart =
-          DemembrementService.calculerDroitsLigneDirecte(20000) * 4;
-      expect(result.droitsDonation, closeTo(droitsParPart, 0.01));
-      // En agrege (methode incorrecte) : 80 000 taxable = ~14 194 EUR
-      final agrege = DemembrementService.calculerDroitsLigneDirecte(80000);
-      expect(result.droitsDonation, lessThan(agrege));
-    });
+    test(
+      'calcul par part : 2 parents x 2 enfants moins taxe qu\'en agrege',
+      () {
+        // NP = 60% x 800 000 = 480 000 ; par part : 120 000 - 100 000 = 20 000
+        final result = demembrement.calculer(
+          const DemembrementModel(
+            ageUsufruitier: 70,
+            valeurBien: 800000,
+            nbEnfants: 2,
+            nbParents: 2,
+          ),
+        );
+        final droitsParPart =
+            DemembrementService.calculerDroitsLigneDirecte(20000) * 4;
+        expect(result.droitsDonation, closeTo(droitsParPart, 0.01));
+        // En agrege (methode incorrecte) : 80 000 taxable = ~14 194 EUR
+        final agrege = DemembrementService.calculerDroitsLigneDirecte(80000);
+        expect(result.droitsDonation, lessThan(agrege));
+      },
+    );
 
     test('bareme progressif ligne directe', () {
       // 50 000 taxable : 8 072x5% + 4 037x10% + 3 823x15% + 34 068x20%
-      final droits =
-          DemembrementService.calculerDroitsLigneDirecte(50000);
-      final attendu = 8072 * 0.05 + (12109 - 8072) * 0.10 +
-          (15932 - 12109) * 0.15 + (50000 - 15932) * 0.20;
+      final droits = DemembrementService.calculerDroitsLigneDirecte(50000);
+      final attendu =
+          8072 * 0.05 +
+          (12109 - 8072) * 0.10 +
+          (15932 - 12109) * 0.15 +
+          (50000 - 15932) * 0.20;
       expect(droits, closeTo(attendu, 0.01));
     });
   });
@@ -95,24 +99,23 @@ void main() {
       expect(result.economie, greaterThan(100000));
     });
 
-    test('petite entreprise couverte par abattement : 0 droit avec Dutreil',
-        () {
-      final result = dutreil.calculer(
-        const PacteDutreilModel(valeurEntreprise: 300000, nbEnfants: 2),
-      );
-      // 25% x 300 000 = 75 000 < abattement 200 000
-      expect(result.droitsAvecDutreil, 0);
-    });
+    test(
+      'petite entreprise couverte par abattement : 0 droit avec Dutreil',
+      () {
+        final result = dutreil.calculer(
+          const PacteDutreilModel(valeurEntreprise: 300000, nbEnfants: 2),
+        );
+        // 25% x 300 000 = 75 000 < abattement 200 000
+        expect(result.droitsAvecDutreil, 0);
+      },
+    );
 
     test('les conditions legales sont listees', () {
       final result = dutreil.calculer(
         const PacteDutreilModel(valeurEntreprise: 500000),
       );
       expect(result.conditions.length, greaterThanOrEqualTo(5));
-      expect(
-        result.conditions.any((c) => c.contains('4 ans')),
-        isTrue,
-      );
+      expect(result.conditions.any((c) => c.contains('4 ans')), isTrue);
     });
   });
 }

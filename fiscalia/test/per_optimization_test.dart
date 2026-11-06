@@ -59,18 +59,20 @@ void main() {
   });
 
   group('PerOptimizationService - mutualisation couple', () {
-    test('couple 150 000 EUR : plafond combine 74 188 EUR borne a 2 x 37 094',
-        () {
-      final result = service.optimiser(
-        const PerOptimizationModel(
-          revenuDeclarant1: 500000,
-          revenuDeclarant2: 400000,
-          tmi: 0.41,
-          versementEnvisage: 50000,
-        ),
-      );
-      expect(result.plafondMutualise, 74188);
-    });
+    test(
+      'couple 150 000 EUR : plafond combine 74 188 EUR borne a 2 x 37 094',
+      () {
+        final result = service.optimiser(
+          const PerOptimizationModel(
+            revenuDeclarant1: 500000,
+            revenuDeclarant2: 400000,
+            tmi: 0.41,
+            versementEnvisage: 50000,
+          ),
+        );
+        expect(result.plafondMutualise, 74188);
+      },
+    );
 
     test('economie = versement x TMI', () {
       final result = service.optimiser(

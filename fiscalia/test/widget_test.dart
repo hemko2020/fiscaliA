@@ -7,14 +7,17 @@ import 'package:fiscalia/presentation/providers/monitoring_providers.dart';
 
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        monitoringServiceProvider.overrideWithValue(MonitoringService()),
-        taxRemoteConfigServiceProvider
-            .overrideWithValue(TaxRemoteConfigService()),
-      ],
-      child: const FiscalIAApp(),
-    ));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          monitoringServiceProvider.overrideWithValue(MonitoringService()),
+          taxRemoteConfigServiceProvider.overrideWithValue(
+            TaxRemoteConfigService(),
+          ),
+        ],
+        child: const FiscalIAApp(),
+      ),
+    );
     expect(find.text('FiscalIA'), findsOneWidget);
   });
 }

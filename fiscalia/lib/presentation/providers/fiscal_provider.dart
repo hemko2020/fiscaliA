@@ -15,6 +15,7 @@ class TaxCalculator {
   final TaxConfig config;
 
   TaxCalculator({this.config = const TaxConfig.embedded()});
+
   /// Calcule l'impot brut progressif pour un revenu et un nombre de parts
   /// donnes (application du bareme par tranches au quotient R/parts, puis
   /// multiplication par le nombre de parts).
@@ -84,8 +85,7 @@ class TaxCalculator {
         // specifique, les demi-parts suivantes le plafond classique.
         plafondQuotientFamilial =
             config.parentIsoleQuotientCeiling +
-            (demiPartsSupplementaires - 2) *
-                config.familyQuotientCeiling;
+            (demiPartsSupplementaires - 2) * config.familyQuotientCeiling;
       } else {
         plafondQuotientFamilial =
             demiPartsSupplementaires * config.familyQuotientCeiling;
@@ -95,10 +95,12 @@ class TaxCalculator {
     double impotApresPlafond = impotBrut;
     double reductionQuotientFamilial = 0;
     if (impotBrut > 0 && demiPartsSupplementaires > 0) {
-      final impotReference = _calculerProgressif(
-        foyer.revenuNetImposable,
-        partsReference,
-      )['impotBrut'] as double;
+      final impotReference =
+          _calculerProgressif(
+                foyer.revenuNetImposable,
+                partsReference,
+              )['impotBrut']
+              as double;
       final avantage = impotReference - impotBrut;
       reductionQuotientFamilial = avantage > plafondQuotientFamilial
           ? plafondQuotientFamilial

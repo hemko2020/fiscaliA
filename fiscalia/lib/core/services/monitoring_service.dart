@@ -42,14 +42,15 @@ class MonitoringService {
   }
 
   /// Enregistre une erreur non fatale (ex : echec de sauvegarde Hive).
-  void enregistrerErreur(Object erreur, StackTrace? stack,
-      {String? contexte}) {
+  void enregistrerErreur(Object erreur, StackTrace? stack, {String? contexte}) {
     _crashlytics?.recordError(erreur, stack, reason: contexte);
   }
 
   /// Journalise un evenement analytique (ex : simulation_completee).
-  Future<void> journaliserEvenement(String nom,
-      [Map<String, Object>? parametres]) async {
+  Future<void> journaliserEvenement(
+    String nom, [
+    Map<String, Object>? parametres,
+  ]) async {
     await _analytics?.logEvent(name: nom, parameters: parametres);
   }
 

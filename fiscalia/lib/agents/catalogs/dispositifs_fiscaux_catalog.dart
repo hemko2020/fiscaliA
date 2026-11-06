@@ -366,10 +366,7 @@ class DispositifsFiscauxCatalog {
       type: TypeDispositif.deduction,
       tauxAvantage: 0.30,
       plafond: 152500,
-      conditionsEligibilite: const [
-        'Horizon 8 ans',
-        'Beneficiaires designes',
-      ],
+      conditionsEligibilite: const ['Horizon 8 ans', 'Beneficiaires designes'],
       horsNicheFiscale: true,
       baseLegale: 'Art. 990 I et 132-12 CGI',
       risqueScore: 1,

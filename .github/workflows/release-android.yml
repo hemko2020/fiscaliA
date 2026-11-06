@@ -28,6 +28,21 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+
+      - name: Install Android NDK
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" "ndk;28.2.13676358"
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -39,11 +54,11 @@ jobs:
 
       - name: Decode release keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/release.jks
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.jks
 
       - name: Create key.properties
         run: |
-          cat > android/key.properties <<EOF
+          cat > android/app/key.properties <<EOF
           storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
           keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
@@ -58,7 +73,7 @@ jobs:
 
       - name: Clean signing material
         if: always()
-        run: rm -f android/release.jks android/key.properties
+        run: rm -f android/app/release.jks android/app/key.properties
 
       - name: Upload release APK
         uses: actions/upload-artifact@v4

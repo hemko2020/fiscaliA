@@ -1,0 +1,106 @@
+name: CI
+
+# Integration continue sur develop : verification systematique du code
+# a chaque push et sur toutes les PR (analyse statique + tests).
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  analyze-and-test:
+    name: Analyze & Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./fiscalia
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed lib test
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+  build-android-debug:
+    name: Build Android (debug)
+    needs: analyze-and-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./fiscalia
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.6'
+          channel: 'stable'
+          cache: true
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+
+      - name: Install Android NDK
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" "ndk;28.2.13676358"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build debug APK
+        run: flutter build apk --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: fiscalia/build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 7
+
+  build-ios-simulator:
+    name: Build iOS (simulateur)
+    # macOS coute 10x les minutes CI : on reserve ce job aux push sur
+    # develop/main, pas aux PR (analyze + tests + Android suffisent).
+    if: github.event_name == 'push'
+    needs: analyze-and-test
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./fiscalia
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS (no codesign)
+        run: flutter build ios --simulator --no-codesign

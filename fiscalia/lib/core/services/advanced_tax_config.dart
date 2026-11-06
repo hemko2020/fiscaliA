@@ -87,45 +87,51 @@ class AdvancedTaxConfig {
 
   /// Configuration embarquee (fallback) : valeurs 2026 compilees dans l'app.
   const AdvancedTaxConfig.embedded()
-      : perAnnualCeiling = AdvancedTaxConstants.perAnnualCeiling,
-        perMinDeduction = AdvancedTaxConstants.perMinDeduction,
-        perCarryoverYears = AdvancedTaxConstants.perCarryoverYears,
-        lmnpMicroBicAbattement = AdvancedTaxConstants.lmnpMicroBicAbattement,
-        lmnpMicroBicCeiling = AdvancedTaxConstants.lmnpMicroBicCeiling,
-        lmnpLandShare = AdvancedTaxConstants.lmnpLandShare,
-        lmnpBuildingAmortizationYears =
-            AdvancedTaxConstants.lmnpBuildingAmortizationYears,
-        lmnpFurnitureAmortizationYears =
-            AdvancedTaxConstants.lmnpFurnitureAmortizationYears,
-        prelevementsSociaux = AdvancedTaxConstants.prelevementsSociaux,
-        isReducedRate = AdvancedTaxConstants.isReducedRate,
-        isReducedRateCeiling = AdvancedTaxConstants.isReducedRateCeiling,
-        isNormalRate = AdvancedTaxConstants.isNormalRate,
-        pfuDividendes = AdvancedTaxConstants.pfuDividendes,
-        usufruitBareme = const [
-          (21, 0.90), (31, 0.80), (41, 0.70), (51, 0.60), (61, 0.50),
-          (71, 0.40), (81, 0.30), (91, 0.20), (2147483647, 0.10),
-        ],
-        abattementLigneDirecte = AdvancedTaxConstants.abattementLigneDirecte,
-        rappelFiscalDonationYears =
-            AdvancedTaxConstants.rappelFiscalDonationYears,
-        baremeLigneDirecte = AdvancedTaxConstants.baremeLigneDirecte,
-        dutreilAbattement = AdvancedTaxConstants.dutreilAbattement,
-        ifiSeuilImposition = AdvancedTaxConstants.ifiSeuilImposition,
-        ifiSeuilCalcul = AdvancedTaxConstants.ifiSeuilCalcul,
-        baremeIFI = AdvancedTaxConstants.baremeIFI,
-        ifiDecoteBase = AdvancedTaxConstants.ifiDecoteBase,
-        ifiDecoteTaux = AdvancedTaxConstants.ifiDecoteTaux,
-        ifiDecotePlafond = AdvancedTaxConstants.ifiDecotePlafond,
-        ifiDonReductionTaux = AdvancedTaxConstants.ifiDonReductionTaux,
-        ifiDonReductionPlafond = AdvancedTaxConstants.ifiDonReductionPlafond,
-        soficaTauxStandard = AdvancedTaxConstants.soficaTauxStandard,
-        soficaTauxMajore = AdvancedTaxConstants.soficaTauxMajore,
-        soficaPlafondInvestissement =
-            AdvancedTaxConstants.soficaPlafondInvestissement,
-        girardinRendementTypique =
-            AdvancedTaxConstants.girardinRendementTypique,
-        plafondOutreMer = AdvancedTaxConstants.plafondOutreMer;
+    : perAnnualCeiling = AdvancedTaxConstants.perAnnualCeiling,
+      perMinDeduction = AdvancedTaxConstants.perMinDeduction,
+      perCarryoverYears = AdvancedTaxConstants.perCarryoverYears,
+      lmnpMicroBicAbattement = AdvancedTaxConstants.lmnpMicroBicAbattement,
+      lmnpMicroBicCeiling = AdvancedTaxConstants.lmnpMicroBicCeiling,
+      lmnpLandShare = AdvancedTaxConstants.lmnpLandShare,
+      lmnpBuildingAmortizationYears =
+          AdvancedTaxConstants.lmnpBuildingAmortizationYears,
+      lmnpFurnitureAmortizationYears =
+          AdvancedTaxConstants.lmnpFurnitureAmortizationYears,
+      prelevementsSociaux = AdvancedTaxConstants.prelevementsSociaux,
+      isReducedRate = AdvancedTaxConstants.isReducedRate,
+      isReducedRateCeiling = AdvancedTaxConstants.isReducedRateCeiling,
+      isNormalRate = AdvancedTaxConstants.isNormalRate,
+      pfuDividendes = AdvancedTaxConstants.pfuDividendes,
+      usufruitBareme = const [
+        (21, 0.90),
+        (31, 0.80),
+        (41, 0.70),
+        (51, 0.60),
+        (61, 0.50),
+        (71, 0.40),
+        (81, 0.30),
+        (91, 0.20),
+        (2147483647, 0.10),
+      ],
+      abattementLigneDirecte = AdvancedTaxConstants.abattementLigneDirecte,
+      rappelFiscalDonationYears =
+          AdvancedTaxConstants.rappelFiscalDonationYears,
+      baremeLigneDirecte = AdvancedTaxConstants.baremeLigneDirecte,
+      dutreilAbattement = AdvancedTaxConstants.dutreilAbattement,
+      ifiSeuilImposition = AdvancedTaxConstants.ifiSeuilImposition,
+      ifiSeuilCalcul = AdvancedTaxConstants.ifiSeuilCalcul,
+      baremeIFI = AdvancedTaxConstants.baremeIFI,
+      ifiDecoteBase = AdvancedTaxConstants.ifiDecoteBase,
+      ifiDecoteTaux = AdvancedTaxConstants.ifiDecoteTaux,
+      ifiDecotePlafond = AdvancedTaxConstants.ifiDecotePlafond,
+      ifiDonReductionTaux = AdvancedTaxConstants.ifiDonReductionTaux,
+      ifiDonReductionPlafond = AdvancedTaxConstants.ifiDonReductionPlafond,
+      soficaTauxStandard = AdvancedTaxConstants.soficaTauxStandard,
+      soficaTauxMajore = AdvancedTaxConstants.soficaTauxMajore,
+      soficaPlafondInvestissement =
+          AdvancedTaxConstants.soficaPlafondInvestissement,
+      girardinRendementTypique = AdvancedTaxConstants.girardinRendementTypique,
+      plafondOutreMer = AdvancedTaxConstants.plafondOutreMer;
 
   /// Valeur de l'usufruit en fraction (0..1) selon l'age (Art. 669 CGI).
   double usufruitRatioPourAge(int age) {
@@ -143,18 +149,26 @@ class AdvancedTaxConfig {
 
   /// Parse une liste de paires [[seuil, taux], ...] ; 0 = sans borne.
   static List<(double, double)> _bareme(
-      Map<String, dynamic> json, String key, List<(double, double)> fallback) {
+    Map<String, dynamic> json,
+    String key,
+    List<(double, double)> fallback,
+  ) {
     final raw = json[key] as List<dynamic>?;
     if (raw == null || raw.isEmpty) return fallback;
     return raw.map((e) {
       final pair = e as List<dynamic>;
       final seuil = (pair[0] as num).toDouble();
-      return (seuil <= 0 ? double.infinity : seuil, (pair[1] as num).toDouble());
+      return (
+        seuil <= 0 ? double.infinity : seuil,
+        (pair[1] as num).toDouble(),
+      );
     }).toList();
   }
 
   static List<(int, double)> _usufruit(
-      Map<String, dynamic> json, List<(int, double)> fallback) {
+    Map<String, dynamic> json,
+    List<(int, double)> fallback,
+  ) {
     final raw = json['usufruitBareme'] as List<dynamic>?;
     if (raw == null || raw.isEmpty) return fallback;
     return raw.map((e) {
@@ -168,90 +182,141 @@ class AdvancedTaxConfig {
     return AdvancedTaxConfig(
       perAnnualCeiling: _d(json, 'perAnnualCeiling', embedded.perAnnualCeiling),
       perMinDeduction: _d(json, 'perMinDeduction', embedded.perMinDeduction),
-      perCarryoverYears:
-          _i(json, 'perCarryoverYears', embedded.perCarryoverYears),
+      perCarryoverYears: _i(
+        json,
+        'perCarryoverYears',
+        embedded.perCarryoverYears,
+      ),
       lmnpMicroBicAbattement: _d(
-          json, 'lmnpMicroBicAbattement', embedded.lmnpMicroBicAbattement),
-      lmnpMicroBicCeiling:
-          _d(json, 'lmnpMicroBicCeiling', embedded.lmnpMicroBicCeiling),
+        json,
+        'lmnpMicroBicAbattement',
+        embedded.lmnpMicroBicAbattement,
+      ),
+      lmnpMicroBicCeiling: _d(
+        json,
+        'lmnpMicroBicCeiling',
+        embedded.lmnpMicroBicCeiling,
+      ),
       lmnpLandShare: _d(json, 'lmnpLandShare', embedded.lmnpLandShare),
-      lmnpBuildingAmortizationYears: _i(json, 'lmnpBuildingAmortizationYears',
-          embedded.lmnpBuildingAmortizationYears),
-      lmnpFurnitureAmortizationYears: _i(json, 'lmnpFurnitureAmortizationYears',
-          embedded.lmnpFurnitureAmortizationYears),
-      prelevementsSociaux:
-          _d(json, 'prelevementsSociaux', embedded.prelevementsSociaux),
+      lmnpBuildingAmortizationYears: _i(
+        json,
+        'lmnpBuildingAmortizationYears',
+        embedded.lmnpBuildingAmortizationYears,
+      ),
+      lmnpFurnitureAmortizationYears: _i(
+        json,
+        'lmnpFurnitureAmortizationYears',
+        embedded.lmnpFurnitureAmortizationYears,
+      ),
+      prelevementsSociaux: _d(
+        json,
+        'prelevementsSociaux',
+        embedded.prelevementsSociaux,
+      ),
       isReducedRate: _d(json, 'isReducedRate', embedded.isReducedRate),
-      isReducedRateCeiling:
-          _d(json, 'isReducedRateCeiling', embedded.isReducedRateCeiling),
+      isReducedRateCeiling: _d(
+        json,
+        'isReducedRateCeiling',
+        embedded.isReducedRateCeiling,
+      ),
       isNormalRate: _d(json, 'isNormalRate', embedded.isNormalRate),
       pfuDividendes: _d(json, 'pfuDividendes', embedded.pfuDividendes),
       usufruitBareme: _usufruit(json, embedded.usufruitBareme),
       abattementLigneDirecte: _d(
-          json, 'abattementLigneDirecte', embedded.abattementLigneDirecte),
-      rappelFiscalDonationYears: _i(json, 'rappelFiscalDonationYears',
-          embedded.rappelFiscalDonationYears),
-      baremeLigneDirecte:
-          _bareme(json, 'baremeLigneDirecte', embedded.baremeLigneDirecte),
-      dutreilAbattement:
-          _d(json, 'dutreilAbattement', embedded.dutreilAbattement),
-      ifiSeuilImposition:
-          _d(json, 'ifiSeuilImposition', embedded.ifiSeuilImposition),
+        json,
+        'abattementLigneDirecte',
+        embedded.abattementLigneDirecte,
+      ),
+      rappelFiscalDonationYears: _i(
+        json,
+        'rappelFiscalDonationYears',
+        embedded.rappelFiscalDonationYears,
+      ),
+      baremeLigneDirecte: _bareme(
+        json,
+        'baremeLigneDirecte',
+        embedded.baremeLigneDirecte,
+      ),
+      dutreilAbattement: _d(
+        json,
+        'dutreilAbattement',
+        embedded.dutreilAbattement,
+      ),
+      ifiSeuilImposition: _d(
+        json,
+        'ifiSeuilImposition',
+        embedded.ifiSeuilImposition,
+      ),
       ifiSeuilCalcul: _d(json, 'ifiSeuilCalcul', embedded.ifiSeuilCalcul),
       baremeIFI: _bareme(json, 'baremeIFI', embedded.baremeIFI),
       ifiDecoteBase: _d(json, 'ifiDecoteBase', embedded.ifiDecoteBase),
       ifiDecoteTaux: _d(json, 'ifiDecoteTaux', embedded.ifiDecoteTaux),
-      ifiDecotePlafond:
-          _d(json, 'ifiDecotePlafond', embedded.ifiDecotePlafond),
-      ifiDonReductionTaux:
-          _d(json, 'ifiDonReductionTaux', embedded.ifiDonReductionTaux),
-      ifiDonReductionPlafond:
-          _d(json, 'ifiDonReductionPlafond', embedded.ifiDonReductionPlafond),
-      soficaTauxStandard:
-          _d(json, 'soficaTauxStandard', embedded.soficaTauxStandard),
+      ifiDecotePlafond: _d(json, 'ifiDecotePlafond', embedded.ifiDecotePlafond),
+      ifiDonReductionTaux: _d(
+        json,
+        'ifiDonReductionTaux',
+        embedded.ifiDonReductionTaux,
+      ),
+      ifiDonReductionPlafond: _d(
+        json,
+        'ifiDonReductionPlafond',
+        embedded.ifiDonReductionPlafond,
+      ),
+      soficaTauxStandard: _d(
+        json,
+        'soficaTauxStandard',
+        embedded.soficaTauxStandard,
+      ),
       soficaTauxMajore: _d(json, 'soficaTauxMajore', embedded.soficaTauxMajore),
-      soficaPlafondInvestissement: _d(json, 'soficaPlafondInvestissement',
-          embedded.soficaPlafondInvestissement),
-      girardinRendementTypique: _d(json, 'girardinRendementTypique',
-          embedded.girardinRendementTypique),
+      soficaPlafondInvestissement: _d(
+        json,
+        'soficaPlafondInvestissement',
+        embedded.soficaPlafondInvestissement,
+      ),
+      girardinRendementTypique: _d(
+        json,
+        'girardinRendementTypique',
+        embedded.girardinRendementTypique,
+      ),
       plafondOutreMer: _d(json, 'plafondOutreMer', embedded.plafondOutreMer),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'perAnnualCeiling': perAnnualCeiling,
-        'perMinDeduction': perMinDeduction,
-        'perCarryoverYears': perCarryoverYears,
-        'lmnpMicroBicAbattement': lmnpMicroBicAbattement,
-        'lmnpMicroBicCeiling': lmnpMicroBicCeiling,
-        'lmnpLandShare': lmnpLandShare,
-        'lmnpBuildingAmortizationYears': lmnpBuildingAmortizationYears,
-        'lmnpFurnitureAmortizationYears': lmnpFurnitureAmortizationYears,
-        'prelevementsSociaux': prelevementsSociaux,
-        'isReducedRate': isReducedRate,
-        'isReducedRateCeiling': isReducedRateCeiling,
-        'isNormalRate': isNormalRate,
-        'pfuDividendes': pfuDividendes,
-        'usufruitBareme': usufruitBareme.map((e) => [e.$1, e.$2]).toList(),
-        'abattementLigneDirecte': abattementLigneDirecte,
-        'rappelFiscalDonationYears': rappelFiscalDonationYears,
-        'baremeLigneDirecte': baremeLigneDirecte
-            .map((e) => [e.$1.isInfinite ? 0 : e.$1, e.$2])
-            .toList(),
-        'dutreilAbattement': dutreilAbattement,
-        'ifiSeuilImposition': ifiSeuilImposition,
-        'ifiSeuilCalcul': ifiSeuilCalcul,
-        'baremeIFI':
-            baremeIFI.map((e) => [e.$1.isInfinite ? 0 : e.$1, e.$2]).toList(),
-        'ifiDecoteBase': ifiDecoteBase,
-        'ifiDecoteTaux': ifiDecoteTaux,
-        'ifiDecotePlafond': ifiDecotePlafond,
-        'ifiDonReductionTaux': ifiDonReductionTaux,
-        'ifiDonReductionPlafond': ifiDonReductionPlafond,
-        'soficaTauxStandard': soficaTauxStandard,
-        'soficaTauxMajore': soficaTauxMajore,
-        'soficaPlafondInvestissement': soficaPlafondInvestissement,
-        'girardinRendementTypique': girardinRendementTypique,
-        'plafondOutreMer': plafondOutreMer,
-      };
+    'perAnnualCeiling': perAnnualCeiling,
+    'perMinDeduction': perMinDeduction,
+    'perCarryoverYears': perCarryoverYears,
+    'lmnpMicroBicAbattement': lmnpMicroBicAbattement,
+    'lmnpMicroBicCeiling': lmnpMicroBicCeiling,
+    'lmnpLandShare': lmnpLandShare,
+    'lmnpBuildingAmortizationYears': lmnpBuildingAmortizationYears,
+    'lmnpFurnitureAmortizationYears': lmnpFurnitureAmortizationYears,
+    'prelevementsSociaux': prelevementsSociaux,
+    'isReducedRate': isReducedRate,
+    'isReducedRateCeiling': isReducedRateCeiling,
+    'isNormalRate': isNormalRate,
+    'pfuDividendes': pfuDividendes,
+    'usufruitBareme': usufruitBareme.map((e) => [e.$1, e.$2]).toList(),
+    'abattementLigneDirecte': abattementLigneDirecte,
+    'rappelFiscalDonationYears': rappelFiscalDonationYears,
+    'baremeLigneDirecte': baremeLigneDirecte
+        .map((e) => [e.$1.isInfinite ? 0 : e.$1, e.$2])
+        .toList(),
+    'dutreilAbattement': dutreilAbattement,
+    'ifiSeuilImposition': ifiSeuilImposition,
+    'ifiSeuilCalcul': ifiSeuilCalcul,
+    'baremeIFI': baremeIFI
+        .map((e) => [e.$1.isInfinite ? 0 : e.$1, e.$2])
+        .toList(),
+    'ifiDecoteBase': ifiDecoteBase,
+    'ifiDecoteTaux': ifiDecoteTaux,
+    'ifiDecotePlafond': ifiDecotePlafond,
+    'ifiDonReductionTaux': ifiDonReductionTaux,
+    'ifiDonReductionPlafond': ifiDonReductionPlafond,
+    'soficaTauxStandard': soficaTauxStandard,
+    'soficaTauxMajore': soficaTauxMajore,
+    'soficaPlafondInvestissement': soficaPlafondInvestissement,
+    'girardinRendementTypique': girardinRendementTypique,
+    'plafondOutreMer': plafondOutreMer,
+  };
 }

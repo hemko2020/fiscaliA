@@ -33,8 +33,7 @@ class SciComparisonService {
     final ir = _calculerRegimeIR(input);
     final is_ = _calculerRegimeIS(input);
 
-    final recommande =
-        ir.fiscaliteTotale <= is_.fiscaliteTotale ? 'IR' : 'IS';
+    final recommande = ir.fiscaliteTotale <= is_.fiscaliteTotale ? 'IR' : 'IS';
     final avantage = (ir.fiscaliteTotale - is_.fiscaliteTotale).abs();
 
     final pointsVigilance = <String>[
@@ -67,8 +66,7 @@ class SciComparisonService {
     // Revenu foncier net (pas d'amortissement a l'IR, seulement les charges).
     final revenuFoncierNet = input.loyersAnnuels - input.chargesAnnuelles;
     final baseImposable = revenuFoncierNet > 0 ? revenuFoncierNet : 0.0;
-    final impot = baseImposable *
-        (input.tmi + config.prelevementsSociaux);
+    final impot = baseImposable * (input.tmi + config.prelevementsSociaux);
 
     // Le deficit foncier s'impute sur le revenu global : economie a la TMI
     // (pas de prelevements sociaux sur le revenu global).
@@ -88,10 +86,9 @@ class SciComparisonService {
   }
 
   SciRegimeResult _calculerRegimeIS(SciComparisonModel input) {
-    final amortissement =
-        input.dureeAmortissement > 0
-            ? input.valeurAmortissable / input.dureeAmortissement
-            : 0.0;
+    final amortissement = input.dureeAmortissement > 0
+        ? input.valeurAmortissable / input.dureeAmortissement
+        : 0.0;
     final resultat =
         input.loyersAnnuels - input.chargesAnnuelles - amortissement;
     final baseImposable = resultat > 0 ? resultat : 0.0;
@@ -101,8 +98,8 @@ class SciComparisonService {
         ? config.isReducedRateCeiling
         : baseImposable;
     final tranche25 = baseImposable - tranche15;
-    final impotIS = tranche15 * config.isReducedRate +
-        tranche25 * config.isNormalRate;
+    final impotIS =
+        tranche15 * config.isReducedRate + tranche25 * config.isNormalRate;
 
     // PFU 30% sur la part distribuee du resultat apres IS.
     final resultatApresIS = baseImposable - impotIS;

@@ -35,7 +35,9 @@ class _SoficaGirardinScreenState extends ConsumerState<SoficaGirardinScreen> {
   void _calculer() {
     if (!_formKey.currentState!.validate()) return;
     final parse = PremiumFormWidgets.parseMontant;
-    final resultat = ref.read(soficaGirardinServiceProvider).calculer(
+    final resultat = ref
+        .read(soficaGirardinServiceProvider)
+        .calculer(
           SoficaGirardinModel(
             investissementSofica: parse(_soficaController.text),
             soficaTauxMajore: _tauxMajore,

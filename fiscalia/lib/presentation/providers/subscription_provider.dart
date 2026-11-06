@@ -130,9 +130,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     if (!state.revenueCatDisponible) return false;
     state = state.copyWith(achatEnCours: true);
     try {
-      final result = await Purchases.purchase(
-        PurchaseParams.package(package),
-      );
+      final result = await Purchases.purchase(PurchaseParams.package(package));
       state = state.copyWith(
         niveau: _niveauDepuisEntitlements(result.customerInfo),
         achatEnCours: false,

@@ -240,9 +240,9 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
                 Text(
                   alerte.titre,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: couleur,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: couleur,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -296,9 +296,9 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
             Text(
               'Ces dispositifs sont HORS plafond des niches fiscales : '
               'ils restent pleinement efficaces meme a 100% d\'utilisation.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 8),
             Row(
@@ -314,9 +314,8 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
                     max: 0.45,
                     divisions: 4,
                     label: '${(tmi * 100).toStringAsFixed(0)}%',
-                    onChanged: (v) => ref
-                        .read(nicheSuggestionTmiProvider.notifier)
-                        .state = v,
+                    onChanged: (v) =>
+                        ref.read(nicheSuggestionTmiProvider.notifier).state = v,
                   ),
                 ),
               ],
@@ -336,8 +335,8 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
     final couleurRisque = suggestion.risqueScore <= 2
         ? AppColors.riskLow
         : suggestion.risqueScore == 3
-            ? AppColors.riskMedium
-            : AppColors.riskHigh;
+        ? AppColors.riskMedium
+        : AppColors.riskHigh;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -353,10 +352,9 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
                     Flexible(
                       child: Text(
                         suggestion.nom,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -372,10 +370,10 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
                       child: Text(
                         'Risque ${suggestion.risqueScore}/5',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: couleurRisque,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                            ),
+                          color: couleurRisque,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   ],
@@ -388,9 +386,9 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
                 Text(
                   suggestion.baseLegale,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                        fontSize: 10,
-                      ),
+                    color: AppColors.textSecondary,
+                    fontSize: 10,
+                  ),
                 ),
               ],
             ),
@@ -402,16 +400,16 @@ class NicheCeilingTrackerScreen extends ConsumerWidget {
               Text(
                 '${suggestion.economieEstimee.toStringAsFixed(0)} €',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: AppColors.accentGreen,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: AppColors.accentGreen,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 'd\'économie',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
-                      fontSize: 10,
-                    ),
+                  color: AppColors.textSecondary,
+                  fontSize: 10,
+                ),
               ),
             ],
           ),

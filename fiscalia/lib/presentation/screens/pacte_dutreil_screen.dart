@@ -29,10 +29,13 @@ class _PacteDutreilScreenState extends ConsumerState<PacteDutreilScreen> {
 
   void _calculer() {
     if (!_formKey.currentState!.validate()) return;
-    final resultat = ref.read(pacteDutreilServiceProvider).calculer(
+    final resultat = ref
+        .read(pacteDutreilServiceProvider)
+        .calculer(
           PacteDutreilModel(
-            valeurEntreprise:
-                PremiumFormWidgets.parseMontant(_valeurController.text),
+            valeurEntreprise: PremiumFormWidgets.parseMontant(
+              _valeurController.text,
+            ),
             nbEnfants: _nbEnfants,
           ),
         );

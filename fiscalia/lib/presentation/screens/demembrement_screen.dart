@@ -31,11 +31,12 @@ class _DemembrementScreenState extends ConsumerState<DemembrementScreen> {
 
   void _calculer() {
     if (!_formKey.currentState!.validate()) return;
-    final resultat = ref.read(demembrementServiceProvider).calculer(
+    final resultat = ref
+        .read(demembrementServiceProvider)
+        .calculer(
           DemembrementModel(
             ageUsufruitier: _age,
-            valeurBien:
-                PremiumFormWidgets.parseMontant(_valeurController.text),
+            valeurBien: PremiumFormWidgets.parseMontant(_valeurController.text),
             nbEnfants: _nbEnfants,
             nbParents: _nbParents,
           ),

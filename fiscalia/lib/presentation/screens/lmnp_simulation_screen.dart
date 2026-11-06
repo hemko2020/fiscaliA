@@ -38,7 +38,9 @@ class _LmnpSimulationScreenState extends ConsumerState<LmnpSimulationScreen> {
   void _calculer() {
     if (!_formKey.currentState!.validate()) return;
     final parse = PremiumFormWidgets.parseMontant;
-    final resultat = ref.read(lmnpServiceProvider).simuler(
+    final resultat = ref
+        .read(lmnpServiceProvider)
+        .simuler(
           LmnpSimulationModel(
             prixAcquisition: parse(_prixController.text),
             valeurMobilier: parse(_mobilierController.text),
