@@ -33,7 +33,10 @@ dependencies:
   firebase_core: ^4.7.0
   cloud_functions: ^6.2.0
   google_mobile_ads: ^9.2.0
-  purchases_flutter: ^11.0.0
+  # Pin 10.x : purchases_flutter 11.x exige PurchasesHybridCommon 20.x,
+  # non publie sur CocoaPods trunk (gel trunk debut nov. 2026).
+  # Repasser en ^11 des que le pod est publie (cf. release notes RevenueCat).
+  purchases_flutter: 10.19.0
   firebase_remote_config: ^6.7.1
   firebase_crashlytics: ^5.4.1
   firebase_analytics: ^12.6.1
